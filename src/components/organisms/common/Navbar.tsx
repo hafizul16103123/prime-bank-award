@@ -6,7 +6,7 @@ import Link from "next/link";
 export const Navbar = () => {
 	return (
 		<Container>
-			<header className="flex items-center justify-between py-9 ">
+			<header className="flex items-center justify-between py-9 bg-white/90 backdrop-blur-lg">
 				<Image src="/daily_star_logo.png" alt="The Daily Star Logo" width={191} height={38} />
 
 				<div className="flex items-center gap-6 ">

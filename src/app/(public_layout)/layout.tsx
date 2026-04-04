@@ -5,7 +5,9 @@ import "../globals.css";
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<>
-			<Navbar />
+			<div className="sticky top-0">
+				<Navbar />
+			</div>
 			<main className=" bg-white h-screen">{children}</main>
 			<ToastContainer />
 		</>
