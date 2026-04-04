@@ -1,5 +1,4 @@
 import React, { ReactNode } from "react";
-import { Text } from "../atoms";
 
 type Variant = "2xl" | "xl" | "lg" | "base" | "sm" | "xs" | "footnote";
 type ColorVariant = "primary" | "secondary" | "tertiary" | "white";
@@ -13,9 +12,5 @@ interface LoaderTextProps {
 }
 
 export const LoaderText: React.FC<LoaderTextProps> = ({ loading, children, variant, color, align }) => {
-	return (
-		<Text color={color} variant={variant} align={align}>
-			{loading ? "Please wait..." : children}
-		</Text>
-	);
+	return <p color={color}>{loading ? "Please wait..." : children}</p>;
 };

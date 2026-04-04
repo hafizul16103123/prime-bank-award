@@ -1,5 +1,4 @@
 import { FC } from "react";
-import { Text } from "../atoms";
 
 export type IStatus = "Pending" | "Active" | "Approved" | "Completed" | "Denied" | "Upcoming" | "Ongoing" | "Blocked";
 
@@ -13,7 +12,7 @@ export const ChipByStatus: FC<PropsType> = ({ status, label }) => {
 		Completed: "bg-[#00719A]",
 		Active: "bg-[#00719A]",
 		Ongoing: "bg-[#00719A]",
-		Pending: "bg-[#DEF300]",
+		Pending: "!bg-[#FAF0BC]",
 		Denied: "bg-[#FF4141]",
 		Blocked: "bg-[#FF4141]",
 		Approved: "bg-[#2FB772]",
@@ -27,7 +26,7 @@ export const ChipByStatus: FC<PropsType> = ({ status, label }) => {
 		Denied: "text-white",
 		Blocked: "text-white",
 		Approved: "text-white",
-		Pending: "text-black",
+		Pending: "!text-[#675E00]",
 		Upcoming: "text-black",
 	};
 
@@ -36,9 +35,7 @@ export const ChipByStatus: FC<PropsType> = ({ status, label }) => {
 			<div
 				className={`inline-block rounded-[6px] hover:shadow-none shadow-none normal-case ${colorByStatus[status]} ${textByStatus[status]} px-4 py-1 text-[10px] rounded-full`}
 			>
-				<Text className={`${textByStatus[status]}`} variant="footnote">
-					{label}
-				</Text>
+				<p className={`${textByStatus[status]} text-xs`}>{label}</p>
 			</div>
 		</div>
 	);

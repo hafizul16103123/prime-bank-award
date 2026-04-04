@@ -60,6 +60,8 @@ module.exports = {
 					4: "var(--chart-4)",
 					5: "var(--chart-5)",
 				},
+				subtle: "var(--subtle)",
+				frost: "var(--frost)",
 				/* legacy palette (non–CSS-variable tokens) */
 				default: "#fafafa",
 				tartiary: "#E0E0E0",
