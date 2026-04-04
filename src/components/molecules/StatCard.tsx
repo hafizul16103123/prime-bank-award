@@ -1,25 +1,21 @@
-import { FC } from "react";
-import { Text } from "../atoms";
+import { LucideIcon } from "lucide-react";
 
 interface StatCardProps {
 	title: string;
-	value: string | number;
-	period: string;
-	isDark?: boolean;
+	value: string;
+	change: string;
+	icon: LucideIcon;
 }
 
-export const StatCard: FC<StatCardProps> = ({ title, value, period, isDark = false }) => {
+export const StatCard = ({ title, value, change, icon: Icon }: StatCardProps) => {
 	return (
-		<div className={`rounded-xl p-5 ${isDark ? "bg-primary " : "bg-white "}`}>
-			<Text variant="lg" color={isDark ? "white" : "primary"}>
-				{title}
-			</Text>
-
-			<div className="flex items-end justify-between mt-[128px]">
-				<Text variant="3xl" color={isDark ? "white" : "primary"} weight="semibold">
-					{value}
-				</Text>
+		<div className="bg-white border border-tartiary rounded-xl p-5 flex-1 min-w-[200px]">
+			<div className="flex items-center justify-between mb-2">
+				<span className="text-sm text-muted-foreground">{title}</span>
+				<Icon className="w-4 h-4 text-muted-foreground" />
 			</div>
+			<p className="text-2xl font-semibold text-foreground">{value}</p>
+			<p className="text-xs text-primary/80 mt-1">{change}</p>
 		</div>
 	);
 };

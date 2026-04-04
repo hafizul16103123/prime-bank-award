@@ -1,7 +1,6 @@
 export * from "./Brand";
 export * from "./ChipByStatus";
 export * from "./ContorlDatePicker";
-export * from "./ContorlSelectPicker";
 export * from "./FileUploaderDnd";
 export * from "./LoaderText";
 export * from "./Pagination";

@@ -8,17 +8,13 @@ module.exports = {
 	theme: {
 		extend: {
 			colors: {
-				primary: "#111B21",
+				primary: "#000",
 				secondary: "#282A2D",
-				tartiary: "#f1f3f4",
-				default: "#F9F9F9",
+				tartiary: "#E0E0E0",
+				default: "#fafafa",
 				white: "#ffffff",
 				gray: "#5F6368",
 				green: "#002C00",
-				"light-green": "#E6F0E6",
-				"light-pink": "#FCE5ED",
-				"light-blue": "#E3F2FD",
-				"light-yellow": "#FFF9C4",
 			},
 			fontFamily: {
 				sans: ["var(--font-poppins)", "sans-serif"],
