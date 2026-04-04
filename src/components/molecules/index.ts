@@ -8,5 +8,6 @@ export * from "./QueryTabOption";
 export * from "./ReusableModal";
 export * from "./ReusableTable";
 export * from "./SearchInput";
+export * from "./SelectInput";
 export * from "./StatCard";
 export * from "./TableLoader";
