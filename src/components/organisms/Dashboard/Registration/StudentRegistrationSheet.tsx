@@ -1,14 +1,14 @@
 "use client";
 
-import { FormField } from "@/components/molecules";
+import { FormField, SelectInput } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { Upload, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import type { Registration } from "./registration.types";
 
-const oLevelSubjects = [
+const oLevelSubjectRows = [
 	{ subject: "Mathematics D (Calculator)", grade: "A*", code: "4024" },
 	{ subject: "Physics", grade: "B", code: "5054" },
 	{ subject: "Chemistry", grade: "C", code: "5070" },
@@ -30,7 +30,7 @@ const oLevelSubjects = [
 	{ subject: "Bengali", grade: "A", code: "3204" },
 ];
 
-const aLevelSubjects = [
+const aLevelSubjectRows = [
 	{ subject: "Mathematics", grade: "A", code: "9709" },
 	{ subject: "Further Mathematics", grade: "A", code: "9231" },
 	{ subject: "Physics", grade: "A", code: "9702" },
@@ -47,31 +47,26 @@ const aLevelSubjects = [
 	{ subject: "English Language", grade: "A", code: "9093" },
 ];
 
-function MarksheetTable({ subjects }: { subjects: { subject: string; grade: string; code: string }[] }) {
-	return (
-		<div className="overflow-hidden rounded-md border border-border">
-			<Table>
-				<TableHeader>
-					<TableRow className="border-0 hover:bg-transparent">
-						<TableHead className="h-9 bg-muted px-3 py-2 text-left text-xs font-medium">Subject</TableHead>
-						<TableHead className="h-9 bg-muted px-3 py-2 text-left text-xs font-medium">Grade</TableHead>
-						<TableHead className="h-9 bg-muted px-3 py-2 text-left text-xs font-medium">
-							Paper Code
-						</TableHead>
-					</TableRow>
-				</TableHeader>
-				<TableBody>
-					{subjects.map((s, i) => (
-						<TableRow key={i} className="border-t border-border">
-							<TableCell className="px-3 py-1.5 text-xs whitespace-normal">{s.subject}</TableCell>
-							<TableCell className="px-3 py-1.5 text-xs">{s.grade}</TableCell>
-							<TableCell className="px-3 py-1.5 text-xs">{s.code}</TableCell>
-						</TableRow>
-					))}
-				</TableBody>
-			</Table>
-		</div>
-	);
+const GRADE_OPTIONS = ["A*", "A", "B", "C", "D", "E", "U"];
+
+type MarkLine = { id: string; subject: string; grade: string; code: string };
+
+function seedLines(rows: { subject: string; grade: string; code: string }[], prefix: string): MarkLine[] {
+	return rows.map((r, i) => ({
+		id: `${prefix}-${i}-${r.code}`,
+		subject: r.subject,
+		grade: r.grade,
+		code: r.code,
+	}));
+}
+
+function newLine(prefix: string, subjectOptions: string[]): MarkLine {
+	return {
+		id: `${prefix}-${crypto.randomUUID()}`,
+		subject: subjectOptions[0] ?? "",
+		grade: "A",
+		code: "",
+	};
 }
 
 type Props = {
@@ -82,6 +77,23 @@ type Props = {
 export const StudentRegistrationSheet = ({ student, onOpenChange }: Props) => {
 	const open = student !== null;
 
+	const oNames = useMemo(() => oLevelSubjectRows.map((r) => r.subject), []);
+	const aNames = useMemo(() => aLevelSubjectRows.map((r) => r.subject), []);
+
+	const [oLines, setOLines] = useState<MarkLine[]>(() => seedLines(oLevelSubjectRows, "o"));
+	const [aLines, setALines] = useState<MarkLine[]>(() => seedLines(aLevelSubjectRows, "a"));
+
+	useEffect(() => {
+		if (!student) return;
+		setOLines(seedLines(oLevelSubjectRows, "o"));
+		setALines(seedLines(aLevelSubjectRows, "a"));
+	}, [student?.id]);
+
+	const patchO = (id: string, patch: Partial<MarkLine>) =>
+		setOLines((prev) => prev.map((l) => (l.id === id ? { ...l, ...patch } : l)));
+	const patchA = (id: string, patch: Partial<MarkLine>) =>
+		setALines((prev) => prev.map((l) => (l.id === id ? { ...l, ...patch } : l)));
+
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>
 			<SheetContent
@@ -89,14 +101,14 @@ export const StudentRegistrationSheet = ({ student, onOpenChange }: Props) => {
 				showCloseButton={false}
 				overlayClassName="bg-foreground/30 backdrop-blur-[2px]"
 				className={cn(
-					"flex h-full max-h-[100dvh] min-h-0 w-full max-w-md flex-col gap-0 overflow-hidden border-l bg-background p-0 text-foreground shadow-xl",
-					"data-[side=right]:w-full data-[side=right]:sm:max-w-md",
+					"flex h-full max-h-[100dvh] min-h-0 w-full max-w-[500px] flex-col gap-0 overflow-hidden border-l bg-background p-0 text-foreground shadow-xl",
+					"data-[side=right]:w-full data-[side=right]:sm:max-w-[500px]",
 					"animate-in slide-in-from-right duration-200",
 				)}
 			>
 				{student ? (
 					<>
-						<SheetHeader className="shrink-0 space-y-1  px-6 pt-6 pb-4">
+						<SheetHeader className="shrink-0 space-y-1 px-6 pt-6 pb-4">
 							<Button
 								type="button"
 								variant="ghost"
@@ -115,7 +127,7 @@ export const StudentRegistrationSheet = ({ student, onOpenChange }: Props) => {
 
 						<div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-6 py-6">
 							<div className="space-y-8">
-								<div className="flex justify-between items-end gap-3 border border-tartiary rounded-lg p-4">
+								<div className="flex items-end justify-between gap-3 rounded-lg border border-tartiary p-4">
 									<div className="size-28 overflow-hidden rounded-lg bg-muted">
 										<img
 											src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face"
@@ -123,13 +135,13 @@ export const StudentRegistrationSheet = ({ student, onOpenChange }: Props) => {
 											className="size-full object-cover"
 										/>
 									</div>
-									<Button type="button" variant="outline" size="sm" className="gap-1.5 bg-frost ">
+									<Button type="button" variant="outline" size="sm" className="gap-1.5 bg-frost">
 										<Upload className="size-3.5" />
 										Replace Image
 									</Button>
 								</div>
 
-								<div className="border border-tartiary rounded-lg p-4">
+								<div className="rounded-lg border border-tartiary p-4">
 									<h3 className="mb-4 text-sm font-semibold text-foreground">Personal Information</h3>
 									<div className="space-y-3">
 										<FormField label="Full Name" value={student.student} />
@@ -142,7 +154,7 @@ export const StudentRegistrationSheet = ({ student, onOpenChange }: Props) => {
 									</div>
 								</div>
 
-								<div>
+								<div className="rounded-lg border border-tartiary p-4">
 									<h3 className="mb-4 text-sm font-semibold text-foreground">Academic Information</h3>
 									<div className="space-y-3">
 										<FormField label="School Name" value={student.school} />
@@ -161,20 +173,95 @@ export const StudentRegistrationSheet = ({ student, onOpenChange }: Props) => {
 									</div>
 								</div>
 
-								<div>
+								<div className="rounded-lg border border-tartiary p-4">
 									<h3 className="mb-2 text-sm font-semibold text-foreground">Marksheet</h3>
 									<p className="mb-3 text-xs text-muted-foreground">O-Level Subjects</p>
-									<MarksheetTable subjects={oLevelSubjects} />
-									<Button type="button" variant="link" className="mt-2 h-auto p-0 text-primary">
+									<div className="space-y-3">
+										{oLines.map((line) => (
+											<div
+												key={line.id}
+												className="grid grid-cols-1 items-end gap-3 sm:grid-cols-12"
+											>
+												<div className="min-w-0 sm:col-span-7">
+													<SelectInput
+														options={oNames}
+														value={line.subject}
+														onValueChange={(v) => patchO(line.id, { subject: v })}
+														placeholder="Select subject"
+													/>
+												</div>
+												<div className="min-w-0 sm:col-span-3">
+													<SelectInput
+														options={GRADE_OPTIONS}
+														value={line.grade}
+														onValueChange={(v) => patchO(line.id, { grade: v })}
+														placeholder="Select grade"
+													/>
+												</div>
+												<div className="min-w-0 sm:col-span-2">
+													<FormField
+														value={line.code}
+														readOnly={false}
+														onChange={(e) => patchO(line.id, { code: e.target.value })}
+													/>
+												</div>
+											</div>
+										))}
+									</div>
+									<Button
+										type="button"
+										variant="outline"
+										size="lg"
+										className="mt-2 gap-1.5 !bg-frost"
+										onClick={() => setOLines((prev) => [...prev, newLine("o", oNames)])}
+									>
 										+ Add Subject
 									</Button>
 								</div>
 
-								<div>
+								<div className="rounded-lg border border-tartiary p-4">
 									<h3 className="mb-2 text-sm font-semibold text-foreground">Marksheet</h3>
 									<p className="mb-3 text-xs text-muted-foreground">A-Level Subjects</p>
-									<MarksheetTable subjects={aLevelSubjects} />
-									<Button type="button" variant="link" className="mt-2 h-auto p-0 text-primary">
+									<div className="space-y-3">
+										{aLines.map((line) => (
+											<div
+												key={line.id}
+												className="grid grid-cols-1 items-end gap-3 rounded-lg sm:grid-cols-12"
+											>
+												<div className="min-w-0 sm:col-span-5">
+													<SelectInput
+														label="Subject"
+														options={aNames}
+														value={line.subject}
+														onValueChange={(v) => patchA(line.id, { subject: v })}
+														placeholder="Select subject"
+													/>
+												</div>
+												<div className="min-w-0 sm:col-span-3">
+													<SelectInput
+														options={GRADE_OPTIONS}
+														value={line.grade}
+														onValueChange={(v) => patchA(line.id, { grade: v })}
+														placeholder="Select grade"
+													/>
+												</div>
+												<div className="min-w-0 sm:col-span-4">
+													<FormField
+														value={line.code}
+														readOnly={false}
+														onChange={(e) => patchA(line.id, { code: e.target.value })}
+													/>
+												</div>
+											</div>
+										))}
+									</div>
+									<Button
+										type="button"
+										variant="outline"
+										size="lg"
+										className="mt-2 gap-1.5 !bg-frost"
+										onClick={() => setALines((prev) => [...prev, newLine("a", aNames)])}
+									>
 										+ Add Subject
 									</Button>
 								</div>
@@ -183,11 +270,14 @@ export const StudentRegistrationSheet = ({ student, onOpenChange }: Props) => {
 									<Button
 										type="button"
 										variant="outline"
-										className="h-10 w-full rounded-md text-sm font-medium"
+										className="h-10 w-full rounded-md border border-[#002E66] bg-frost text-sm font-medium"
 									>
 										Update Information
 									</Button>
-									<Button type="button" className="h-10 w-full rounded-md text-sm font-medium">
+									<Button
+										type="button"
+										className="h-10 w-full rounded-md bg-[#002E66] text-sm font-medium"
+									>
 										Approve Now
 									</Button>
 									<div className="flex items-center gap-2">
@@ -196,7 +286,7 @@ export const StudentRegistrationSheet = ({ student, onOpenChange }: Props) => {
 										</select>
 										<Button
 											type="button"
-											className="h-10 shrink-0 rounded-md bg-destructive px-6 text-sm font-medium text-destructive-foreground hover:bg-destructive/90"
+											className="h-10 shrink-0 rounded-md bg-[#FFB0B0] px-6 text-sm font-medium text-[#B00000] hover:bg-[#FFB0B0]/90"
 										>
 											Decline
 										</Button>
