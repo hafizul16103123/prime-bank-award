@@ -3,71 +3,18 @@
 import { FormField, SelectInput } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import {
+	GRADE_OPTIONS,
+	aLevelSubjectRows,
+	newLine,
+	oLevelSubjectRows,
+	seedLines,
+	type MarkLine,
+} from "@/lib/marksheetData";
 import { cn } from "@/lib/utils";
 import { Upload, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import type { Registration } from "../Dashboard/Winners/winner.types";
-
-const oLevelSubjectRows = [
-	{ subject: "Mathematics D (Calculator)", grade: "A*", code: "4024" },
-	{ subject: "Physics", grade: "B", code: "5054" },
-	{ subject: "Chemistry", grade: "C", code: "5070" },
-	{ subject: "Biology", grade: "D", code: "5090" },
-	{ subject: "Computer Science", grade: "E", code: "2210" },
-	{ subject: "Combined Science", grade: "U", code: "5129" },
-	{ subject: "Accounting", grade: "A", code: "7707" },
-	{ subject: "Business Studies", grade: "A", code: "7115" },
-	{ subject: "Economics", grade: "A", code: "2281" },
-	{ subject: "Commerce", grade: "A", code: "7100" },
-	{ subject: "Bangladesh Studies", grade: "A", code: "7094" },
-	{ subject: "Sociology", grade: "A", code: "2251" },
-	{ subject: "Geography", grade: "A", code: "2217" },
-	{ subject: "ICT", grade: "B", code: "7042" },
-	{ subject: "Islamiyat", grade: "A", code: "2058" },
-	{ subject: "Global Perspectives", grade: "A", code: "2069" },
-	{ subject: "Additional Mathematics", grade: "A", code: "4037" },
-	{ subject: "English Language", grade: "A", code: "1123" },
-	{ subject: "Bengali", grade: "A", code: "3204" },
-];
-
-const aLevelSubjectRows = [
-	{ subject: "Mathematics", grade: "A", code: "9709" },
-	{ subject: "Further Mathematics", grade: "A", code: "9231" },
-	{ subject: "Physics", grade: "A", code: "9702" },
-	{ subject: "Chemistry", grade: "A", code: "9701" },
-	{ subject: "Biology", grade: "A", code: "9700" },
-	{ subject: "Computer Science", grade: "A", code: "9618" },
-	{ subject: "Marine Science", grade: "A", code: "9693" },
-	{ subject: "Accounting", grade: "A", code: "9706" },
-	{ subject: "Business", grade: "A", code: "9609" },
-	{ subject: "Economics", grade: "A", code: "9708" },
-	{ subject: "Law", grade: "A", code: "9084" },
-	{ subject: "Psychology", grade: "A", code: "9990" },
-	{ subject: "Sociology", grade: "A", code: "9699" },
-	{ subject: "English Language", grade: "A", code: "9093" },
-];
-
-const GRADE_OPTIONS = ["A*", "A", "B", "C", "D", "E", "U"];
-
-type MarkLine = { id: string; subject: string; grade: string; code: string };
-
-function seedLines(rows: { subject: string; grade: string; code: string }[], prefix: string): MarkLine[] {
-	return rows.map((r, i) => ({
-		id: `${prefix}-${i}-${r.code}`,
-		subject: r.subject,
-		grade: r.grade,
-		code: r.code,
-	}));
-}
-
-function newLine(prefix: string, subjectOptions: string[]): MarkLine {
-	return {
-		id: `${prefix}-${crypto.randomUUID()}`,
-		subject: subjectOptions[0] ?? "",
-		grade: "A",
-		code: "",
-	};
-}
 
 type Props = {
 	student: Registration | null;
@@ -176,13 +123,24 @@ export const StudentRegistrationSheet = ({ student, onOpenChange }: Props) => {
 								<div className="rounded-lg border border-tartiary p-4">
 									<h3 className="mb-2 text-sm font-semibold text-foreground">Marksheet</h3>
 									<p className="mb-3 text-xs text-muted-foreground">O-Level Subjects</p>
+									<div className="gap-3 grid sm:grid-cols-12 bg-tartiary/60 rounded-md border border-tartiary p-2 mb-3">
+										<div className="min-w-0 sm:col-span-6">
+											<span>Subject</span>
+										</div>
+										<div className="min-w-0 sm:col-span-3">
+											<span>Grade</span>
+										</div>
+										<div className="min-w-0 sm:col-span-3">
+											<span>Paper Code</span>
+										</div>
+									</div>
 									<div className="space-y-3">
 										{oLines.map((line) => (
 											<div
 												key={line.id}
 												className="grid grid-cols-1 items-end gap-3 sm:grid-cols-12"
 											>
-												<div className="min-w-0 sm:col-span-7">
+												<div className="min-w-0 sm:col-span-6">
 													<SelectInput
 														options={oNames}
 														value={line.subject}
@@ -198,7 +156,7 @@ export const StudentRegistrationSheet = ({ student, onOpenChange }: Props) => {
 														placeholder="Select grade"
 													/>
 												</div>
-												<div className="min-w-0 sm:col-span-2">
+												<div className="min-w-0 sm:col-span-3">
 													<FormField
 														value={line.code}
 														readOnly={false}
@@ -222,15 +180,25 @@ export const StudentRegistrationSheet = ({ student, onOpenChange }: Props) => {
 								<div className="rounded-lg border border-tartiary p-4">
 									<h3 className="mb-2 text-sm font-semibold text-foreground">Marksheet</h3>
 									<p className="mb-3 text-xs text-muted-foreground">A-Level Subjects</p>
+									<div className="gap-3 grid sm:grid-cols-12 bg-tartiary/60 rounded-md border border-tartiary p-2 mb-3">
+										<div className="min-w-0 sm:col-span-6">
+											<span>Subject</span>
+										</div>
+										<div className="min-w-0 sm:col-span-3">
+											<span>Grade</span>
+										</div>
+										<div className="min-w-0 sm:col-span-3">
+											<span>Paper Code</span>
+										</div>
+									</div>
 									<div className="space-y-3">
 										{aLines.map((line) => (
 											<div
 												key={line.id}
 												className="grid grid-cols-1 items-end gap-3 rounded-lg sm:grid-cols-12"
 											>
-												<div className="min-w-0 sm:col-span-5">
+												<div className="min-w-0 sm:col-span-6">
 													<SelectInput
-														label="Subject"
 														options={aNames}
 														value={line.subject}
 														onValueChange={(v) => patchA(line.id, { subject: v })}
@@ -245,7 +213,7 @@ export const StudentRegistrationSheet = ({ student, onOpenChange }: Props) => {
 														placeholder="Select grade"
 													/>
 												</div>
-												<div className="min-w-0 sm:col-span-4">
+												<div className="min-w-0 sm:col-span-3">
 													<FormField
 														value={line.code}
 														readOnly={false}

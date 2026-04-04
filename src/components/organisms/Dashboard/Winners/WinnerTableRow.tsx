@@ -27,7 +27,7 @@ export const WinnerTableRow = ({
 					<button onClick={() => setSelectedStudent(row)} className="bg-subtle px-3 py-1 rounded-md">
 						<Eye className="w-4 h-4" color="#212121" />
 					</button>
-					<button onClick={() => setSelectedStudent(row)} className="bg-subtle px-3 py-1 rounded-md">
+					<button className="bg-subtle px-3 py-1 rounded-md">
 						<Eye className="w-4 h-4" color="#212121" />
 					</button>
 				</div>

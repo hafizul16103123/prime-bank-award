@@ -7,7 +7,6 @@ import { sidebarItems } from "./constant";
 export const AdminSidebar = () => {
 	const pathname = usePathname();
 
-	console.log({ pathname });
 	return (
 		<aside className="w-[220px] min-w-[220px] h-screen border-r border-tartiary bg-white flex flex-col">
 			{/* Logo */}

@@ -2,8 +2,8 @@
 import { ReusableTable } from "@/components/molecules";
 import { TableRow } from "@/components/ui/table";
 import { useState } from "react";
+import { StudentRegistrationSheet } from "../../common";
 import { RegistrationTableRow } from "./RegistrationTableRow";
-import { StudentRegistrationSheet } from "./StudentRegistrationSheet";
 import type { Registration } from "./registration.types";
 
 export type { Registration } from "./registration.types";
