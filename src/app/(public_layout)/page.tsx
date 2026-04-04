@@ -1,3 +1,4 @@
+import { HomeUnit } from "@/components/templates";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,7 +8,7 @@ export const metadata: Metadata = {
 	},
 };
 const Home = async () => {
-	return <></>;
+	return <HomeUnit />;
 };
 
 export default Home;

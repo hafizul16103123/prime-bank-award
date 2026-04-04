@@ -7,15 +7,14 @@ import { sidebarItems } from "./constant";
 export const AdminSidebar = () => {
 	const pathname = usePathname();
 
-	console.log({ pathname });
 	return (
-		<aside className="w-[220px] min-w-[220px] h-screen border-r border-tartiary bg-white flex flex-col">
+		<aside className="flex h-full min-h-0 w-[220px] min-w-[220px] shrink-0 flex-col border-r border-tartiary bg-white">
 			{/* Logo */}
 			<div className="flex items-center gap-2.5 px-4 py-4 border-b border-tartiary">
 				<span className="font-semibold text-sm text-foreground">Prime Bank PLC</span>
 			</div>
 
-			<nav className="flex-1 overflow-y-auto py-2">
+			<nav className="min-h-0 flex-1 overflow-y-auto py-2">
 				{sidebarItems.map((section) => (
 					<div key={section.title} className="mb-1 mt-2">
 						<p className="px-4 py-1.5 text-xs    text-muted-foreground">{section?.title}</p>

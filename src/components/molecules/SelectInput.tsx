@@ -27,8 +27,8 @@ export function SelectInput({
 		<div className={cn("space-y-1", className)}>
 			{label && <Label className="text-xs font-normal text-muted-foreground">{label}</Label>}
 			<Select value={value} onValueChange={(v) => onValueChange(v ?? "")} disabled={disabled}>
-				<SelectTrigger className="h-9 w-full min-w-0 max-w-none justify-between">
-					<SelectValue className="min-w-0" placeholder={placeholder} />
+				<SelectTrigger className="!h-11 w-full min-w-0 max-w-none justify-between">
+					<SelectValue className="min-w-0 text-sm" placeholder={placeholder} />
 				</SelectTrigger>
 				<SelectContent>
 					{options.map((opt) => (

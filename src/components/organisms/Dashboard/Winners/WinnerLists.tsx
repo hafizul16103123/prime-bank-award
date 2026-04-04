@@ -3,10 +3,10 @@ import { ReusableTable } from "@/components/molecules";
 import { TableRow } from "@/components/ui/table";
 import { useState } from "react";
 import { StudentRegistrationSheet } from "../../common";
-import { RegistrationTableRow } from "./RegistrationTableRow";
-import type { Registration } from "./registration.types";
+import type { Registration } from "./winner.types";
+import { WinnerTableRow } from "./WinnerTableRow";
 
-export type { Registration } from "./registration.types";
+export type { Registration } from "./winner.types";
 
 const registrationTableHeader = ["Student", "Phone", "School", "ID", "Level", "Submitted", "Status", "Actions"];
 
@@ -19,7 +19,7 @@ const mockData: Registration[] = [
 		studentId: "32116464",
 		level: "A-Level",
 		submitted: "12 April 2026",
-		status: "Pending",
+		status: "YET_TO_AWARD",
 	},
 	{
 		id: 2,
@@ -29,7 +29,7 @@ const mockData: Registration[] = [
 		studentId: "32116464",
 		level: "O-Level",
 		submitted: "12 April 2026",
-		status: "Pending",
+		status: "YET_TO_AWARD",
 	},
 	{
 		id: 3,
@@ -39,7 +39,7 @@ const mockData: Registration[] = [
 		studentId: "32116464",
 		level: "A-Level",
 		submitted: "12 April 2026",
-		status: "Pending",
+		status: "YET_TO_AWARD",
 	},
 	{
 		id: 4,
@@ -49,7 +49,7 @@ const mockData: Registration[] = [
 		studentId: "32116464",
 		level: "A-Level",
 		submitted: "12 April 2026",
-		status: "Pending",
+		status: "YET_TO_AWARD",
 	},
 	{
 		id: 5,
@@ -59,7 +59,7 @@ const mockData: Registration[] = [
 		studentId: "32116464",
 		level: "O-Level",
 		submitted: "12 April 2026",
-		status: "Pending",
+		status: "YET_TO_AWARD",
 	},
 	{
 		id: 6,
@@ -69,7 +69,7 @@ const mockData: Registration[] = [
 		studentId: "32116464",
 		level: "O-Level",
 		submitted: "12 April 2026",
-		status: "Approved",
+		status: "AWARDED",
 	},
 	{
 		id: 7,
@@ -79,7 +79,7 @@ const mockData: Registration[] = [
 		studentId: "32116464",
 		level: "O-Level",
 		submitted: "12 April 2026",
-		status: "Declined",
+		status: "AWARDED",
 	},
 	{
 		id: 8,
@@ -89,7 +89,7 @@ const mockData: Registration[] = [
 		studentId: "32116464",
 		level: "A-Level",
 		submitted: "12 April 2026",
-		status: "Approved",
+		status: "AWARDED",
 	},
 	{
 		id: 9,
@@ -99,7 +99,7 @@ const mockData: Registration[] = [
 		studentId: "32116464",
 		level: "A-Level",
 		submitted: "12 April 2026",
-		status: "Approved",
+		status: "AWARDED",
 	},
 	{
 		id: 10,
@@ -109,7 +109,7 @@ const mockData: Registration[] = [
 		studentId: "32116464",
 		level: "O-Level",
 		submitted: "12 April 2026",
-		status: "Declined",
+		status: "AWARDED",
 	},
 ];
 type Props = {
@@ -118,7 +118,7 @@ type Props = {
 	isLoading?: boolean;
 };
 
-export const RegistrationLists = ({ data = mockData, emptyMessage, isLoading = false }: Props) => {
+export const WinnerLists = ({ data = mockData, emptyMessage, isLoading = false }: Props) => {
 	const [selectedStudent, setSelectedStudent] = useState<Registration | null>(null);
 	return (
 		<div>
@@ -137,7 +137,7 @@ export const RegistrationLists = ({ data = mockData, emptyMessage, isLoading = f
 			>
 				{data.map((row) => (
 					<TableRow key={row.id}>
-						<RegistrationTableRow row={row} setSelectedStudent={setSelectedStudent} />
+						<WinnerTableRow row={row} setSelectedStudent={setSelectedStudent} />
 					</TableRow>
 				))}
 			</ReusableTable>
