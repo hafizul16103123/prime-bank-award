@@ -2,29 +2,47 @@
 
 import { InputHTMLAttributes } from "react";
 import { Input, Label } from "../ui";
+import { cn } from "@/lib/utils";
 
-interface FormFieldProps extends InputHTMLAttributes<HTMLInputElement> {
+interface FormFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "value" | "defaultValue"> {
 	label?: string;
 	value: string;
 	error?: string;
 	placeholder?: string;
+	/**
+	 * Default read-only display. Set `false` or pass `onChange` to allow editing (controlled with `value`).
+	 */
+	readOnly?: boolean;
 }
 
-export const FormField = ({ label, value, error, placeholder, ...rest }: FormFieldProps) => {
+export const FormField = ({
+	label,
+	value,
+	error,
+	placeholder,
+	readOnly,
+	onChange,
+	className,
+	type = "text",
+	...rest
+}: FormFieldProps) => {
+	const editable = readOnly === false || typeof onChange === "function";
+
 	return (
 		<div className="space-y-1">
-			<Label className="text-xs font-normal text-muted-foreground">{label}</Label>
+			{label ? <Label className="text-xs font-normal text-muted-foreground">{label}</Label> : null}
 			<div>
 				<Input
 					{...rest}
-					type="text"
+					type={type}
 					placeholder={placeholder}
-					defaultValue={value}
-					readOnly
-					className="h-9 rounded-md bg-background px-3 text-sm"
+					onChange={onChange}
+					readOnly={!editable}
+					{...(editable ? { value } : { defaultValue: value })}
+					className={cn("h-9 rounded-md bg-background px-3 text-sm", className)}
 				/>
 			</div>
-			{error && <p className="text-red-500  text-sm">{error}</p>}
+			{error ? <p className="text-sm text-red-500">{error}</p> : null}
 		</div>
 	);
 };
