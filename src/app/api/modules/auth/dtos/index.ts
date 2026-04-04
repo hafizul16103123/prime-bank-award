@@ -3,7 +3,7 @@ import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
 export enum UserRole {
   STUDENT = "STUDENT",
-  TEACHER = "TEACHER",
+  SCHOOL_ADMIN = "SCHOOL_ADMIN",
   ADMIN = "ADMIN",
 }
 

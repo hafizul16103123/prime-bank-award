@@ -4,10 +4,11 @@ export interface IUser {
   name: string;
   email: string;
   password: string;
-  role: 'STUDENT' | 'TEACHER' | 'ADMIN';
+  role: "STUDENT" | "SCHOOL_ADMIN" | "ADMIN";
   emailVerified: boolean;
-  status: 'ACTIVE' | 'INACTIVE' | 'DELETED' | 'BLOCKED';
+  status: "ACTIVE" | "INACTIVE" | "DELETED" | "BLOCKED";
   isDeleted: boolean;
+  isUserConfirmed: boolean;
 }
 
 const userSchema = new mongoose.Schema<IUser>(
@@ -29,8 +30,8 @@ const userSchema = new mongoose.Schema<IUser>(
     },
     role: {
       type: String,
-      enum: ['STUDENT', 'TEACHER', 'ADMIN'],
-      default: 'STUDENT',
+      enum: ["STUDENT", "SCHOOL_ADMIN", "ADMIN"],
+      default: "STUDENT",
     },
     emailVerified: {
       type: Boolean,
@@ -38,18 +39,24 @@ const userSchema = new mongoose.Schema<IUser>(
     },
     status: {
       type: String,
-      enum: ['ACTIVE', 'INACTIVE', 'DELETED', 'BLOCKED'],
-      default: 'ACTIVE',
+      enum: ["ACTIVE", "INACTIVE", "DELETED", "BLOCKED"],
+      default: "ACTIVE",
     },
     isDeleted: {
       type: Boolean,
       default: false,
     },
+    isUserConfirmed: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
-const User: Model<IUser> = model<IUser>('User', userSchema);
+const User: Model<IUser> = mongoose.models.User 
+  ? mongoose.models.User as Model<IUser>
+  : model<IUser>('User', userSchema);
 export { User };

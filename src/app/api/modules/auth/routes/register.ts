@@ -14,13 +14,14 @@ export async function register(request: Request) {
       );
     }
 
-    const user = await authService.register(name, email, password, role);
+    const baseUrl = request.headers.get("origin") || process.env.NEXT_PUBLIC_APP_URL;
+    const user = await authService.register(name, email, password, role, baseUrl);
 
     return NextResponse.json(
       {
         success: true,
-        message: "User registered successfully",
-        data: user,
+        message: user.message,
+        data: { id: user.id, name: user.name, email: user.email, role: user.role },
       },
       { status: 201 }
     );

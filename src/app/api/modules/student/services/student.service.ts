@@ -1,7 +1,10 @@
 import bcrypt from "bcryptjs";
 import { User } from "../../auth/models/User";
 import { Student } from "../models/Student";
+import { Verification } from "../../auth/models/Verification";
+import { sendVerificationEmail } from "@/lib/email";
 import dbConnect from "@/lib/db";
+import { generateVerificationToken, verifyVerificationToken } from "../../auth/utils/jwt";
 
 export class StudentService {
   async register(
@@ -23,7 +26,8 @@ export class StudentService {
       studyGroup?: string;
       oLevelSubjects?: any[];
       aLevelSubjects?: any[];
-    }
+    },
+    baseUrl?: string
   ) {
     await dbConnect();
 
@@ -45,6 +49,7 @@ export class StudentService {
     });
 
     const student = await Student.create({
+      name,
       userId: user._id,
       dateOfBirth: studentData.dateOfBirth,
       gender: studentData.gender,
@@ -62,7 +67,23 @@ export class StudentService {
       aLevelSubjects: studentData.aLevelSubjects,
     });
 
+    const verificationToken = generateVerificationToken(email);
+
+    await Verification.deleteMany({ identifier: `verify-email:${email}` });
+
+    await Verification.create({
+      identifier: `verify-email:${email}`,
+      value: verificationToken,
+      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+    });
+
+    if (baseUrl) {
+      const verificationLink = `${baseUrl}/verify-email?token=${verificationToken}`;
+      await sendVerificationEmail(email, verificationLink, name);
+    }
+
     return {
+      message: "Student registered successfully. Please verify your email to login.",
       user: {
         id: user._id,
         name: user.name,

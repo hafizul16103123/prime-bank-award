@@ -9,6 +9,7 @@ export async function POST(request: Request) {
       name,
       email,
       password,
+      confirmPassword,
       role,
       dateOfBirth,
       gender,
@@ -25,13 +26,20 @@ export async function POST(request: Request) {
       aLevelSubjects,
     } = body;
 
-    if (!name || !email || !password || !dateOfBirth || !gender || !phoneNumber || !school || !applyingForLevel || !yearOfExamination || !examinationSession) {
+    if (!name || !email || !password || !dateOfBirth || !gender || !phoneNumber || !school || !applyingForLevel || !yearOfExamination || !examinationSession || !confirmPassword  ) {
       return NextResponse.json(
         { success: false, message: "Please provide all required fields" },
         { status: 400 }
       );
     }
+    if(password !== confirmPassword){
+      return NextResponse.json(
+        { success: false, message: "Passwords do not match" },
+        { status: 400 }
+      );
+    }
 
+    const baseUrl = request.headers.get("origin") || process.env.NEXT_PUBLIC_APP_URL;
     const result = await studentService.register(name, email, password, role, {
       dateOfBirth,
       gender,
@@ -46,13 +54,16 @@ export async function POST(request: Request) {
       studyGroup,
       oLevelSubjects,
       aLevelSubjects,
-    });
+    }, baseUrl);
 
     return NextResponse.json(
       {
         success: true,
-        message: "Student registered successfully",
-        data: result,
+        message: result.message,
+        data: {
+          user: result.user,
+          student: result.student,
+        },
       },
       { status: 201 }
     );

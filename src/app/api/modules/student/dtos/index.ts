@@ -65,6 +65,11 @@ export class CreateStudentDto {
   @IsString()
   @IsNotEmpty()
   password: string;
+  
+  @ApiProperty({ example: "password123" })
+  @IsString()
+  @IsNotEmpty()
+  confirmPassword: string;
 
   @ApiPropertyOptional({ example: "STUDENT" })
   @IsString()

@@ -1,4 +1,10 @@
-import mongoose, { Model, model } from 'mongoose';
+import mongoose, { Model, model } from "mongoose";
+
+export enum StudentStatus {
+  PENDING = "PENDING",
+  APPROVED = "APPROVED",
+  REJECTED = "REJECTED",
+}
 
 export enum Gender {
   MALE = "MALE",
@@ -38,6 +44,7 @@ export interface ISubject {
 }
 
 export interface IStudent {
+  name: string;
   userId: mongoose.Types.ObjectId;
   dateOfBirth: Date;
   gender: string;
@@ -53,30 +60,57 @@ export interface IStudent {
   studyGroup?: string;
   oLevelSubjects?: ISubject[];
   aLevelSubjects?: ISubject[];
+  status?: string;
 }
 
-const subjectSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  grade: { type: String, required: true },
-  paperCode: { type: String },
-}, { _id: false });
+const subjectSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    grade: { type: String, required: true },
+    paperCode: { type: String },
+  },
+  { _id: false },
+);
 
-const studentSchema = new mongoose.Schema<IStudent>({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  dateOfBirth: { type: Date, required: true },
-  gender: { type: String, enum: Object.values(Gender), required: true },
-  phoneNumber: { type: String, required: true },
-  email: { type: String, required: true, unique: true, lowercase: true },
-  school: { type: String, required: true },
-  rollNumber: { type: String },
-  photoUrl: { type: String },
-  applyingForLevel: { type: String, enum: Object.values(ExaminationLevel), required: true },
-  yearOfExamination: { type: Number, required: true },
-  examinationSession: { type: String, enum: Object.values(ExaminationSession), required: true },
-  examinationBoard: { type: String, enum: Object.values(ExaminationBoard) },
-  studyGroup: { type: String, enum: Object.values(StudyGroup) },
-  oLevelSubjects: [subjectSchema],
-  aLevelSubjects: [subjectSchema],
-}, { timestamps: true });
+const studentSchema = new mongoose.Schema<IStudent>(
+  {
+    name: { type: String },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    dateOfBirth: { type: Date, required: true },
+    gender: { type: String, enum: Object.values(Gender), required: true },
+    phoneNumber: { type: String, required: true },
+    email: { type: String, required: true, unique: true, lowercase: true },
+    school: { type: String, required: true },
+    rollNumber: { type: String },
+    photoUrl: { type: String },
+    applyingForLevel: {
+      type: String,
+      enum: Object.values(ExaminationLevel),
+      required: true,
+    },
+    yearOfExamination: { type: Number, required: true },
+    examinationSession: {
+      type: String,
+      enum: Object.values(ExaminationSession),
+      required: true,
+    },
+    examinationBoard: { type: String, enum: Object.values(ExaminationBoard) },
+    studyGroup: { type: String, enum: Object.values(StudyGroup) },
+    oLevelSubjects: [subjectSchema],
+    aLevelSubjects: [subjectSchema],
+    status: { 
+      type: String, 
+      enum: Object.values(StudentStatus),
+      default: StudentStatus.PENDING 
+    },
+  },
+  { timestamps: true },
+);
 
-export const Student: Model<IStudent> = model<IStudent>('Student', studentSchema);
+export const Student: Model<IStudent> = mongoose.models.Student 
+  ? mongoose.models.Student as Model<IStudent>
+  : model<IStudent>("Student", studentSchema);

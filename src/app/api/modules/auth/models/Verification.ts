@@ -26,5 +26,7 @@ const verificationSchema = new mongoose.Schema<IVerification>(
   }
 );
 
-const Verification: Model<IVerification> = model<IVerification>('Verification', verificationSchema);
+const Verification: Model<IVerification> = mongoose.models.Verification 
+  ? mongoose.models.Verification as Model<IVerification>
+  : model<IVerification>('Verification', verificationSchema);
 export { Verification };

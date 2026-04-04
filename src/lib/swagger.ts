@@ -29,7 +29,10 @@ const options = {
             name: { type: "string" },
             email: { type: "string", format: "email" },
             password: { type: "string" },
-            role: { type: "string", enum: ["STUDENT", "TEACHER", "ADMIN"] },
+            role: {
+              type: "string",
+              enum: ["STUDENT", "SCHOOL_ADMIN", "ADMIN"],
+            },
           },
           required: ["name", "email", "password"],
         },
@@ -46,7 +49,10 @@ const options = {
             email: { type: "string", format: "email" },
             school: { type: "string" },
             rollNumber: { type: "string" },
-            photoUrl: { type: "string",example:"https://example.com/photo.jpg" },
+            photoUrl: {
+              type: "string",
+              example: "https://example.com/photo.jpg",
+            },
             applyingForLevel: {
               type: "string",
               enum: ["AS_A2", "CAMBRIDGE_CIE"],

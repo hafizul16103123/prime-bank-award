@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
 import { Student } from "../../student/models/Student";
 import dbConnect from "@/lib/db";
-import { requireSchoolAdmin, AuthenticatedRequest } from "../../auth/utils/auth-guard";
+import {
+  requireAdmin,
+  AuthenticatedRequest,
+} from "../../auth/utils/auth-guard";
 
 export async function GET(request: AuthenticatedRequest) {
   try {
-    const authError = requireSchoolAdmin()(request as any);
+    const authError = requireAdmin()(request as any);
     if (authError) return authError;
 
     const { searchParams } = new URL(request.url);

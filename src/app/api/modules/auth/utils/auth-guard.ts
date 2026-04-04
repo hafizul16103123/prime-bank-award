@@ -56,11 +56,15 @@ export function requireAdmin() {
 }
 
 export function requireSchoolAdmin() {
-  return requireAuth([UserRole.ADMIN, UserRole.SCHOOL_ADMIN]);
+  return requireAuth([UserRole.SCHOOL_ADMIN]);
 }
 
 export function requireStudent() {
   return requireAuth([UserRole.STUDENT]);
+}
+
+export function requireAdminOrSchoolAdmin() {
+  return requireAuth([UserRole.ADMIN, UserRole.SCHOOL_ADMIN]);
 }
 
 export function requireAnyRole() {

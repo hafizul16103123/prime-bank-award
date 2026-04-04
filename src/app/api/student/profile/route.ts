@@ -1,2 +1,3 @@
 import { GET } from "../../modules/student/routes/profile";
-export { GET };
+import { PUT } from "../../modules/student/routes/update-profile";
+export { GET, PUT };
