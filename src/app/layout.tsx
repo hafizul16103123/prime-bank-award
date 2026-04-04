@@ -1,18 +1,18 @@
-import { Poppins } from "next/font/google";
+import { Outfit } from "next/font/google";
 
 import { ToastContainer } from "react-toastify";
 import "./globals.css";
+import { cn } from "@/lib/utils";
 
-const poppins = Poppins({
+const outfit = Outfit({
 	subsets: ["latin"],
-	weight: ["400", "500", "600", "700"],
 	display: "swap",
-	variable: "--font-poppins",
+	variable: "--font-sans",
 });
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
-		<html lang="en" className={poppins.variable}>
+		<html lang="en" className={cn("font-sans", outfit.variable)}>
 			<body className="relative">
 				<main className=" ">{children}</main>
 				<ToastContainer />

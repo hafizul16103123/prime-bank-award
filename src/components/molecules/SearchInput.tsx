@@ -3,7 +3,7 @@
 import { useDebounce } from "@/libes/hooks";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FC, useEffect, useState } from "react";
-import { FormInput } from "../atoms";
+import { FormField } from "./FormField";
 
 type size = "SM" | "MD" | "XL";
 
@@ -33,7 +33,7 @@ export const SearchInput: FC<PropsType> = ({ searchKey, placeholder, bgColor, ic
 
 	return (
 		<div className="w-full ">
-			<FormInput
+			<FormField
 				placeholder={placeholder}
 				value={searchText}
 				onChange={(e) => {
@@ -41,8 +41,6 @@ export const SearchInput: FC<PropsType> = ({ searchKey, placeholder, bgColor, ic
 					handleChange(e);
 				}}
 				{...rest}
-				icon={icon}
-				bgColor
 			/>
 		</div>
 	);

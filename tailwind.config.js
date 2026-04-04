@@ -1,4 +1,6 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
+	darkMode: ["class"],
 	content: [
 		"./src/app/api/**/*.{js,ts,jsx,tsx}",
 		"./src/app/**/*.{js,ts,jsx,tsx,mdx}",
@@ -9,22 +11,74 @@ module.exports = {
 	theme: {
 		extend: {
 			colors: {
-				primary: "#111B21",
-				secondary: "#282A2D",
-				tartiary: "#f1f3f4",
-				default: "#F9F9F9",
+				border: "var(--border)",
+				input: "var(--input)",
+				ring: "var(--ring)",
+				background: "var(--background)",
+				foreground: "var(--foreground)",
+				primary: {
+					DEFAULT: "var(--primary)",
+					foreground: "var(--primary-foreground)",
+				},
+				secondary: {
+					DEFAULT: "var(--secondary)",
+					foreground: "var(--secondary-foreground)",
+				},
+				destructive: {
+					DEFAULT: "var(--destructive)",
+					foreground: "var(--destructive-foreground)",
+				},
+				muted: {
+					DEFAULT: "var(--muted)",
+					foreground: "var(--muted-foreground)",
+				},
+				accent: {
+					DEFAULT: "var(--accent)",
+					foreground: "var(--accent-foreground)",
+				},
+				popover: {
+					DEFAULT: "var(--popover)",
+					foreground: "var(--popover-foreground)",
+				},
+				card: {
+					DEFAULT: "var(--card)",
+					foreground: "var(--card-foreground)",
+				},
+				sidebar: {
+					DEFAULT: "var(--sidebar)",
+					foreground: "var(--sidebar-foreground)",
+					primary: "var(--sidebar-primary)",
+					"primary-foreground": "var(--sidebar-primary-foreground)",
+					accent: "var(--sidebar-accent)",
+					"accent-foreground": "var(--sidebar-accent-foreground)",
+					border: "var(--sidebar-border)",
+					ring: "var(--sidebar-ring)",
+				},
+				chart: {
+					1: "var(--chart-1)",
+					2: "var(--chart-2)",
+					3: "var(--chart-3)",
+					4: "var(--chart-4)",
+					5: "var(--chart-5)",
+				},
+				subtle: "var(--subtle)",
+				frost: "var(--frost)",
+				/* legacy palette (non–CSS-variable tokens) */
+				default: "#fafafa",
+				tartiary: "#E0E0E0",
 				white: "#ffffff",
 				gray: "#5F6368",
 				green: "#002C00",
-				"light-green": "#E6F0E6",
-				"light-pink": "#FCE5ED",
-				"light-blue": "#E3F2FD",
-				"light-yellow": "#FFF9C4",
+			},
+			borderRadius: {
+				lg: "var(--radius)",
+				md: "calc(var(--radius) - 2px)",
+				sm: "calc(var(--radius) - 4px)",
 			},
 			fontFamily: {
-				sans: ["var(--font-poppins)", "sans-serif"],
+				sans: ["var(--font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
 			},
 		},
 	},
-	plugins: [],
+	plugins: [require("tailwindcss-animate")],
 };
