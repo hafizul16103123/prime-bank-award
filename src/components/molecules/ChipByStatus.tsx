@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-export type IStatus = "Pending" | "Active" | "Approved" | "Completed" | "Denied" | "Upcoming" | "Ongoing" | "Blocked";
+export type IStatus = "Pending" | "YET_TO_AWARD" | "AWARDED";
 
 interface PropsType {
 	status: IStatus;
@@ -9,25 +9,15 @@ interface PropsType {
 
 export const ChipByStatus: FC<PropsType> = ({ status, label }) => {
 	const colorByStatus: Record<IStatus, string> = {
-		Completed: "bg-[#00719A]",
-		Active: "bg-[#00719A]",
-		Ongoing: "bg-[#00719A]",
 		Pending: "!bg-[#FAF0BC]",
-		Denied: "bg-[#FF4141]",
-		Blocked: "bg-[#FF4141]",
-		Approved: "bg-[#2FB772]",
-		Upcoming: "bg-[#DEF300]",
+		YET_TO_AWARD: "!bg-[#FAF0BC]",
+		AWARDED: "!bg-subtle",
 	};
 
 	const textByStatus: Record<IStatus, string> = {
-		Completed: "text-white",
-		Active: "text-white",
-		Ongoing: "text-white",
-		Denied: "text-white",
-		Blocked: "text-white",
-		Approved: "text-white",
 		Pending: "!text-[#675E00]",
-		Upcoming: "text-black",
+		YET_TO_AWARD: "!text-[#675E00]",
+		AWARDED: "!text-primary",
 	};
 
 	return (
