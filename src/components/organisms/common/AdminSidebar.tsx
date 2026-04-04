@@ -24,7 +24,7 @@ export const AdminSidebar = () => {
 								<button
 									className={`w-full flex items-center gap-2.5 px-4 py-2 text-sm transition-colors ${
 										pathname === item.path
-											? "text-primary bg-[hsl(var(--sidebar-active-bg))] font-medium border-r-2 border-primary"
+											? "border-r-2 border-primary bg-sidebar-accent font-medium text-primary"
 											: "text-primary/80 hover:bg-muted"
 									}`}
 								>

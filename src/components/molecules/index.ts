@@ -7,7 +7,6 @@ export * from "./Pagination";
 export * from "./Popover";
 export * from "./QueryTabOption";
 export * from "./ReusableModal";
-export * from "./ReusableTable";
 export * from "./SearchInput";
 export * from "./StatCard";
 export * from "./TableLoader";
