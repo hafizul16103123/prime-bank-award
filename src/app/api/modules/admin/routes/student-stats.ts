@@ -27,9 +27,9 @@ export async function GET(request: AuthenticatedRequest) {
 
     const result = {
       total: totalStudents,
-      PENDING: 0,
-      APPROVED: 0,
-      REJECTED: 0
+      Pending: 0,
+      Approved: 0,
+      Declined: 0
     };
 
     statusCounts.forEach((item: any) => {

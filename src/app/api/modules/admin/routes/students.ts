@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { Student } from "../../student/models/Student";
+import { Student, StudentStatus } from "../../student/models/Student";
 import dbConnect from "@/lib/db";
 import {
   requireAdmin,
@@ -17,6 +17,7 @@ export async function GET(request: AuthenticatedRequest) {
     const limit = parseInt(searchParams.get("limit") || "10");
     const status = searchParams.get("status");
     const level = searchParams.get("level");
+    const school = searchParams.get("school");
     const search = searchParams.get("search");
     const sortBy = searchParams.get("sort_by") || "createdAt";
     const sortOrder = searchParams.get("sort_order") === "asc" ? 1 : -1;
@@ -31,6 +32,9 @@ export async function GET(request: AuthenticatedRequest) {
 
     if (level) {
       query.applyingForLevel = level;
+    }
+    if (school) {
+      query.school = school;
     }
 
     if (search) {
@@ -64,6 +68,41 @@ export async function GET(request: AuthenticatedRequest) {
         },
       },
       "Students fetched",
+      200
+    );
+  } catch (error: any) {
+    return errorResponse(error.message || "Internal server error", 500);
+  }
+}
+
+export async function PATCH(request: AuthenticatedRequest) {
+  try {
+    const authError = requireAdmin()(request as any);
+    if (authError) return authError;
+
+    const body = await request.json();
+    const { studentIds, action } = body;
+
+    if (!studentIds || !Array.isArray(studentIds) || studentIds.length === 0) {
+      return errorResponse("Student IDs are required", 400);
+    }
+
+    if (!action || !["approve", "reject"].includes(action)) {
+      return errorResponse("Invalid action. Use 'approve' or 'reject'", 400);
+    }
+
+    await dbConnect();
+
+    const status = action === "approve" ? StudentStatus.APPROVED : StudentStatus.DECLINED;
+
+    const result = await Student.updateMany(
+      { _id: { $in: studentIds } },
+      { $set: { status } }
+    );
+
+    return successResponse(
+      { updatedCount: result.modifiedCount },
+      action === "approve" ? "Students approved successfully" : "Students rejected successfully",
       200
     );
   } catch (error: any) {
