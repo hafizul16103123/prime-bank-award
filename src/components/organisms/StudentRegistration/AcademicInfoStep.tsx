@@ -68,11 +68,11 @@ export const AcademicInfoStep = ({ subjectFields, onRemoveSubject, onAddSubject 
 	const applyingLevel = useWatch({ control, name: "applyingLevel" });
 
 	return (
-		<div className="space-y-6">
+		<div className="space-y-5 sm:space-y-6 md:space-y-6 lg:space-y-6 xl:space-y-6">
 			<div>
 				<CardSectionHeader title="Academic Information" description="Enter your Academic Information." />
 
-				<div className="grid gap-5 sm:grid-cols-2">
+				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 md:gap-5 lg:gap-5 xl:gap-5">
 					<FormSelectField
 						control={control}
 						name="applyingLevel"
@@ -108,7 +108,7 @@ export const AcademicInfoStep = ({ subjectFields, onRemoveSubject, onAddSubject 
 				/>
 			</div>
 
-			<div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+			<div className="rounded-xl border border-border bg-card p-4 shadow-sm sm:p-5 md:p-6 lg:p-6 xl:p-6">
 				<CardSectionHeader
 					title={marksheetSectionTitle(applyingLevel)}
 					description="Enter your examination results. Add each subject and the corresponding grade."
@@ -118,8 +118,8 @@ export const AcademicInfoStep = ({ subjectFields, onRemoveSubject, onAddSubject 
 					<p className="mb-3 text-xs text-destructive">{errors.subjects.message}</p>
 				)}
 
-				<div className="space-y-3">
-					<div className="grid grid-cols-[1fr_100px_100px_40px] gap-3 text-sm font-medium text-muted-foreground bg-subtle p-[10px] rounded-[50px]">
+				<div className="space-y-3 md:space-y-3">
+					<div className="hidden text-sm font-medium text-muted-foreground md:grid md:grid-cols-[1fr_100px_100px_40px] md:gap-3 md:rounded-[50px] md:bg-subtle md:p-[10px]">
 						<span>Subject</span>
 						<span>Grade</span>
 						<span>Paper Code</span>
@@ -127,7 +127,10 @@ export const AcademicInfoStep = ({ subjectFields, onRemoveSubject, onAddSubject 
 					</div>
 
 					{subjectFields.map((row, index) => (
-						<div key={row.id} className="grid grid-cols-[1fr_100px_100px_40px] gap-3">
+						<div
+							key={row.id}
+							className="grid grid-cols-1 gap-3 md:grid-cols-[1fr_100px_100px_40px] md:items-end md:gap-3"
+						>
 							<FormSelectField
 								control={control}
 								name={`subjects.${index}.subject`}
@@ -135,23 +138,25 @@ export const AcademicInfoStep = ({ subjectFields, onRemoveSubject, onAddSubject 
 								options={subjectOptions}
 								className="space-y-1"
 							/>
-							<FormSelectField
-								control={control}
-								name={`subjects.${index}.grade`}
-								placeholder="—"
-								options={gradeOptions}
-								className="space-y-1"
-							/>
-							<FormInputField
-								control={control}
-								name={`subjects.${index}.paperCode`}
-								placeholder="Code"
-								className="space-y-1"
-							/>
+							<div className="grid grid-cols-2 gap-3 md:contents">
+								<FormSelectField
+									control={control}
+									name={`subjects.${index}.grade`}
+									placeholder="—"
+									options={gradeOptions}
+									className="space-y-1"
+								/>
+								<FormInputField
+									control={control}
+									name={`subjects.${index}.paperCode`}
+									placeholder="Code"
+									className="space-y-1"
+								/>
+							</div>
 							<button
 								type="button"
 								disabled={subjectFields.length <= 1}
-								className="inline-flex size-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground outline-none transition-colors hover:bg-muted hover:text-destructive focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-40"
+								className="inline-flex size-9 shrink-0 items-center justify-center justify-self-end rounded-lg text-muted-foreground outline-none transition-colors hover:bg-muted hover:text-destructive focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-40 md:size-8 md:justify-self-auto"
 								aria-label="Remove subject row"
 								onClick={() => onRemoveSubject(index)}
 							>
@@ -164,7 +169,7 @@ export const AcademicInfoStep = ({ subjectFields, onRemoveSubject, onAddSubject 
 				<Button
 					type="button"
 					variant="outline"
-					className="mt-4 gap-2 border border-[#002E66] bg-frost text-sm font-medium py-[10px] px-[22px]"
+					className="mt-4 w-full gap-2 border border-[#002E66] bg-frost py-[10px] text-sm font-medium sm:w-auto sm:px-[22px]"
 					onClick={onAddSubject}
 				>
 					<Plus className="h-4 w-4" /> Add Subject

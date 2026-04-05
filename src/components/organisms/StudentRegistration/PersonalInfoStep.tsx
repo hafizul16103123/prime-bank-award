@@ -26,7 +26,7 @@ export const PersonalInfoStep = () => {
 				description="Please provide your personal data as they appear on official documents."
 			/>
 
-			<div className="grid gap-5 sm:grid-cols-2">
+			<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 md:gap-5 lg:gap-5 xl:gap-5">
 				<FormInputField control={control} name="fullName" label="Full Name" placeholder="Your full name" />
 				<ControlDatePicker
 					control={control}
@@ -45,9 +45,9 @@ export const PersonalInfoStep = () => {
 				/>
 			</div>
 
-			<div className="mt-5 space-y-2">
+			<div className="mt-5 space-y-2 sm:mt-6 md:mt-6 lg:mt-6 xl:mt-6">
 				<span className="text-sm font-medium leading-none">Upload Photo</span>
-				<div className="flex flex-col items-center rounded-lg border-2 border-dashed border-border bg-muted/50 p-8">
+				<div className="flex flex-col items-center rounded-lg border-2 border-dashed border-border bg-muted/50 p-5 sm:p-6 md:p-7 lg:p-8 xl:p-8">
 					<Controller
 						name="photo"
 						control={control}

@@ -8,7 +8,7 @@ export const ConfirmSubmitStep = () => {
 	const { control } = useFormContext<StudentRegistrationFormValues>();
 
 	return (
-		<div className="mx-auto max-w-md rounded-xl border border-border bg-card p-6 shadow-sm">
+		<div className="mx-auto w-full max-w-md rounded-xl border border-border bg-card p-4 shadow-sm sm:p-5 md:p-6 lg:p-6 xl:p-6">
 			<CardSectionHeader
 				title="Create Your Profile"
 				description="Enter your credentials to access your profile."

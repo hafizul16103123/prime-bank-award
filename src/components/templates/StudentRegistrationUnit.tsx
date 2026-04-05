@@ -150,7 +150,7 @@ export const StudentRegistrationUnit = () => {
 						type: "button",
 						size: "lg",
 						className:
-							"ml-auto bg-brand-blue text-white rounded-full hover:opacity-90 transition-opacity text-base font-medium px-20 py-6",
+							"w-full bg-brand-blue text-sm font-medium text-white transition-opacity hover:opacity-90 sm:ml-auto sm:w-auto sm:text-base md:text-base rounded-full px-6 py-4 sm:px-10 sm:py-5 md:px-14 md:py-5 lg:px-16 lg:py-6 xl:px-20 xl:py-6",
 						onClick: () => goToStep(2, step1Fields),
 						label: "Next: Academic Info",
 						icon: ArrowRight,
@@ -162,7 +162,8 @@ export const StudentRegistrationUnit = () => {
 					{
 						type: "button",
 						variant: "outline",
-						className: "gap-2 py-6 border border-tartiary rounded-full bg-subtle px-10",
+						className:
+							"w-full gap-2 rounded-full border border-tartiary bg-subtle py-4 text-sm sm:w-auto sm:px-8 sm:py-5 md:px-9 md:py-5 lg:px-10 lg:py-6",
 						onClick: () => setCurrentStep(1),
 						label: "Back",
 						icon: ArrowLeft,
@@ -172,7 +173,7 @@ export const StudentRegistrationUnit = () => {
 						type: "button",
 						size: "lg",
 						className:
-							"ml-auto bg-brand-blue text-white rounded-full hover:opacity-90 transition-opacity text-base font-medium px-20 py-6",
+							"w-full bg-brand-blue text-sm font-medium text-white transition-opacity hover:opacity-90 sm:ml-auto sm:w-auto sm:text-base md:text-base rounded-full px-6 py-4 sm:px-10 sm:py-5 md:px-14 md:py-5 lg:px-16 lg:py-6 xl:px-20 xl:py-6",
 						onClick: () => goToStep(3, step2Fields),
 						label: "Next: Confirm & Submit",
 						icon: ArrowRight,
@@ -184,7 +185,8 @@ export const StudentRegistrationUnit = () => {
 					{
 						type: "button",
 						variant: "outline",
-						className: "gap-2",
+						className:
+							"w-full gap-2 rounded-full border border-tartiary bg-subtle py-4 text-sm sm:w-auto sm:px-8 sm:py-5 md:px-9",
 						onClick: () => setCurrentStep(2),
 						label: "Back",
 						icon: ArrowLeft,
@@ -194,7 +196,8 @@ export const StudentRegistrationUnit = () => {
 						type: "submit",
 						size: "lg",
 						disabled: isSubmitting,
-						className: "gap-2 bg-accent text-accent-foreground hover:bg-accent/90 sm:ml-auto",
+						className:
+							"w-full gap-2 bg-accent text-sm text-accent-foreground hover:bg-accent/90 sm:ml-auto sm:w-auto sm:text-base md:text-base lg:px-8 lg:py-6 xl:px-10",
 						label: isSubmitting ? "Submitting…" : "Submit Registration",
 						icon: ArrowRight,
 						iconPosition: "end",
@@ -209,7 +212,7 @@ export const StudentRegistrationUnit = () => {
 
 	if (submitted) {
 		return (
-			<div className="min-h-screen bg-background px-4 py-10">
+			<div className="min-h-screen bg-background px-3 py-8 sm:px-4 sm:py-9 md:px-6 md:py-10 lg:px-8 xl:px-10">
 				<div className="mx-auto max-w-3xl">
 					<ThankYouStep />
 				</div>
@@ -219,26 +222,41 @@ export const StudentRegistrationUnit = () => {
 
 	return (
 		<Container>
-			<div className="min-h-screen bg-default rounded-[50px] border border-tartiary mt-3 pt-[85px] pb-[75px] py-10">
-				<div className="mx-auto max-w-[1200px]">
-					<div className="mb-8 text-center">
-						<span className="inline-block rounded-full border border-[#002E66] bg-frost text-sm font-medium py-[10px] px-[22px]">
+			<div
+				className={[
+					"min-h-screen border border-tartiary bg-default",
+					"mt-2 rounded-2xl px-3 pt-12 pb-8 sm:mt-3 sm:rounded-3xl sm:px-4 sm:pt-16 sm:pb-10",
+					"md:rounded-[36px] md:px-6 md:pt-20 md:pb-12",
+					"lg:rounded-[42px] lg:px-8 lg:pt-[72px] lg:pb-16",
+					"xl:mt-3 xl:rounded-[50px] xl:px-10 xl:pt-[85px] xl:pb-[75px]",
+					"py-6 sm:py-8 md:py-9 lg:py-10",
+				].join(" ")}
+			>
+				<div className="mx-auto max-w-[1200px] px-0 sm:px-1 md:px-2 lg:px-3 xl:px-4">
+					<div className="mb-6 text-center sm:mb-7 md:mb-8 lg:mb-9 xl:mb-10">
+						<span className="inline-block rounded-full border border-[#002E66] bg-frost px-4 py-2 text-xs font-medium sm:px-[18px] sm:py-[9px] sm:text-sm md:px-5 md:text-sm lg:px-[22px] lg:py-[10px] xl:text-sm">
 							Application
 						</span>
-						<h1 className="my-4 text-2xl text-[#212121] sm:text-[40px]">Student Registration</h1>
-						<p className=" text-xl text-[#757575]">
+						<h1 className="my-3 text-xl font-semibold leading-tight text-[#212121] sm:my-4 sm:text-2xl md:text-3xl md:leading-snug lg:text-4xl lg:leading-tight xl:text-[40px] xl:font-normal">
+							Student Registration
+						</h1>
+						<p className="mx-auto max-w-2xl text-sm leading-relaxed text-[#757575] sm:text-base md:text-lg lg:text-xl xl:text-xl">
 							Complete both steps to submit your registration for the 2026 Awards.
 						</p>
 					</div>
 
-					<div className="mb-10">
+					<div className="mb-6 sm:mb-8 md:mb-9 lg:mb-10">
 						<RegistrationStepper currentStep={currentStep} steps={steps} />
 					</div>
 
 					<FormProvider {...methods}>
 						<form
 							onSubmit={handleSubmit(onRegistrationSubmit)}
-							className="space-y-6 bg-white border border-tartiary rounded-[36px] px-[50px] py-[45px]"
+							className={[
+								"space-y-5 border border-tartiary bg-white sm:space-y-6",
+								"rounded-2xl px-4 py-6 sm:rounded-3xl sm:px-5 sm:py-8 md:rounded-[32px] md:px-7 md:py-9",
+								"lg:rounded-[34px] lg:px-9 lg:py-10 xl:rounded-[36px] xl:px-[50px] xl:py-[45px]",
+							].join(" ")}
 						>
 							{currentStep === 1 && <PersonalInfoStep />}
 							{currentStep === 2 && (
@@ -250,7 +268,7 @@ export const StudentRegistrationUnit = () => {
 							)}
 							{currentStep === 3 && <ConfirmSubmitStep />}
 
-							<div className="flex flex-wrap items-center justify-between gap-4">
+							<div className="flex flex-col-reverse gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4">
 								{footerLeft ? (
 									<StepFooterButton action={footerLeft} />
 								) : (
