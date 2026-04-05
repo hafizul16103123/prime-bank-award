@@ -1,22 +1,28 @@
 import { Student } from "@/app/api/modules/student/models/Student";
 import dbConnect from "@/lib/db";
-import { requireAdmin, AuthenticatedRequest } from "@/app/api/modules/auth/utils/auth-guard";
+import { requireSchoolAdmin, AuthenticatedRequest } from "@/app/api/modules/auth/utils/auth-guard";
 import { successResponse, errorResponse } from "@/lib/api-response";
 
 export async function GET(request: AuthenticatedRequest) {
   try {
-    const authError = requireAdmin()(request as any);
+    const authError = requireSchoolAdmin()(request as any);
     if (authError) return authError;
+
+    const user = (request as any).user;
+    const userSchool = user?.school;
+
+    if (!userSchool) {
+      return errorResponse("School not assigned to this user", 403);
+    }
 
     const { searchParams } = new URL(request.url);
     const status = searchParams.get("status");
     const level = searchParams.get("level");
-    const school = searchParams.get("school");
     const search = searchParams.get("search");
 
     await dbConnect();
 
-    const query: any = {};
+    const query: any = { school: userSchool };
 
     if (status) {
       query.status = status;
@@ -26,15 +32,10 @@ export async function GET(request: AuthenticatedRequest) {
       query.applyingForLevel = level;
     }
 
-    if (school) {
-      query.school = school;
-    }
-
     if (search) {
       query.$or = [
         { name: { $regex: search, $options: "i" } },
         { email: { $regex: search, $options: "i" } },
-        { school: { $regex: search, $options: "i" } },
         { phoneNumber: { $regex: search, $options: "i" } },
       ];
     }

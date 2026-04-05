@@ -7,6 +7,7 @@ export interface JwtPayload {
   id: string;
   email: string;
   role: string;
+  school?: string;
 }
 
 export interface VerifyTokenPayload {

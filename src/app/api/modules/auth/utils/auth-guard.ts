@@ -13,7 +13,9 @@ export interface AuthenticatedRequest extends NextRequest {
 }
 
 export function authMiddleware(req: AuthenticatedRequest) {
-  const token = extractTokenFromHeader(req.headers.get("authorization"));
+  const authHeader = req.headers.get("authorization");
+  
+  const token = extractTokenFromHeader(authHeader);
   
   if (!token) {
     return { authenticated: false, user: null };
@@ -29,7 +31,7 @@ export function authMiddleware(req: AuthenticatedRequest) {
 }
 
 export function requireAuth(roles: UserRole[] = []) {
-  return (req: AuthenticatedRequest) => {
+  return (req: AuthenticatedRequest): NextResponse | null => {
     const { authenticated, user } = authMiddleware(req);
 
     if (!authenticated) {
@@ -46,7 +48,7 @@ export function requireAuth(roles: UserRole[] = []) {
       );
     }
 
-    req.user = user!;
+    (req as any).user = user;
     return null;
   };
 }

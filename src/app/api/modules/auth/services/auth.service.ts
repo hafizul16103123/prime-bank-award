@@ -113,7 +113,8 @@ export class AuthService {
     const token = generateToken({
       id: user._id.toString(),
       email: user.email,
-      role: user.role
+      role: user.role,
+      school: user.school
     });
 
     return {
