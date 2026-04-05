@@ -55,7 +55,7 @@ const options = {
             },
             applyingForLevel: {
               type: "string",
-              enum: ["AS_A2", "CAMBRIDGE_CIE"],
+              enum: ["A Level", "O Level"],
             },
             yearOfExamination: { type: "number" },
             examinationSession: {

@@ -1,40 +1,10 @@
 import mongoose, { Model, model } from "mongoose";
+import { Gender, ExaminationLevel, ExaminationSession, ExaminationBoard, StudyGroup } from "../dtos";
 
 export enum StudentStatus {
   PENDING = "PENDING",
   APPROVED = "APPROVED",
   REJECTED = "REJECTED",
-}
-
-export enum Gender {
-  MALE = "MALE",
-  FEMALE = "FEMALE",
-  OTHER = "OTHER",
-  PREFER_NOT_TO_SAY = "PREFER_NOT_TO_SAY",
-}
-
-export enum ExaminationLevel {
-  AS_A2 = "AS_A2",
-  CAMBRIDGE_CIE = "CAMBRIDGE_CIE",
-}
-
-export enum StudyGroup {
-  SCIENCE = "SCIENCE",
-  ARTS = "ARTS",
-  COMMERCE = "COMMERCE",
-}
-
-export enum ExaminationBoard {
-  CAMBRIDGE = "CAMBRIDGE",
-  EDEXCEL = "EDEXCEL",
-  AQA = "AQA",
-  OCR = "OCR",
-}
-
-export enum ExaminationSession {
-  OCT_NOV = "OCT_NOV",
-  MAY_JUNE = "MAY_JUNE",
-  FEB_MARCH = "FEB_MARCH",
 }
 
 export interface ISubject {
