@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { authService } from "../services/auth.service";
 import { ResetPasswordDto } from "../dtos";
+import { successResponse, errorResponse } from "@/lib/api-response";
 
 export async function POST(request: Request) {
   try {
@@ -8,26 +9,14 @@ export async function POST(request: Request) {
     const { email, otp, newPassword } = body;
 
     if (!email || !otp || !newPassword) {
-      return NextResponse.json(
-        { success: false, message: "Email, OTP and new password are required" },
-        { status: 400 }
-      );
+      return errorResponse("Email, OTP and new password are required", 400);
     }
 
     await authService.resetPassword(email, otp, newPassword);
 
-    return NextResponse.json(
-      {
-        success: true,
-        message: "Password reset successfully",
-      },
-      { status: 200 }
-    );
+    return successResponse(null, "Password reset successfully", 200);
   } catch (error: any) {
     console.error("Reset password error:", error);
-    return NextResponse.json(
-      { success: false, message: error.message || "Internal server error" },
-      { status: 400 }
-    );
+    return errorResponse(error.message || "Internal server error", 400);
   }
 }

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { User } from "../../auth/models/User";
 import dbConnect from "@/lib/db";
 import { requireAdmin, AuthenticatedRequest, authMiddleware } from "../../auth/utils/auth-guard";
+import { successResponse, errorResponse } from "@/lib/api-response";
 
 export async function GET(request: AuthenticatedRequest) {
   try {
@@ -11,14 +12,8 @@ export async function GET(request: AuthenticatedRequest) {
     await dbConnect();
     const users = await User.find({ isDeleted: false }).select("-password");
     
-    return NextResponse.json({
-      success: true,
-      data: users,
-    });
+    return successResponse(users, "Users fetched", 200);
   } catch (error: any) {
-    return NextResponse.json({
-      success: false,
-      message: error.message || "Internal server error",
-    }, { status: 500 });
+    return errorResponse(error.message || "Internal server error", 500);
   }
 }

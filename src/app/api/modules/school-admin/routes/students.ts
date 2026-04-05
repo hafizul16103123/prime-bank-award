@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { Student } from "../../student/models/Student";
 import dbConnect from "@/lib/db";
 import { requireSchoolAdmin, AuthenticatedRequest } from "../../auth/utils/auth-guard";
+import { successResponse, errorResponse } from "@/lib/api-response";
 
 export async function GET(request: AuthenticatedRequest) {
   try {
@@ -49,9 +50,8 @@ export async function GET(request: AuthenticatedRequest) {
       Student.countDocuments(query),
     ]);
 
-    return NextResponse.json({
-      success: true,
-      data: {
+    return successResponse(
+      {
         items: students,
         pagination: {
           page,
@@ -60,14 +60,10 @@ export async function GET(request: AuthenticatedRequest) {
           totalPages: Math.ceil(total / limit),
         },
       },
-    });
-  } catch (error: any) {
-    return NextResponse.json(
-      {
-        success: false,
-        message: error.message || "Internal server error",
-      },
-      { status: 500 },
+      "Students fetched",
+      200
     );
+  } catch (error: any) {
+    return errorResponse(error.message || "Internal server error", 500);
   }
 }

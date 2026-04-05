@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { Student } from "../../student/models/Student";
 import dbConnect from "@/lib/db";
 import { requireStudent, AuthenticatedRequest } from "../../auth/utils/auth-guard";
+import { successResponse, errorResponse } from "@/lib/api-response";
 
 export async function PUT(request: AuthenticatedRequest) {
   try {
@@ -15,10 +16,7 @@ export async function PUT(request: AuthenticatedRequest) {
     
     const student = await Student.findOne({ userId });
     if (!student) {
-      return NextResponse.json({
-        success: false,
-        message: "Student not found",
-      }, { status: 404 });
+      return errorResponse("Student not found", 404);
     }
 
     const allowedUpdates = [
@@ -35,15 +33,8 @@ export async function PUT(request: AuthenticatedRequest) {
 
     await student.save();
 
-    return NextResponse.json({
-      success: true,
-      message: "Profile updated successfully",
-      data: student,
-    });
+    return successResponse(student, "Profile updated successfully", 200);
   } catch (error: any) {
-    return NextResponse.json({
-      success: false,
-      message: error.message || "Internal server error",
-    }, { status: 500 });
+    return errorResponse(error.message || "Internal server error", 500);
   }
 }

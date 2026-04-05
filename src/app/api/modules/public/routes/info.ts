@@ -1,9 +1,8 @@
-import { NextResponse } from "next/server";
+import { successResponse } from "@/lib/api-response";
 
 export async function GET() {
-  return NextResponse.json({
-    success: true,
-    data: {
+  return successResponse(
+    {
       message: "Welcome to Prime Bank API",
       version: "1.0.0",
       publicRoutes: [
@@ -19,5 +18,7 @@ export async function GET() {
         "GET /api/student/profile - Student only",
       ],
     },
-  });
+    "API info fetched",
+    200
+  );
 }

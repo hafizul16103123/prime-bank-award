@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { authService } from "../services/auth.service";
 import { ForgetPasswordDto } from "../dtos";
+import { successResponse, errorResponse } from "@/lib/api-response";
 
 export async function POST(request: Request) {
   try {
@@ -8,26 +9,17 @@ export async function POST(request: Request) {
     const { email } = body;
 
     if (!email) {
-      return NextResponse.json(
-        { success: false, message: "Email is required" },
-        { status: 400 }
-      );
+      return errorResponse("Email is required", 400);
     }
 
     await authService.forgetPassword(email);
 
-    return NextResponse.json(
-      {
-        success: true,
-        message: "OTP sent to email successfully",
-      },
-      { status: 200 }
-    );
+    return successResponse(null, "OTP sent to email successfully", 200);
   } catch (error: any) {
     console.error("Forget password error:", error);
-    return NextResponse.json(
-      { success: false, message: error.message || "Internal server error" },
-      { status: error.message === "User not found" ? 404 : 500 }
+    return errorResponse(
+      error.message || "Internal server error",
+      error.message === "User not found" ? 404 : 500
     );
   }
 }

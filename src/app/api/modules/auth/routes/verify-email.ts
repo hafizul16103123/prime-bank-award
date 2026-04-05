@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { authService } from "../services/auth.service";
+import { successResponse, errorResponse } from "@/lib/api-response";
 
 export async function POST(request: Request) {
   try {
@@ -7,22 +8,13 @@ export async function POST(request: Request) {
     const { token } = body;
 
     if (!token) {
-      return NextResponse.json(
-        { success: false, message: "Token is required" },
-        { status: 400 }
-      );
+      return errorResponse("Token is required", 400);
     }
 
     const result = await authService.verifyEmail(token);
 
-    return NextResponse.json({
-      success: true,
-      message: result.message,
-    });
+    return successResponse(null, result.message, 200);
   } catch (error: any) {
-    return NextResponse.json(
-      { success: false, message: error.message || "Internal server error" },
-      { status: 400 }
-    );
+    return errorResponse(error.message || "Internal server error", 400);
   }
 }

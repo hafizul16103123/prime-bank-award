@@ -1,5 +1,5 @@
 import { put } from "@vercel/blob";
-import { NextResponse } from "next/server";
+import { successResponse, errorResponse } from "@/lib/api-response";
 
 export async function POST(request: Request) {
   try {
@@ -8,10 +8,7 @@ export async function POST(request: Request) {
     const pathname = formData.get("pathname") as string | null;
 
     if (!file) {
-      return NextResponse.json(
-        { success: false, message: "No image file provided" },
-        { status: 400 }
-      );
+      return errorResponse("No image file provided", 400);
     }
 
     const uniqueId = crypto.randomUUID();
@@ -25,17 +22,15 @@ export async function POST(request: Request) {
       access: "public",
     });
 
-    return NextResponse.json({
-      success: true,
-      data: {
+    return successResponse(
+      {
         url: blob.url,
         pathname: blob.pathname,
       },
-    });
-  } catch (error: any) {
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 500 }
+      "Image uploaded successfully",
+      200
     );
+  } catch (error: any) {
+    return errorResponse(error.message, 500);
   }
 }

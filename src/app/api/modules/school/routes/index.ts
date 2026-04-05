@@ -1,14 +1,15 @@
 import { NextResponse } from "next/server";
 import { School } from "../models/School";
 import dbConnect from "@/lib/db";
+import { successResponse, errorResponse } from "@/lib/api-response";
 
 export async function GET() {
   try {
     await dbConnect();
     const schools = await School.find({}).select("name address").sort({ name: 1 });
-    return NextResponse.json({ success: true, data: schools });
+    return successResponse(schools, "Schools fetched", 200);
   } catch (error: any) {
-    return NextResponse.json({ success: false, message: error.message }, { status: 500 });
+    return errorResponse(error.message || "Internal server error", 500);
   }
 }
 
@@ -19,12 +20,12 @@ export async function POST(request: Request) {
     const { name, address } = body;
 
     if (!name || !address) {
-      return NextResponse.json({ success: false, message: "Name and address are required" }, { status: 400 });
+      return errorResponse("Name and address are required", 400);
     }
 
     const school = await School.create({ name, address });
-    return NextResponse.json({ success: true, data: school }, { status: 201 });
+    return successResponse(school, "School created", 201);
   } catch (error: any) {
-    return NextResponse.json({ success: false, message: error.message }, { status: 500 });
+    return errorResponse(error.message || "Internal server error", 500);
   }
 }
