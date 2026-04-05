@@ -23,7 +23,7 @@ export const RegistrationStepper = ({ currentStep, steps }: StepperProps) => {
 								<div
 									className={cn(
 										"flex h-12 w-12 items-center justify-center rounded-full text-sm transition-all sm:h-14 sm:w-14 sm:text-base md:h-16 md:w-16 md:text-lg lg:h-[68px] lg:w-[68px] lg:text-2xl xl:h-[70px] xl:w-[70px]",
-										isComplete && "bg-[#002E66] text-primary-foreground",
+										isComplete && "bg-[#1E6E45] text-primary-foreground",
 										isActive && "bg-[#002E66] text-primary-foreground",
 										!isComplete && !isActive && "bg-[#BDBDBD] text-[#757575]",
 									)}

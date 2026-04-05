@@ -100,12 +100,14 @@ export const AcademicInfoStep = ({ subjectFields, onRemoveSubject, onAddSubject 
 						options={boardOptions}
 					/>
 				</div>
-				<FormInputField
-					control={control}
-					name="schoolName"
-					label="School Name"
-					placeholder="Search school..."
-				/>
+				<div className="mt-4">
+					<FormInputField
+						control={control}
+						name="schoolName"
+						label="School Name"
+						placeholder="Search school..."
+					/>
+				</div>
 			</div>
 
 			<div className="rounded-xl border border-border bg-card p-4 shadow-sm sm:p-5 md:p-6 lg:p-6 xl:p-6">

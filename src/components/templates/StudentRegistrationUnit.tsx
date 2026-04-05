@@ -8,7 +8,7 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 import type { LucideIcon } from "lucide-react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useFieldArray, useForm, type Resolver } from "react-hook-form";
 import {
 	AcademicInfoStep,
@@ -107,6 +107,8 @@ export const StudentRegistrationUnit = () => {
 	const [currentStep, setCurrentStep] = useState(1);
 	const [submitted, setSubmitted] = useState(false);
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	/** After step 2→3, ignore submit briefly so the same touch that hit "Next" cannot trigger submit (mobile ghost click). */
+	const [suppressStep3Submit, setSuppressStep3Submit] = useState(false);
 
 	const methods = useForm<StudentRegistrationFormValues>({
 		resolver: yupResolver(studentRegistrationSchema) as Resolver<StudentRegistrationFormValues>,
@@ -126,9 +128,25 @@ export const StudentRegistrationUnit = () => {
 		name: "subjects",
 	});
 
+	useEffect(() => {
+		if (currentStep !== 3) return;
+		const id = window.setTimeout(() => setSuppressStep3Submit(false), 450);
+		return () => window.clearTimeout(id);
+	}, [currentStep]);
+
+	useEffect(() => {
+		if (currentStep !== 3) return;
+		requestAnimationFrame(() => {
+			const el = document.activeElement;
+			if (el instanceof HTMLElement) el.blur();
+		});
+	}, [currentStep]);
+
 	const goToStep = async (next: number, fields: (keyof StudentRegistrationFormValues)[]) => {
 		const valid = await trigger(fields, { shouldFocus: true });
-		if (valid) setCurrentStep(next);
+		if (!valid) return;
+		if (next === 3) setSuppressStep3Submit(true);
+		setCurrentStep(next);
 	};
 
 	const onRegistrationSubmit = async (data: StudentRegistrationFormValues) => {
@@ -195,9 +213,9 @@ export const StudentRegistrationUnit = () => {
 					{
 						type: "submit",
 						size: "lg",
-						disabled: isSubmitting,
+						disabled: isSubmitting || suppressStep3Submit,
 						className:
-							"w-full gap-2 bg-accent text-sm text-accent-foreground hover:bg-accent/90 sm:ml-auto sm:w-auto sm:text-base md:text-base lg:px-8 lg:py-6 xl:px-10",
+							"w-full gap-2 rounded-full bg-[#1E6E45] py-4 text-sm sm:w-auto sm:px-8 sm:py-5 md:px-9",
 						label: isSubmitting ? "Submitting…" : "Submit Registration",
 						icon: ArrowRight,
 						iconPosition: "end",
@@ -251,7 +269,11 @@ export const StudentRegistrationUnit = () => {
 
 					<FormProvider {...methods}>
 						<form
-							onSubmit={handleSubmit(onRegistrationSubmit)}
+							onSubmit={(e) => {
+								e.preventDefault();
+								if (currentStep !== 3) return;
+								void handleSubmit(onRegistrationSubmit)(e);
+							}}
 							className={[
 								"space-y-5 border border-tartiary bg-white sm:space-y-6",
 								"rounded-2xl px-4 py-6 sm:rounded-3xl sm:px-5 sm:py-8 md:rounded-[32px] md:px-7 md:py-9",
@@ -268,7 +290,10 @@ export const StudentRegistrationUnit = () => {
 							)}
 							{currentStep === 3 && <ConfirmSubmitStep />}
 
-							<div className="flex flex-col-reverse gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4">
+							<div
+								key={currentStep}
+								className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4"
+							>
 								{footerLeft ? (
 									<StepFooterButton action={footerLeft} />
 								) : (
