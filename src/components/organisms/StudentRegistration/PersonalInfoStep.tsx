@@ -8,9 +8,8 @@ import { Upload } from "lucide-react";
 import { Controller, useFormContext } from "react-hook-form";
 
 const genderOptions: FormSelectOption[] = [
-	{ value: "male", label: "Male" },
-	{ value: "female", label: "Female" },
-	{ value: "other", label: "Other" },
+	{ value: "MALE", label: "Male" },
+	{ value: "FEMALE", label: "Female" },
 ];
 
 export const PersonalInfoStep = () => {
@@ -27,15 +26,15 @@ export const PersonalInfoStep = () => {
 			/>
 
 			<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 md:gap-5 lg:gap-5 xl:gap-5">
-				<FormInputField control={control} name="fullName" label="Full Name" placeholder="Your full name" />
+				<FormInputField control={control} name="name" label="Full Name" placeholder="Your full name" />
 				<ControlDatePicker
 					control={control}
-					name="dob"
+					name="dateOfBirth"
 					label="Date of Birth"
 					placeholder="Select date"
-					error={errors.dob?.message}
+					error={errors.dateOfBirth?.message}
 				/>
-				<FormInputField control={control} name="phone" label="Phone Number" placeholder="01XXXXXXXXX" />
+				<FormInputField control={control} name="phoneNumber" label="Phone Number" placeholder="01XXXXXXXXX" />
 				<FormSelectField
 					control={control}
 					name="gender"

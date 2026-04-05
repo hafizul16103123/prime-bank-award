@@ -1,15 +1,18 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { buildStudentRegistrationSubmitPayload } from "@/lib/studentRegistrationPayload";
 import {
+	defaultValuesStudentForm,
 	studentRegistrationSchema,
 	type StudentRegistrationFormValues,
 } from "@/lib/validation/studentRegistrationSchema";
+import { useApiClient } from "@/libes/hooks";
 import { yupResolver } from "@hookform/resolvers/yup";
 import type { LucideIcon } from "lucide-react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import { FormProvider, useFieldArray, useForm, type Resolver } from "react-hook-form";
+import { FormProvider, useForm, type Resolver } from "react-hook-form";
 import {
 	AcademicInfoStep,
 	ConfirmSubmitStep,
@@ -21,51 +24,19 @@ import { Container } from "../ui";
 
 const steps = [{ label: "Personal Information" }, { label: "Academic Info" }, { label: "Confirm & Submit" }];
 
-const defaultSubjectRows = () =>
-	Array.from({ length: 6 }, () => ({
-		subject: "",
-		grade: "",
-		paperCode: "",
-	}));
-
-const defaultValues: StudentRegistrationFormValues = {
-	fullName: "",
-	dob: "",
-	phone: "",
-	gender: "" as StudentRegistrationFormValues["gender"],
-	photo: null as unknown as StudentRegistrationFormValues["photo"],
-	applyingLevel: "" as StudentRegistrationFormValues["applyingLevel"],
-	yearOfExamination: "" as StudentRegistrationFormValues["yearOfExamination"],
-	studyGroup: "" as StudentRegistrationFormValues["studyGroup"],
-	session: "" as StudentRegistrationFormValues["session"],
-	rollNumber: "",
-	examinationBoard: "" as StudentRegistrationFormValues["examinationBoard"],
-	schoolName: "",
-	subjects: defaultSubjectRows(),
-	email: "",
-	password: "",
-	confirmPassword: "",
-	termsAccepted: false,
-};
-
-const step1Fields: (keyof StudentRegistrationFormValues)[] = ["fullName", "dob", "phone", "gender", "photo"];
+const step1Fields: (keyof StudentRegistrationFormValues)[] = ["name", "dateOfBirth", "phoneNumber", "gender", "photo"];
 
 const step2Fields: (keyof StudentRegistrationFormValues)[] = [
-	"applyingLevel",
+	"applyingForLevel",
 	"yearOfExamination",
 	"studyGroup",
-	"session",
+	"examinationSession",
 	"rollNumber",
 	"examinationBoard",
-	"schoolName",
-	"subjects",
+	"school",
+	"oLevelSubjects",
+	"aLevelSubjects",
 ];
-
-type ApiEnvelope = {
-	success: boolean;
-	message?: string[];
-	data?: { url?: string };
-};
 
 type StepFooterAction = {
 	type?: "button" | "submit";
@@ -107,26 +78,18 @@ export const StudentRegistrationUnit = () => {
 	const [currentStep, setCurrentStep] = useState(1);
 	const [submitted, setSubmitted] = useState(false);
 	const [isSubmitting, setIsSubmitting] = useState(false);
-	/** After step 2→3, ignore submit briefly so the same touch that hit "Next" cannot trigger submit (mobile ghost click). */
 	const [suppressStep3Submit, setSuppressStep3Submit] = useState(false);
+
+	const {} = useApiClient();
 
 	const methods = useForm<StudentRegistrationFormValues>({
 		resolver: yupResolver(studentRegistrationSchema) as Resolver<StudentRegistrationFormValues>,
-		defaultValues,
+		defaultValues: defaultValuesStudentForm,
 		mode: "onTouched",
 		shouldFocusError: true,
 	});
 
-	const { control, handleSubmit, trigger } = methods;
-
-	const {
-		fields: subjectFields,
-		append: appendSubject,
-		remove: removeSubject,
-	} = useFieldArray({
-		control,
-		name: "subjects",
-	});
+	const { handleSubmit, trigger } = methods;
 
 	useEffect(() => {
 		if (currentStep !== 3) return;
@@ -150,14 +113,9 @@ export const StudentRegistrationUnit = () => {
 	};
 
 	const onRegistrationSubmit = async (data: StudentRegistrationFormValues) => {
-		console.log(data);
+		const payload = buildStudentRegistrationSubmitPayload(data);
+		console.log({ payload });
 	};
-
-	const removeSubjectRow = (index: number) => {
-		if (subjectFields.length > 1) removeSubject(index);
-	};
-
-	const addSubjectRow = () => appendSubject({ subject: "", grade: "", paperCode: "" });
 
 	const getFooterActions = (): [StepFooterAction | null, StepFooterAction | null] => {
 		switch (currentStep) {
@@ -281,13 +239,7 @@ export const StudentRegistrationUnit = () => {
 							].join(" ")}
 						>
 							{currentStep === 1 && <PersonalInfoStep />}
-							{currentStep === 2 && (
-								<AcademicInfoStep
-									subjectFields={subjectFields}
-									onRemoveSubject={removeSubjectRow}
-									onAddSubject={addSubjectRow}
-								/>
-							)}
+							{currentStep === 2 && <AcademicInfoStep />}
 							{currentStep === 3 && <ConfirmSubmitStep />}
 
 							<div

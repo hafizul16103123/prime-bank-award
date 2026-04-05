@@ -1,59 +1,60 @@
 import type { StudentRegistrationFormValues } from "@/lib/validation/studentRegistrationSchema";
 
-/** POST `/api/student-register` JSON body (aligned with `CreateStudentDto` / Student model enums). */
-export type StudentRegisterApiBody = {
-	name: string;
-	email: string;
-	password: string;
-	confirmPassword: string;
-	dateOfBirth: string;
-	gender: string;
-	phoneNumber: string;
-	school: string;
-	rollNumber?: string;
-	photoUrl?: string;
-	applyingForLevel: string;
-	yearOfExamination: number;
-	examinationSession: string;
-	examinationBoard?: string;
-	studyGroup?: string;
-	oLevelSubjects: SubjectRowPayload[];
-	aLevelSubjects: SubjectRowPayload[];
-};
-
 export type SubjectRowPayload = {
 	name: string;
 	grade: string;
 	paperCode?: string;
 };
 
-/** Form values → API enum strings stored in MongoDB (see `Gender`, `ExaminationLevel`, etc. in dtos). */
-const GENDER: Record<string, string> = {
-	male: "Male",
-	female: "Female",
-	other: "Other",
+/** JSON body aligned with `CreateStudentDto` (no `photo` FileList, no `termsAccepted`). */
+export type StudentRegistrationSubmitPayload = {
+	name: string;
+	dateOfBirth: string;
+	phoneNumber: string;
+	gender: string;
+	photoUrl?: string;
+	applyingForLevel: string;
+	yearOfExamination: number;
+	studyGroup: string;
+	examinationSession: string;
+	rollNumber: string;
+	examinationBoard: string;
+	school: string;
+	oLevelSubjects: SubjectRowPayload[];
+	aLevelSubjects: SubjectRowPayload[];
+	email: string;
+	password: string;
+	confirmPassword: string;
 };
 
-const APPLYING_LEVEL: Record<string, string> = {
-	"o-level": "O Level",
-	"a-level": "A Level",
+/** Form select values → `Gender` enum strings stored in MongoDB. */
+const GENDER_TO_DTO: Record<string, string> = {
+	MALE: "Male",
+	FEMALE: "Female",
 };
 
-const STUDY_GROUP: Record<string, string> = {
-	science: "Science",
-	commerce: "Commerce",
-	arts: "Arts",
-};
+function normalizeSubjectName(raw: string): string {
+	const t = raw.trim();
+	const paren = t.indexOf(" (");
+	return paren >= 0 ? t.slice(0, paren) : t;
+}
 
-const EXAM_SESSION: Record<string, string> = {
-	"may-june": "May/June",
-	"oct-nov": "Oct/Nov",
-};
-
-const EXAM_BOARD: Record<string, string> = {
-	cambridge: "Cambridge(CIE)",
-	edexcel: "Edexcel",
-};
+function mapLevelSubjectRows(
+	rows: { name?: string; grade?: string; paperCode?: string }[] | undefined,
+): SubjectRowPayload[] {
+	return (rows ?? [])
+		.filter((r) => Boolean(r?.name?.trim() && r?.grade?.trim()))
+		.map((r) => {
+			const row: SubjectRowPayload = {
+				name: normalizeSubjectName(r.name ?? ""),
+				grade: (r.grade ?? "").trim(),
+			};
+			if (r.paperCode?.trim()) {
+				row.paperCode = r.paperCode.trim();
+			}
+			return row;
+		});
+}
 
 export function formatBdPhoneForApi(phone: string): string {
 	const p = phone.trim();
@@ -63,51 +64,44 @@ export function formatBdPhoneForApi(phone: string): string {
 	return p;
 }
 
-function normalizeSubjectName(raw: string): string {
-	const t = raw.trim();
-	const paren = t.indexOf(" (");
-	return paren >= 0 ? t.slice(0, paren) : t;
-}
-
-function mapSubjectRows(rows: StudentRegistrationFormValues["subjects"]): SubjectRowPayload[] {
-	return (rows ?? [])
-		.filter((r) => Boolean(r?.subject?.trim() && r?.grade?.trim()))
-		.map((r) => {
-			const row: SubjectRowPayload = {
-				name: normalizeSubjectName(r.subject),
-				grade: r.grade.trim(),
-			};
-			if (r.paperCode?.trim()) {
-				row.paperCode = r.paperCode.trim();
-			}
-			return row;
-		});
-}
-
-export function buildStudentRegisterPayload(
+/**
+ * Builds the registration JSON payload from validated form values.
+ * Pass `photoUrl` after upload; otherwise `photoUrl` is omitted.
+ */
+export function buildStudentRegistrationSubmitPayload(
 	values: StudentRegistrationFormValues,
 	photoUrl?: string,
-): StudentRegisterApiBody {
-	const subjectRows = mapSubjectRows(values.subjects);
-	const isOLevel = values.applyingLevel === "o-level";
+): StudentRegistrationSubmitPayload {
+	const oRows = mapLevelSubjectRows(values.oLevelSubjects);
+	const aRows = mapLevelSubjectRows(values.aLevelSubjects);
+	const isOLevel = values.applyingForLevel === "O Level";
 
-	return {
-		name: values.fullName.trim(),
+	const payload: StudentRegistrationSubmitPayload = {
+		name: values.name.trim(),
+		dateOfBirth: values.dateOfBirth,
+		phoneNumber: formatBdPhoneForApi(values.phoneNumber),
+		gender: GENDER_TO_DTO[values.gender] ?? values.gender,
+		applyingForLevel: values.applyingForLevel,
+		yearOfExamination: values.yearOfExamination,
+		studyGroup: values.studyGroup,
+		examinationSession: values.examinationSession,
+		rollNumber: values.rollNumber.trim(),
+		examinationBoard: values.examinationBoard,
+		school: values.school.trim(),
+		oLevelSubjects: isOLevel ? oRows : [],
+		aLevelSubjects: isOLevel ? [] : aRows,
 		email: values.email.trim(),
 		password: values.password,
 		confirmPassword: values.confirmPassword,
-		dateOfBirth: values.dob,
-		gender: GENDER[values.gender] ?? values.gender,
-		phoneNumber: formatBdPhoneForApi(values.phone),
-		school: values.schoolName.trim(),
-		rollNumber: values.rollNumber.trim() || undefined,
-		photoUrl,
-		applyingForLevel: APPLYING_LEVEL[values.applyingLevel] ?? values.applyingLevel,
-		yearOfExamination: Number.parseInt(values.yearOfExamination, 10),
-		examinationSession: EXAM_SESSION[values.session] ?? values.session,
-		examinationBoard: EXAM_BOARD[values.examinationBoard] ?? values.examinationBoard,
-		studyGroup: STUDY_GROUP[values.studyGroup] ?? values.studyGroup,
-		oLevelSubjects: isOLevel ? subjectRows : [],
-		aLevelSubjects: isOLevel ? [] : subjectRows,
 	};
+
+	if (photoUrl) {
+		payload.photoUrl = photoUrl;
+	}
+
+	return payload;
 }
+
+/** Alias for API modules that still import this name. */
+export type StudentRegisterApiBody = StudentRegistrationSubmitPayload;
+export const buildStudentRegisterPayload = buildStudentRegistrationSubmitPayload;
