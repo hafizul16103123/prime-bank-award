@@ -38,7 +38,7 @@ export class AuthService {
     });
 
     if (baseUrl) {
-      const verificationLink = `${baseUrl}/verify-email?token=${verificationToken}`;
+      const verificationLink = `${baseUrl}/login?token=${verificationToken}`;
       await sendVerificationEmail(email, verificationLink, name);
     }
 
