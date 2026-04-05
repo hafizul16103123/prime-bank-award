@@ -1,4 +1,4 @@
-"use clinet";
+"use client";
 
 import { useState } from "react";
 import {
