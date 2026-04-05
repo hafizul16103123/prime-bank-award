@@ -1,9 +1,17 @@
 "use client";
 
-import { studentRegistrationSchema, type StudentRegistrationFormValues } from "@/lib/validation/studentRegistrationSchema";
+import { Button } from "@/components/ui/button";
+import { isFileList } from "@/lib/isFileList";
+import { buildStudentRegisterPayload } from "@/lib/studentRegistrationPayload";
+import {
+	studentRegistrationSchema,
+	type StudentRegistrationFormValues,
+} from "@/lib/validation/studentRegistrationSchema";
+import { toastError, toastSuccess } from "@/utils/helpers/toast.helpers";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { ArrowLeft, ArrowRight, Plus } from "lucide-react";
 import { useState } from "react";
-import { FormProvider, useForm, type Resolver } from "react-hook-form";
+import { FormProvider, useFieldArray, useForm, type Resolver } from "react-hook-form";
 import {
 	AcademicInfoStep,
 	ConfirmSubmitStep,
@@ -54,9 +62,16 @@ const step2Fields: (keyof StudentRegistrationFormValues)[] = [
 	"subjects",
 ];
 
+type ApiEnvelope = {
+	success: boolean;
+	message?: string[];
+	data?: { url?: string };
+};
+
 export const StudentRegistrationUnit = () => {
 	const [currentStep, setCurrentStep] = useState(1);
 	const [submitted, setSubmitted] = useState(false);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const methods = useForm<StudentRegistrationFormValues>({
 		resolver: yupResolver(studentRegistrationSchema) as Resolver<StudentRegistrationFormValues>,
@@ -65,15 +80,65 @@ export const StudentRegistrationUnit = () => {
 		shouldFocusError: true,
 	});
 
-	const { handleSubmit, trigger } = methods;
+	const { control, handleSubmit, trigger } = methods;
+
+	const {
+		fields: subjectFields,
+		append: appendSubject,
+		remove: removeSubject,
+	} = useFieldArray({
+		control,
+		name: "subjects",
+	});
 
 	const goToStep = async (next: number, fields: (keyof StudentRegistrationFormValues)[]) => {
 		const valid = await trigger(fields, { shouldFocus: true });
 		if (valid) setCurrentStep(next);
 	};
 
-	const onRegistrationSubmit = (_data: StudentRegistrationFormValues) => {
-		setSubmitted(true);
+	const onRegistrationSubmit = async (data: StudentRegistrationFormValues) => {
+		setIsSubmitting(true);
+		try {
+			let photoUrl: string | undefined;
+
+			if (isFileList(data.photo) && data.photo.length > 0) {
+				const uploadForm = new FormData();
+				uploadForm.append("image", data.photo[0]);
+				const uploadRes = await fetch("/api/upload/image", {
+					method: "POST",
+					body: uploadForm,
+				});
+				const uploadJson = (await uploadRes.json()) as ApiEnvelope;
+				if (!uploadRes.ok || !uploadJson.success || !uploadJson.data?.url) {
+					const m = uploadJson.message?.[0] ?? "Photo upload failed";
+					throw new Error(m);
+				}
+				photoUrl = uploadJson.data.url;
+			}
+
+			const body = buildStudentRegisterPayload(data, photoUrl);
+			const regRes = await fetch("/api/student-register", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(body),
+			});
+			const regJson = (await regRes.json()) as ApiEnvelope;
+			if (!regRes.ok || !regJson.success) {
+				const m = regJson.message?.[0] ?? "Registration failed";
+				throw new Error(m);
+			}
+
+			toastSuccess({ message: regJson.message?.[0] ?? "Registration successful." });
+			setSubmitted(true);
+		} catch (e) {
+			toastError({ message: e instanceof Error ? e.message : "Something went wrong" });
+		} finally {
+			setIsSubmitting(false);
+		}
+	};
+
+	const removeSubjectRow = (index: number) => {
+		if (subjectFields.length > 1) removeSubject(index);
 	};
 
 	if (submitted) {
@@ -104,15 +169,81 @@ export const StudentRegistrationUnit = () => {
 				</div>
 
 				<FormProvider {...methods}>
-					<form onSubmit={handleSubmit(onRegistrationSubmit)} className="space-y-0">
-						{currentStep === 1 && <PersonalInfoStep onNext={() => goToStep(2, step1Fields)} />}
+					<form onSubmit={handleSubmit(onRegistrationSubmit)} className="space-y-6">
+						{currentStep === 1 && <PersonalInfoStep />}
 						{currentStep === 2 && (
-							<AcademicInfoStep
-								onNext={() => goToStep(3, step2Fields)}
-								onBack={() => setCurrentStep(1)}
-							/>
+							<AcademicInfoStep subjectFields={subjectFields} onRemoveSubject={removeSubjectRow} />
 						)}
-						{currentStep === 3 && <ConfirmSubmitStep onBack={() => setCurrentStep(2)} />}
+						{currentStep === 3 && <ConfirmSubmitStep />}
+
+						<div className="flex flex-wrap items-center justify-between gap-4">
+							{currentStep === 1 && (
+								<>
+									<span className="hidden min-w-0 flex-1 sm:block" aria-hidden />
+									<Button
+										type="button"
+										size="lg"
+										className="ml-auto gap-2"
+										onClick={() => goToStep(2, step1Fields)}
+									>
+										Next: Academic Info <ArrowRight className="h-4 w-4" />
+									</Button>
+								</>
+							)}
+
+							{currentStep === 2 && (
+								<>
+									<Button
+										type="button"
+										variant="outline"
+										className="gap-2"
+										onClick={() => setCurrentStep(1)}
+									>
+										<ArrowLeft className="h-4 w-4" /> Back
+									</Button>
+									<div className="flex flex-wrap items-center justify-end gap-2 sm:ml-auto">
+										<Button
+											type="button"
+											variant="outline"
+											className="gap-2 border-accent text-accent hover:bg-accent/10"
+											onClick={() => appendSubject({ subject: "", grade: "", paperCode: "" })}
+										>
+											<Plus className="h-4 w-4" /> Add Subject
+										</Button>
+										<Button
+											type="button"
+											size="lg"
+											className="gap-2"
+											onClick={() => goToStep(3, step2Fields)}
+										>
+											Next: Confirm & Submit <ArrowRight className="h-4 w-4" />
+										</Button>
+									</div>
+								</>
+							)}
+
+							{currentStep === 3 && (
+								<>
+									<Button
+										type="button"
+										variant="outline"
+										className="gap-2"
+										onClick={() => setCurrentStep(2)}
+									>
+										<ArrowLeft className="h-4 w-4" /> Back
+									</Button>
+									<Button
+										type="submit"
+										size="lg"
+										disabled={isSubmitting}
+										className="gap-2 bg-accent text-accent-foreground hover:bg-accent/90 sm:ml-auto"
+									>
+										{isSubmitting ? "Submitting…" : "Submit Registration"}{" "}
+										<ArrowRight className="h-4 w-4" />
+									</Button>
+								</>
+							)}
+						</div>
 					</form>
 				</FormProvider>
 			</div>

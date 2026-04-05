@@ -1,3 +1,4 @@
+import { isFileList } from "@/lib/isFileList";
 import * as yup from "yup";
 
 const subjectRowSchema = yup.object({
@@ -23,15 +24,15 @@ export const studentRegistrationSchema = yup.object({
 		.matches(/^01\d{9}$/, "Enter a valid 11-digit mobile number (01XXXXXXXXX)"),
 	gender: yup.string().oneOf(["male", "female", "other"], "Select a gender").required("Gender is required"),
 	photo: yup
-		.mixed<FileList | null>()
+		.mixed()
 		.required("Photo is required")
-		.test("has-file", "Please upload a photo", (value) => value instanceof FileList && value.length > 0)
+		.test("has-file", "Please upload a photo", (value) => isFileList(value) && value.length > 0)
 		.test("file-size", "Image must be 5MB or smaller", (value) => {
-			if (!(value instanceof FileList) || value.length === 0) return true;
+			if (!isFileList(value) || value.length === 0) return true;
 			return value[0].size <= 5 * 1024 * 1024;
 		})
 		.test("file-type", "Use PNG or JPG", (value) => {
-			if (!(value instanceof FileList) || value.length === 0) return true;
+			if (!isFileList(value) || value.length === 0) return true;
 			const type = value[0].type;
 			return type === "image/png" || type === "image/jpeg" || type === "image/jpg" || type === "image/webp";
 		}),

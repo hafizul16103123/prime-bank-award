@@ -1,17 +1,11 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { FormInputField } from "@/components/molecules/FormInputField";
+import { type FormSelectOption, FormSelectField } from "@/components/molecules/FormSelectField";
 import type { StudentRegistrationFormValues } from "@/lib/validation/studentRegistrationSchema";
-import { ArrowLeft, ArrowRight, Plus, Trash2 } from "lucide-react";
-import { Controller, useFieldArray, useFormContext } from "react-hook-form";
+import { Trash2 } from "lucide-react";
+import type { FieldArrayWithId } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
-interface AcademicInfoStepProps {
-	onNext: () => void;
-	onBack: () => void;
-}
-
-const subjectOptions = [
+const subjectOptions: FormSelectOption[] = [
 	"Mathematics (D2/Compulsory)",
 	"Physics",
 	"Chemistry",
@@ -21,29 +15,47 @@ const subjectOptions = [
 	"Business Studies",
 	"English Language",
 	"Bangla",
+].map((s) => ({ value: s, label: s }));
+
+const gradeOptions: FormSelectOption[] = ["A*", "A", "B", "C", "D", "E", "F", "U"].map((g) => ({
+	value: g,
+	label: g,
+}));
+
+const levelOptions: FormSelectOption[] = [
+	{ value: "o-level", label: "O Level" },
+	{ value: "a-level", label: "A Level" },
 ];
 
-const gradeOptions = ["A*", "A", "B", "C", "D", "E", "F", "U"];
+const yearOptions: FormSelectOption[] = ["2025", "2024", "2023"].map((y) => ({
+	value: y,
+	label: y,
+}));
 
-export const AcademicInfoStep = ({ onNext, onBack }: AcademicInfoStepProps) => {
-	const {
-		register,
-		control,
-		formState: { errors },
-	} = useFormContext<StudentRegistrationFormValues>();
+const studyGroupOptions: FormSelectOption[] = [
+	{ value: "science", label: "Science" },
+	{ value: "commerce", label: "Commerce" },
+	{ value: "arts", label: "Arts" },
+];
 
-	const { fields, append, remove } = useFieldArray({
-		control,
-		name: "subjects",
-	});
+const sessionOptions: FormSelectOption[] = [
+	{ value: "may-june", label: "May/June" },
+	{ value: "oct-nov", label: "Oct/Nov" },
+];
 
-	const addSubject = () => {
-		append({ subject: "", grade: "", paperCode: "" });
-	};
+const boardOptions: FormSelectOption[] = [
+	{ value: "cambridge", label: "Cambridge (CIE)" },
+	{ value: "edexcel", label: "Edexcel" },
+];
 
-	const removeSubject = (index: number) => {
-		if (fields.length > 1) remove(index);
-	};
+export interface AcademicInfoStepProps {
+	subjectFields: FieldArrayWithId<StudentRegistrationFormValues, "subjects">[];
+	onRemoveSubject: (index: number) => void;
+}
+
+export const AcademicInfoStep = ({ subjectFields, onRemoveSubject }: AcademicInfoStepProps) => {
+	const { control, formState } = useFormContext<StudentRegistrationFormValues>();
+	const { errors } = formState;
 
 	return (
 		<div className="space-y-6">
@@ -52,143 +64,39 @@ export const AcademicInfoStep = ({ onNext, onBack }: AcademicInfoStepProps) => {
 				<p className="mb-6 text-sm text-muted-foreground">Enter your Academic Information.</p>
 
 				<div className="grid gap-5 sm:grid-cols-2">
-					<div className="space-y-2">
-						<Label>Applying for Level</Label>
-						<Controller
-							name="applyingLevel"
+					<FormSelectField
+						control={control}
+						name="applyingLevel"
+						label="Applying for Level"
+						options={levelOptions}
+					/>
+					<FormSelectField
+						control={control}
+						name="yearOfExamination"
+						label="Year of Examination"
+						options={yearOptions}
+					/>
+					<FormSelectField control={control} name="studyGroup" label="Study Group" options={studyGroupOptions} />
+					<FormSelectField control={control} name="session" label="Session" options={sessionOptions} />
+					<FormInputField
+						control={control}
+						name="rollNumber"
+						label="Roll Number"
+						placeholder="0000000000"
+					/>
+					<FormSelectField
+						control={control}
+						name="examinationBoard"
+						label="Examination Board"
+						options={boardOptions}
+					/>
+					<div className="sm:col-span-2">
+						<FormInputField
 							control={control}
-							render={({ field }) => (
-								<Select
-									value={field.value ? field.value : null}
-									onValueChange={(v) => field.onChange(v ?? "")}
-								>
-									<SelectTrigger className="w-full min-w-0" aria-invalid={!!errors.applyingLevel}>
-										<SelectValue placeholder="Select" />
-									</SelectTrigger>
-									<SelectContent>
-										<SelectItem value="o-level">O Level</SelectItem>
-										<SelectItem value="a-level">A Level</SelectItem>
-									</SelectContent>
-								</Select>
-							)}
-						/>
-						{errors.applyingLevel && (
-							<p className="text-xs text-destructive">{errors.applyingLevel.message}</p>
-						)}
-					</div>
-					<div className="space-y-2">
-						<Label>Year of Examination</Label>
-						<Controller
-							name="yearOfExamination"
-							control={control}
-							render={({ field }) => (
-								<Select
-									value={field.value ? field.value : null}
-									onValueChange={(v) => field.onChange(v ?? "")}
-								>
-									<SelectTrigger className="w-full min-w-0" aria-invalid={!!errors.yearOfExamination}>
-										<SelectValue placeholder="Select" />
-									</SelectTrigger>
-									<SelectContent>
-										<SelectItem value="2025">2025</SelectItem>
-										<SelectItem value="2024">2024</SelectItem>
-										<SelectItem value="2023">2023</SelectItem>
-									</SelectContent>
-								</Select>
-							)}
-						/>
-						{errors.yearOfExamination && (
-							<p className="text-xs text-destructive">{errors.yearOfExamination.message}</p>
-						)}
-					</div>
-					<div className="space-y-2">
-						<Label>Study Group</Label>
-						<Controller
-							name="studyGroup"
-							control={control}
-							render={({ field }) => (
-								<Select
-									value={field.value ? field.value : null}
-									onValueChange={(v) => field.onChange(v ?? "")}
-								>
-									<SelectTrigger className="w-full min-w-0" aria-invalid={!!errors.studyGroup}>
-										<SelectValue placeholder="Select" />
-									</SelectTrigger>
-									<SelectContent>
-										<SelectItem value="science">Science</SelectItem>
-										<SelectItem value="commerce">Commerce</SelectItem>
-										<SelectItem value="arts">Arts</SelectItem>
-									</SelectContent>
-								</Select>
-							)}
-						/>
-						{errors.studyGroup && <p className="text-xs text-destructive">{errors.studyGroup.message}</p>}
-					</div>
-					<div className="space-y-2">
-						<Label>Session</Label>
-						<Controller
-							name="session"
-							control={control}
-							render={({ field }) => (
-								<Select
-									value={field.value ? field.value : null}
-									onValueChange={(v) => field.onChange(v ?? "")}
-								>
-									<SelectTrigger className="w-full min-w-0" aria-invalid={!!errors.session}>
-										<SelectValue placeholder="Select" />
-									</SelectTrigger>
-									<SelectContent>
-										<SelectItem value="may-june">May/June</SelectItem>
-										<SelectItem value="oct-nov">Oct/Nov</SelectItem>
-									</SelectContent>
-								</Select>
-							)}
-						/>
-						{errors.session && <p className="text-xs text-destructive">{errors.session.message}</p>}
-					</div>
-					<div className="space-y-2">
-						<Label htmlFor="rollNumber">Roll Number</Label>
-						<Input
-							id="rollNumber"
-							placeholder="0000000000"
-							aria-invalid={!!errors.rollNumber}
-							{...register("rollNumber")}
-						/>
-						{errors.rollNumber && <p className="text-xs text-destructive">{errors.rollNumber.message}</p>}
-					</div>
-					<div className="space-y-2">
-						<Label>Examination Board</Label>
-						<Controller
-							name="examinationBoard"
-							control={control}
-							render={({ field }) => (
-								<Select
-									value={field.value ? field.value : null}
-									onValueChange={(v) => field.onChange(v ?? "")}
-								>
-									<SelectTrigger className="w-full min-w-0" aria-invalid={!!errors.examinationBoard}>
-										<SelectValue placeholder="Select" />
-									</SelectTrigger>
-									<SelectContent>
-										<SelectItem value="cambridge">Cambridge (CIE)</SelectItem>
-										<SelectItem value="edexcel">Edexcel</SelectItem>
-									</SelectContent>
-								</Select>
-							)}
-						/>
-						{errors.examinationBoard && (
-							<p className="text-xs text-destructive">{errors.examinationBoard.message}</p>
-						)}
-					</div>
-					<div className="space-y-2 sm:col-span-2">
-						<Label htmlFor="schoolName">School Name</Label>
-						<Input
-							id="schoolName"
+							name="schoolName"
+							label="School Name"
 							placeholder="Search school..."
-							aria-invalid={!!errors.schoolName}
-							{...register("schoolName")}
 						/>
-						{errors.schoolName && <p className="text-xs text-destructive">{errors.schoolName.message}</p>}
 					</div>
 				</div>
 			</div>
@@ -211,101 +119,40 @@ export const AcademicInfoStep = ({ onNext, onBack }: AcademicInfoStepProps) => {
 						<span />
 					</div>
 
-					{fields.map((row, index) => (
+					{subjectFields.map((row, index) => (
 						<div key={row.id} className="grid grid-cols-[1fr_100px_100px_40px] gap-3">
-							<div className="space-y-1">
-								<Controller
-									name={`subjects.${index}.subject`}
-									control={control}
-									render={({ field }) => (
-										<Select
-											value={field.value ? field.value : null}
-											onValueChange={(v) => field.onChange(v ?? "")}
-										>
-											<SelectTrigger
-												className="w-full min-w-0"
-												aria-invalid={!!errors.subjects?.[index]?.subject}
-											>
-												<SelectValue placeholder="Select subject" />
-											</SelectTrigger>
-											<SelectContent>
-												{subjectOptions.map((s) => (
-													<SelectItem key={s} value={s}>
-														{s}
-													</SelectItem>
-												))}
-											</SelectContent>
-										</Select>
-									)}
-								/>
-								{errors.subjects?.[index]?.subject && (
-									<p className="text-xs text-destructive">{errors.subjects[index]?.subject?.message}</p>
-								)}
-							</div>
-							<div className="space-y-1">
-								<Controller
-									name={`subjects.${index}.grade`}
-									control={control}
-									render={({ field }) => (
-										<Select
-											value={field.value ? field.value : null}
-											onValueChange={(v) => field.onChange(v ?? "")}
-										>
-											<SelectTrigger
-												className="w-full min-w-0"
-												aria-invalid={!!errors.subjects?.[index]?.grade}
-											>
-												<SelectValue placeholder="—" />
-											</SelectTrigger>
-											<SelectContent>
-												{gradeOptions.map((g) => (
-													<SelectItem key={g} value={g}>
-														{g}
-													</SelectItem>
-												))}
-											</SelectContent>
-										</Select>
-									)}
-								/>
-								{errors.subjects?.[index]?.grade && (
-									<p className="text-xs text-destructive">{errors.subjects[index]?.grade?.message}</p>
-								)}
-							</div>
-							<Input
-								placeholder="Code"
-								aria-invalid={!!errors.subjects?.[index]?.paperCode}
-								{...register(`subjects.${index}.paperCode`)}
+							<FormSelectField
+								control={control}
+								name={`subjects.${index}.subject`}
+								placeholder="Select subject"
+								options={subjectOptions}
+								className="space-y-1"
 							/>
-							<Button
+							<FormSelectField
+								control={control}
+								name={`subjects.${index}.grade`}
+								placeholder="—"
+								options={gradeOptions}
+								className="space-y-1"
+							/>
+							<FormInputField
+								control={control}
+								name={`subjects.${index}.paperCode`}
+								placeholder="Code"
+								className="space-y-1"
+							/>
+							<button
 								type="button"
-								variant="ghost"
-								size="icon"
-								className="text-muted-foreground hover:text-destructive"
-								onClick={() => removeSubject(index)}
+								disabled={subjectFields.length <= 1}
+								className="inline-flex size-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground outline-none transition-colors hover:bg-muted hover:text-destructive focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-40"
+								aria-label="Remove subject row"
+								onClick={() => onRemoveSubject(index)}
 							>
 								<Trash2 className="h-4 w-4" />
-							</Button>
+							</button>
 						</div>
 					))}
 				</div>
-
-				<Button
-					type="button"
-					variant="outline"
-					className="mt-4 gap-2 border-accent text-accent hover:bg-accent/10"
-					onClick={addSubject}
-				>
-					<Plus className="h-4 w-4" /> Add Subject
-				</Button>
-			</div>
-
-			<div className="flex justify-between">
-				<Button type="button" variant="outline" onClick={onBack} className="gap-2">
-					<ArrowLeft className="h-4 w-4" /> Back
-				</Button>
-				<Button type="button" onClick={onNext} size="lg" className="gap-2">
-					Next: Confirm & Submit <ArrowRight className="h-4 w-4" />
-				</Button>
 			</div>
 		</div>
 	);
