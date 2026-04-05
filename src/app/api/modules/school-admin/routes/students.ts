@@ -13,12 +13,17 @@ export async function GET(request: AuthenticatedRequest) {
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "10");
     const status = searchParams.get("status");
+    const school = searchParams.get("school");
     const level = searchParams.get("level");
     const search = searchParams.get("search");
     const sortBy = searchParams.get("sort_by") || "createdAt";
     const sortOrder = searchParams.get("sort_order") === "asc" ? 1 : -1;
 
     await dbConnect();
+
+    if(!school){
+      return errorResponse("School must not be Empty", 403);
+    }
 
     const query: any = {};
 
@@ -28,6 +33,9 @@ export async function GET(request: AuthenticatedRequest) {
 
     if (level) {
       query.applyingForLevel = level;
+    }
+    if (school) {
+      query.school = school;
     }
 
     if (search) {

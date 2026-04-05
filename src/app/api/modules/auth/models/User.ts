@@ -5,6 +5,7 @@ export interface IUser {
   email: string;
   password: string;
   role: "STUDENT" | "SCHOOL_ADMIN" | "ADMIN";
+  school?: string;
   emailVerified: boolean;
   status: "ACTIVE" | "INACTIVE" | "DELETED" | "BLOCKED";
   isDeleted: boolean;
@@ -32,6 +33,9 @@ const userSchema = new mongoose.Schema<IUser>(
       type: String,
       enum: ["STUDENT", "SCHOOL_ADMIN", "ADMIN"],
       default: "STUDENT",
+    },
+    school: {
+      type: String,
     },
     emailVerified: {
       type: Boolean,

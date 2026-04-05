@@ -16,6 +16,7 @@ export class CreateUserDto {
   email: string;
   password: string;
   role?: UserRole;
+  school?: string;
 }
 
 export class LoginDto {
