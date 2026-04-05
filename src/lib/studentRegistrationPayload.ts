@@ -78,7 +78,7 @@ export function buildStudentRegistrationSubmitPayload(
 
 	const payload: StudentRegistrationSubmitPayload = {
 		name: values.name.trim(),
-		dateOfBirth: values.dateOfBirth,
+		dateOfBirth: values.dateOfBirth ? new Date(values.dateOfBirth).toISOString() : "",
 		phoneNumber: formatBdPhoneForApi(values.phoneNumber),
 		gender: GENDER_TO_DTO[values.gender] ?? values.gender,
 		applyingForLevel: values.applyingForLevel,

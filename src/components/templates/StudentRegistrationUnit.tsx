@@ -8,7 +8,9 @@ import {
 	type StudentRegistrationFormValues,
 } from "@/lib/validation/studentRegistrationSchema";
 import { useApiClient } from "@/libes/hooks";
+import { toastError } from "@/utils/helpers/toast.helpers";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { AxiosError } from "axios";
 import type { LucideIcon } from "lucide-react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -80,7 +82,7 @@ export const StudentRegistrationUnit = () => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [suppressStep3Submit, setSuppressStep3Submit] = useState(false);
 
-	const {} = useApiClient();
+	const { post, loading } = useApiClient();
 
 	const methods = useForm<StudentRegistrationFormValues>({
 		resolver: yupResolver(studentRegistrationSchema) as Resolver<StudentRegistrationFormValues>,
@@ -114,7 +116,16 @@ export const StudentRegistrationUnit = () => {
 
 	const onRegistrationSubmit = async (data: StudentRegistrationFormValues) => {
 		const payload = buildStudentRegistrationSubmitPayload(data);
-		console.log({ payload });
+		try {
+			const { data, status } = await post("API_URL", "student-register", payload);
+			if (status === 201) {
+				setSubmitted(true);
+			}
+		} catch (err) {
+			toastError({
+				message: err instanceof AxiosError ? err.response?.data?.message[0] : err,
+			});
+		}
 	};
 
 	const getFooterActions = (): [StepFooterAction | null, StepFooterAction | null] => {

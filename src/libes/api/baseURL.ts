@@ -1,1 +1,3 @@
-export const BASE_URLS = {};
+export const BASE_URLS = {
+	API_URL: process.env.API_URL,
+};

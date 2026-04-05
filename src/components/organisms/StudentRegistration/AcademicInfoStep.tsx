@@ -1,10 +1,14 @@
+"use client";
+
 import { CardSectionHeader } from "@/components/molecules/CardSectionHeader";
 import { FormInputField } from "@/components/molecules/FormInputField";
 import { type FormSelectOption, FormSelectField } from "@/components/molecules/FormSelectField";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { StudentRegistrationFormValues } from "@/lib/validation/studentRegistrationSchema";
+import { useApiClient } from "@/libes/hooks";
 import { Plus, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 
 const subjectOptions: FormSelectOption[] = [
@@ -35,12 +39,6 @@ function marksheetSectionTitle(level: string | undefined): string {
 	return "Subjects – Marksheet";
 }
 
-const yearOptions: { value: number; label: string }[] = [
-	{ value: 2025, label: "2025" },
-	{ value: 2024, label: "2024" },
-	{ value: 2023, label: "2023" },
-];
-
 const studyGroupOptions: FormSelectOption[] = [
 	{ value: "Science", label: "Science" },
 	{ value: "Commerce", label: "Commerce" },
@@ -61,6 +59,9 @@ const boardOptions: FormSelectOption[] = [
 const emptySubjectRow = () => ({ name: "", grade: "", paperCode: "" });
 
 export const AcademicInfoStep = () => {
+	const { get } = useApiClient();
+	const [schoolsOption, setSchoolsOption] = useState([]);
+
 	const { control, formState } = useFormContext<StudentRegistrationFormValues>();
 	const { errors } = formState;
 	const applyingForLevel = useWatch({ control, name: "applyingForLevel" });
@@ -91,6 +92,23 @@ export const AcademicInfoStep = () => {
 			: !isO && errors.aLevelSubjects && !Array.isArray(errors.aLevelSubjects)
 				? errors.aLevelSubjects.message
 				: undefined;
+
+	const getSchoolOptions = async () => {
+		try {
+			const { data, status } = await get("API_URL", "schools");
+			if (status === 200) {
+				const options = (data?.data ?? []).map((s: { name: string }) => ({ value: s.name, label: s.name }));
+				console.log({ options });
+				setSchoolsOption(options);
+			}
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	useEffect(() => {
+		getSchoolOptions();
+	}, []);
 
 	return (
 		<div className="space-y-5 sm:space-y-6 md:space-y-6 lg:space-y-6 xl:space-y-6">
@@ -132,12 +150,7 @@ export const AcademicInfoStep = () => {
 					/>
 				</div>
 				<div className="mt-4">
-					<FormInputField
-						control={control}
-						name="school"
-						label="School Name"
-						placeholder="Search school..."
-					/>
+					<FormSelectField control={control} name="school" label="School Name" options={schoolsOption} />
 				</div>
 			</div>
 
