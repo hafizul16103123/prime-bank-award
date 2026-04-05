@@ -6,7 +6,7 @@ import dbConnect from "@/lib/db";
 import { generateToken, generateVerificationToken, verifyVerificationToken } from "../utils/jwt";
 
 export class AuthService {
-  async register(name: string, email: string, password: string, role: string = "STUDENT", baseUrl?: string) {
+  async register(name: string, email: string, password: string, role: string = "STUDENT", baseUrl?: string, school?: string) {
     await dbConnect();
 
     const existingUser = await User.findOne({ email });
@@ -21,6 +21,7 @@ export class AuthService {
       email,
       password: hashedPassword,
       role,
+      school: school || undefined,
       emailVerified: false,
       status: "ACTIVE",
       isDeleted: false,
@@ -112,7 +113,7 @@ export class AuthService {
     const token = generateToken({
       id: user._id.toString(),
       email: user.email,
-      role: user.role,
+      role: user.role
     });
 
     return {
@@ -120,6 +121,7 @@ export class AuthService {
       name: user.name,
       email: user.email,
       role: user.role,
+      school: user.school ?? null,
       token,
     };
   }
