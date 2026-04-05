@@ -1,15 +1,13 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { isFileList } from "@/lib/isFileList";
-import { buildStudentRegisterPayload } from "@/lib/studentRegistrationPayload";
 import {
 	studentRegistrationSchema,
 	type StudentRegistrationFormValues,
 } from "@/lib/validation/studentRegistrationSchema";
-import { toastError, toastSuccess } from "@/utils/helpers/toast.helpers";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { ArrowLeft, ArrowRight, Plus } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { FormProvider, useFieldArray, useForm, type Resolver } from "react-hook-form";
 import {
@@ -19,6 +17,7 @@ import {
 	RegistrationStepper,
 	ThankYouStep,
 } from "../organisms/StudentRegistration";
+import { Container } from "../ui";
 
 const steps = [{ label: "Personal Information" }, { label: "Academic Info" }, { label: "Confirm & Submit" }];
 
@@ -68,6 +67,42 @@ type ApiEnvelope = {
 	data?: { url?: string };
 };
 
+type StepFooterAction = {
+	type?: "button" | "submit";
+	variant?: "default" | "outline" | "secondary" | "ghost" | "link" | "destructive";
+	size?: "default" | "sm" | "lg" | "xs" | "icon" | "icon-sm" | "icon-lg";
+	className?: string;
+	disabled?: boolean;
+	onClick?: () => void;
+	label: string;
+	icon: LucideIcon;
+	iconPosition: "start" | "end";
+};
+
+function StepFooterButton({ action }: { action: StepFooterAction }) {
+	const Icon = action.icon;
+	return (
+		<Button
+			type={action.type ?? "button"}
+			variant={action.variant}
+			size={action.size}
+			className={action.className}
+			disabled={action.disabled}
+			onClick={action.type === "submit" ? undefined : action.onClick}
+		>
+			{action.iconPosition === "start" ? (
+				<>
+					<Icon className="h-4 w-4" /> {action.label}
+				</>
+			) : (
+				<>
+					{action.label} <Icon className="h-4 w-4" />
+				</>
+			)}
+		</Button>
+	);
+}
+
 export const StudentRegistrationUnit = () => {
 	const [currentStep, setCurrentStep] = useState(1);
 	const [submitted, setSubmitted] = useState(false);
@@ -97,49 +132,80 @@ export const StudentRegistrationUnit = () => {
 	};
 
 	const onRegistrationSubmit = async (data: StudentRegistrationFormValues) => {
-		setIsSubmitting(true);
-		try {
-			let photoUrl: string | undefined;
-
-			if (isFileList(data.photo) && data.photo.length > 0) {
-				const uploadForm = new FormData();
-				uploadForm.append("image", data.photo[0]);
-				const uploadRes = await fetch("/api/upload/image", {
-					method: "POST",
-					body: uploadForm,
-				});
-				const uploadJson = (await uploadRes.json()) as ApiEnvelope;
-				if (!uploadRes.ok || !uploadJson.success || !uploadJson.data?.url) {
-					const m = uploadJson.message?.[0] ?? "Photo upload failed";
-					throw new Error(m);
-				}
-				photoUrl = uploadJson.data.url;
-			}
-
-			const body = buildStudentRegisterPayload(data, photoUrl);
-			const regRes = await fetch("/api/student-register", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(body),
-			});
-			const regJson = (await regRes.json()) as ApiEnvelope;
-			if (!regRes.ok || !regJson.success) {
-				const m = regJson.message?.[0] ?? "Registration failed";
-				throw new Error(m);
-			}
-
-			toastSuccess({ message: regJson.message?.[0] ?? "Registration successful." });
-			setSubmitted(true);
-		} catch (e) {
-			toastError({ message: e instanceof Error ? e.message : "Something went wrong" });
-		} finally {
-			setIsSubmitting(false);
-		}
+		console.log(data);
 	};
 
 	const removeSubjectRow = (index: number) => {
 		if (subjectFields.length > 1) removeSubject(index);
 	};
+
+	const addSubjectRow = () => appendSubject({ subject: "", grade: "", paperCode: "" });
+
+	const getFooterActions = (): [StepFooterAction | null, StepFooterAction | null] => {
+		switch (currentStep) {
+			case 1:
+				return [
+					null,
+					{
+						type: "button",
+						size: "lg",
+						className:
+							"ml-auto bg-brand-blue text-white rounded-full hover:opacity-90 transition-opacity text-base font-medium px-20 py-6",
+						onClick: () => goToStep(2, step1Fields),
+						label: "Next: Academic Info",
+						icon: ArrowRight,
+						iconPosition: "end",
+					},
+				];
+			case 2:
+				return [
+					{
+						type: "button",
+						variant: "outline",
+						className: "gap-2 py-6 border border-tartiary rounded-full bg-subtle px-10",
+						onClick: () => setCurrentStep(1),
+						label: "Back",
+						icon: ArrowLeft,
+						iconPosition: "start",
+					},
+					{
+						type: "button",
+						size: "lg",
+						className:
+							"ml-auto bg-brand-blue text-white rounded-full hover:opacity-90 transition-opacity text-base font-medium px-20 py-6",
+						onClick: () => goToStep(3, step2Fields),
+						label: "Next: Confirm & Submit",
+						icon: ArrowRight,
+						iconPosition: "end",
+					},
+				];
+			case 3:
+				return [
+					{
+						type: "button",
+						variant: "outline",
+						className: "gap-2",
+						onClick: () => setCurrentStep(2),
+						label: "Back",
+						icon: ArrowLeft,
+						iconPosition: "start",
+					},
+					{
+						type: "submit",
+						size: "lg",
+						disabled: isSubmitting,
+						className: "gap-2 bg-accent text-accent-foreground hover:bg-accent/90 sm:ml-auto",
+						label: isSubmitting ? "Submitting…" : "Submit Registration",
+						icon: ArrowRight,
+						iconPosition: "end",
+					},
+				];
+			default:
+				return [null, null];
+		}
+	};
+
+	const [footerLeft, footerRight] = getFooterActions();
 
 	if (submitted) {
 		return (
@@ -152,101 +218,50 @@ export const StudentRegistrationUnit = () => {
 	}
 
 	return (
-		<div className="min-h-screen bg-background px-4 py-10">
-			<div className="mx-auto max-w-3xl">
-				<div className="mb-8 text-center">
-					<span className="inline-block rounded-full bg-badge-bg px-4 py-1 text-xs font-semibold text-badge-fg">
-						Application
-					</span>
-					<h1 className="mt-3 text-2xl font-bold text-foreground sm:text-3xl">Student Registration</h1>
-					<p className="mt-1 text-sm text-muted-foreground">
-						Complete both steps to submit your registration for the 2026 Awards.
-					</p>
-				</div>
+		<Container>
+			<div className="min-h-screen bg-default rounded-[50px] border border-tartiary mt-3 pt-[85px] pb-[75px] py-10">
+				<div className="mx-auto max-w-[1200px]">
+					<div className="mb-8 text-center">
+						<span className="inline-block rounded-full border border-[#002E66] bg-frost text-sm font-medium py-[10px] px-[22px]">
+							Application
+						</span>
+						<h1 className="my-4 text-2xl text-[#212121] sm:text-[40px]">Student Registration</h1>
+						<p className=" text-xl text-[#757575]">
+							Complete both steps to submit your registration for the 2026 Awards.
+						</p>
+					</div>
 
-				<div className="mb-10">
-					<RegistrationStepper currentStep={currentStep} steps={steps} />
-				</div>
+					<div className="mb-10">
+						<RegistrationStepper currentStep={currentStep} steps={steps} />
+					</div>
 
-				<FormProvider {...methods}>
-					<form onSubmit={handleSubmit(onRegistrationSubmit)} className="space-y-6">
-						{currentStep === 1 && <PersonalInfoStep />}
-						{currentStep === 2 && (
-							<AcademicInfoStep subjectFields={subjectFields} onRemoveSubject={removeSubjectRow} />
-						)}
-						{currentStep === 3 && <ConfirmSubmitStep />}
-
-						<div className="flex flex-wrap items-center justify-between gap-4">
-							{currentStep === 1 && (
-								<>
-									<span className="hidden min-w-0 flex-1 sm:block" aria-hidden />
-									<Button
-										type="button"
-										size="lg"
-										className="ml-auto gap-2"
-										onClick={() => goToStep(2, step1Fields)}
-									>
-										Next: Academic Info <ArrowRight className="h-4 w-4" />
-									</Button>
-								</>
-							)}
-
+					<FormProvider {...methods}>
+						<form
+							onSubmit={handleSubmit(onRegistrationSubmit)}
+							className="space-y-6 bg-white border border-tartiary rounded-[36px] px-[50px] py-[45px]"
+						>
+							{currentStep === 1 && <PersonalInfoStep />}
 							{currentStep === 2 && (
-								<>
-									<Button
-										type="button"
-										variant="outline"
-										className="gap-2"
-										onClick={() => setCurrentStep(1)}
-									>
-										<ArrowLeft className="h-4 w-4" /> Back
-									</Button>
-									<div className="flex flex-wrap items-center justify-end gap-2 sm:ml-auto">
-										<Button
-											type="button"
-											variant="outline"
-											className="gap-2 border-accent text-accent hover:bg-accent/10"
-											onClick={() => appendSubject({ subject: "", grade: "", paperCode: "" })}
-										>
-											<Plus className="h-4 w-4" /> Add Subject
-										</Button>
-										<Button
-											type="button"
-											size="lg"
-											className="gap-2"
-											onClick={() => goToStep(3, step2Fields)}
-										>
-											Next: Confirm & Submit <ArrowRight className="h-4 w-4" />
-										</Button>
-									</div>
-								</>
+								<AcademicInfoStep
+									subjectFields={subjectFields}
+									onRemoveSubject={removeSubjectRow}
+									onAddSubject={addSubjectRow}
+								/>
 							)}
+							{currentStep === 3 && <ConfirmSubmitStep />}
 
-							{currentStep === 3 && (
-								<>
-									<Button
-										type="button"
-										variant="outline"
-										className="gap-2"
-										onClick={() => setCurrentStep(2)}
-									>
-										<ArrowLeft className="h-4 w-4" /> Back
-									</Button>
-									<Button
-										type="submit"
-										size="lg"
-										disabled={isSubmitting}
-										className="gap-2 bg-accent text-accent-foreground hover:bg-accent/90 sm:ml-auto"
-									>
-										{isSubmitting ? "Submitting…" : "Submit Registration"}{" "}
-										<ArrowRight className="h-4 w-4" />
-									</Button>
-								</>
-							)}
-						</div>
-					</form>
-				</FormProvider>
+							<div className="flex flex-wrap items-center justify-between gap-4">
+								{footerLeft ? (
+									<StepFooterButton action={footerLeft} />
+								) : (
+									<span className="hidden min-w-0 flex-1 sm:block" aria-hidden />
+								)}
+								{footerRight ? <StepFooterButton action={footerRight} /> : null}
+							</div>
+						</form>
+					</FormProvider>
+				</div>
 			</div>
-		</div>
+		</Container>
 	);
 };

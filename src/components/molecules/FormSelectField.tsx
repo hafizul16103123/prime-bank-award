@@ -35,7 +35,7 @@ function FormSelectTriggerInner({
 	return (
 		<SelectTrigger
 			id={formItemId}
-			className={cn("w-full min-w-0", className)}
+			className={cn("w-full min-w-0 !h-[45px]", className)}
 			aria-invalid={!!error}
 		>
 			{children}

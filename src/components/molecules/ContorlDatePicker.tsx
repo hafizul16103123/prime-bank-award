@@ -1,19 +1,51 @@
 "use client";
 
-import { Controller } from "react-hook-form";
+import type { DateValueType } from "react-tailwindcss-datepicker";
 import Datepicker from "react-tailwindcss-datepicker";
+import type { Control, FieldPath, FieldValues } from "react-hook-form";
+import { Controller } from "react-hook-form";
 
-interface ControlDatePickerProps {
-	name: string;
+function formatLocalYmd(d: Date): string {
+	const y = d.getFullYear();
+	const m = String(d.getMonth() + 1).padStart(2, "0");
+	const day = String(d.getDate()).padStart(2, "0");
+	return `${y}-${m}-${day}`;
+}
+
+function parseToPickerValue(value: unknown): DateValueType {
+	if (value == null || value === "") return null;
+	if (value instanceof Date && !Number.isNaN(value.getTime())) {
+		return { startDate: value, endDate: value };
+	}
+	if (typeof value === "string") {
+		const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+		if (m) {
+			const y = Number(m[1]);
+			const mo = Number(m[2]);
+			const d = Number(m[3]);
+			const date = new Date(y, mo - 1, d);
+			if (!Number.isNaN(date.getTime())) return { startDate: date, endDate: date };
+		}
+	}
+	return null;
+}
+
+function rangeToYmdString(range: DateValueType): string {
+	if (!range?.startDate) return "";
+	return formatLocalYmd(range.startDate);
+}
+
+interface ControlDatePickerProps<TFieldValues extends FieldValues> {
+	name: FieldPath<TFieldValues>;
 	label?: string;
 	error?: string;
 	placeholder?: string;
-	control: any;
+	control: Control<TFieldValues>;
 	required?: boolean;
 	highlight?: boolean;
 }
 
-export const ControlDatePicker = ({
+export function ControlDatePicker<TFieldValues extends FieldValues>({
 	name,
 	label,
 	error,
@@ -22,13 +54,13 @@ export const ControlDatePicker = ({
 	required,
 	highlight,
 	...rest
-}: ControlDatePickerProps) => {
+}: ControlDatePickerProps<TFieldValues>) {
 	return (
 		<div>
 			{label && (
 				<p
-					className={`font-normal mb-1 mt-5 text-sm ${highlight && "text-yellow-700"} ${
-						error && "text-red-500"
+					className={`font-normal mb-1 text-sm text-muted-foreground ${highlight ? "text-yellow-700" : ""} ${
+						error ? "text-red-500" : ""
 					}`}
 				>
 					{label} <span className="text-red-500">{required && "*"}</span>
@@ -42,13 +74,14 @@ export const ControlDatePicker = ({
 					<Datepicker
 						{...field}
 						{...rest}
+						placeholder={placeholder}
 						useRange={false}
 						asSingle={true}
 						displayFormat="MM/DD/YYYY"
 						onChange={(date) => {
-							field.onChange(date?.startDate || null);
+							field.onChange(rangeToYmdString(date));
 						}}
-						value={field.value ? { startDate: field.value, endDate: field.value } : null}
+						value={parseToPickerValue(field.value)}
 						inputClassName={`${
 							highlight ? "border border-yellow-700" : "border border-lightGray"
 						} rounded-[8px] h-12 text-gray-900 ring-4 ring-transparent placeholder:text-gray-400 placeholder:text-sm text-sm focus:!border-primary focus:ring-primary/10 w-full outline-none font-light px-4`}
@@ -61,4 +94,4 @@ export const ControlDatePicker = ({
 			{error && <p className="text-red-500 text-sm mt-1">{error}</p>}
 		</div>
 	);
-};
+}

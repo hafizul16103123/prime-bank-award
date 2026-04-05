@@ -18,35 +18,30 @@ export const RegistrationStepper = ({ currentStep, steps }: StepperProps) => {
 
 				return (
 					<div key={index} className="flex items-center">
-						<div className="flex flex-col items-center">
+						<div className="flex flex-col items-center ">
 							<div
 								className={cn(
-									"flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold transition-all",
-									isComplete && "bg-step-complete text-primary-foreground",
-									isActive && "bg-step-active text-primary-foreground",
-									!isComplete && !isActive && "bg-step-inactive text-muted-foreground",
+									"flex h-[70px] w-[70px] items-center justify-center rounded-full text-2xl  transition-all",
+									isComplete && "bg-[#002E66] text-primary-foreground",
+									isActive && "bg-[#002E66] text-primary-foreground",
+									!isComplete && !isActive && "bg-[#BDBDBD] text-[#757575]",
 								)}
 							>
 								{isComplete ? <Check className="h-5 w-5" /> : stepNum}
 							</div>
-							<span
-								className={cn(
-									"mt-2 text-xs font-semibold",
-									isActive ? "text-primary" : "text-muted-foreground",
-								)}
-							>
+							<span className={cn("mt-4 font-medium", isActive ? "text-[#002E66]" : "text-[#757575]")}>
 								{step.label}
 							</span>
 						</div>
-						{index < steps.length - 1 && (
+						{index < steps?.length - 1 && (
 							<div
 								className={cn(
-									"mx-4 mb-6 h-0.5 w-16 sm:w-24",
+									"mb-6 h-0.5 w-16 sm:w-24 border-[1px] border-dashed",
 									currentStep > stepNum + 1
 										? "bg-step-complete"
 										: currentStep > stepNum
-											? "bg-step-active"
-											: "bg-step-inactive",
+											? "border-[#002E66]"
+											: "border-[#909090]",
 								)}
 							/>
 						)}

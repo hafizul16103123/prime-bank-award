@@ -1,3 +1,4 @@
+import { CardSectionHeader } from "@/components/molecules/CardSectionHeader";
 import { FormCheckboxField } from "@/components/molecules/FormCheckboxField";
 import { FormInputField } from "@/components/molecules/FormInputField";
 import type { StudentRegistrationFormValues } from "@/lib/validation/studentRegistrationSchema";
@@ -8,8 +9,10 @@ export const ConfirmSubmitStep = () => {
 
 	return (
 		<div className="mx-auto max-w-md rounded-xl border border-border bg-card p-6 shadow-sm">
-			<h2 className="text-lg font-bold text-foreground">Create Your Profile</h2>
-			<p className="mb-6 text-sm text-muted-foreground">Enter your credentials to access your profile.</p>
+			<CardSectionHeader
+				title="Create Your Profile"
+				description="Enter your credentials to access your profile."
+			/>
 
 			<div className="space-y-4">
 				<FormInputField

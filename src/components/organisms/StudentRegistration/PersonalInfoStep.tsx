@@ -1,3 +1,5 @@
+import { CardSectionHeader } from "@/components/molecules/CardSectionHeader";
+import { ControlDatePicker } from "@/components/molecules/ContorlDatePicker";
 import { FormInputField } from "@/components/molecules/FormInputField";
 import { type FormSelectOption, FormSelectField } from "@/components/molecules/FormSelectField";
 import { isFileList } from "@/lib/isFileList";
@@ -18,26 +20,22 @@ export const PersonalInfoStep = () => {
 	} = useFormContext<StudentRegistrationFormValues>();
 
 	return (
-		<div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-			<h2 className="text-lg font-bold text-foreground">Personal Information</h2>
-			<p className="mb-6 text-sm text-muted-foreground">
-				Please provide your personal data as they appear on official documents.
-			</p>
+		<div className="">
+			<CardSectionHeader
+				title="Personal Information"
+				description="Please provide your personal data as they appear on official documents."
+			/>
 
 			<div className="grid gap-5 sm:grid-cols-2">
-				<FormInputField
+				<FormInputField control={control} name="fullName" label="Full Name" placeholder="Your full name" />
+				<ControlDatePicker
 					control={control}
-					name="fullName"
-					label="Full Name"
-					placeholder="Your full name"
+					name="dob"
+					label="Date of Birth"
+					placeholder="Select date"
+					error={errors.dob?.message}
 				/>
-				<FormInputField control={control} name="dob" label="Date of Birth" type="date" />
-				<FormInputField
-					control={control}
-					name="phone"
-					label="Phone Number"
-					placeholder="01XXXXXXXXX"
-				/>
+				<FormInputField control={control} name="phone" label="Phone Number" placeholder="01XXXXXXXXX" />
 				<FormSelectField
 					control={control}
 					name="gender"

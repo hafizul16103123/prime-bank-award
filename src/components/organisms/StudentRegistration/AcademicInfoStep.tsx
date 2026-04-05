@@ -1,9 +1,11 @@
+import { CardSectionHeader } from "@/components/molecules/CardSectionHeader";
 import { FormInputField } from "@/components/molecules/FormInputField";
 import { type FormSelectOption, FormSelectField } from "@/components/molecules/FormSelectField";
+import { Button } from "@/components/ui/button";
 import type { StudentRegistrationFormValues } from "@/lib/validation/studentRegistrationSchema";
-import { Trash2 } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import type { FieldArrayWithId } from "react-hook-form";
-import { useFormContext } from "react-hook-form";
+import { useFormContext, useWatch } from "react-hook-form";
 
 const subjectOptions: FormSelectOption[] = [
 	"Mathematics (D2/Compulsory)",
@@ -26,6 +28,12 @@ const levelOptions: FormSelectOption[] = [
 	{ value: "o-level", label: "O Level" },
 	{ value: "a-level", label: "A Level" },
 ];
+
+function marksheetSectionTitle(level: string | undefined): string {
+	if (level === "a-level") return "A-Level Subjects – Marksheet";
+	if (level === "o-level") return "O-Level Subjects – Marksheet";
+	return "Subjects – Marksheet";
+}
 
 const yearOptions: FormSelectOption[] = ["2025", "2024", "2023"].map((y) => ({
 	value: y,
@@ -51,17 +59,18 @@ const boardOptions: FormSelectOption[] = [
 export interface AcademicInfoStepProps {
 	subjectFields: FieldArrayWithId<StudentRegistrationFormValues, "subjects">[];
 	onRemoveSubject: (index: number) => void;
+	onAddSubject: () => void;
 }
 
-export const AcademicInfoStep = ({ subjectFields, onRemoveSubject }: AcademicInfoStepProps) => {
+export const AcademicInfoStep = ({ subjectFields, onRemoveSubject, onAddSubject }: AcademicInfoStepProps) => {
 	const { control, formState } = useFormContext<StudentRegistrationFormValues>();
 	const { errors } = formState;
+	const applyingLevel = useWatch({ control, name: "applyingLevel" });
 
 	return (
 		<div className="space-y-6">
-			<div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-				<h2 className="text-lg font-bold text-foreground">Academic Information</h2>
-				<p className="mb-6 text-sm text-muted-foreground">Enter your Academic Information.</p>
+			<div>
+				<CardSectionHeader title="Academic Information" description="Enter your Academic Information." />
 
 				<div className="grid gap-5 sm:grid-cols-2">
 					<FormSelectField
@@ -76,43 +85,41 @@ export const AcademicInfoStep = ({ subjectFields, onRemoveSubject }: AcademicInf
 						label="Year of Examination"
 						options={yearOptions}
 					/>
-					<FormSelectField control={control} name="studyGroup" label="Study Group" options={studyGroupOptions} />
-					<FormSelectField control={control} name="session" label="Session" options={sessionOptions} />
-					<FormInputField
+					<FormSelectField
 						control={control}
-						name="rollNumber"
-						label="Roll Number"
-						placeholder="0000000000"
+						name="studyGroup"
+						label="Study Group"
+						options={studyGroupOptions}
 					/>
+					<FormSelectField control={control} name="session" label="Session" options={sessionOptions} />
+					<FormInputField control={control} name="rollNumber" label="Roll Number" placeholder="0000000000" />
 					<FormSelectField
 						control={control}
 						name="examinationBoard"
 						label="Examination Board"
 						options={boardOptions}
 					/>
-					<div className="sm:col-span-2">
-						<FormInputField
-							control={control}
-							name="schoolName"
-							label="School Name"
-							placeholder="Search school..."
-						/>
-					</div>
 				</div>
+				<FormInputField
+					control={control}
+					name="schoolName"
+					label="School Name"
+					placeholder="Search school..."
+				/>
 			</div>
 
 			<div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-				<h2 className="text-lg font-bold text-foreground">O-Level Subjects – Marksheet</h2>
-				<p className="mb-4 text-sm text-muted-foreground">
-					Enter your examination results. Add each subject and the corresponding grade.
-				</p>
+				<CardSectionHeader
+					title={marksheetSectionTitle(applyingLevel)}
+					description="Enter your examination results. Add each subject and the corresponding grade."
+				/>
 
 				{errors.subjects && !Array.isArray(errors.subjects) && (
 					<p className="mb-3 text-xs text-destructive">{errors.subjects.message}</p>
 				)}
 
 				<div className="space-y-3">
-					<div className="grid grid-cols-[1fr_100px_100px_40px] gap-3 text-xs font-semibold text-muted-foreground">
+					<div className="grid grid-cols-[1fr_100px_100px_40px] gap-3 text-sm font-medium text-muted-foreground bg-subtle p-[10px] rounded-[50px]">
 						<span>Subject</span>
 						<span>Grade</span>
 						<span>Paper Code</span>
@@ -153,6 +160,15 @@ export const AcademicInfoStep = ({ subjectFields, onRemoveSubject }: AcademicInf
 						</div>
 					))}
 				</div>
+
+				<Button
+					type="button"
+					variant="outline"
+					className="mt-4 gap-2 border border-[#002E66] bg-frost text-sm font-medium py-[10px] px-[22px]"
+					onClick={onAddSubject}
+				>
+					<Plus className="h-4 w-4" /> Add Subject
+				</Button>
 			</div>
 		</div>
 	);
