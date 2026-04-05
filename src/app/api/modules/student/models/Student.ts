@@ -2,9 +2,9 @@ import mongoose, { Model, model } from "mongoose";
 import { Gender, ExaminationLevel, ExaminationSession, ExaminationBoard, StudyGroup } from "../dtos";
 
 export enum StudentStatus {
-  PENDING = "PENDING",
-  APPROVED = "APPROVED",
-  REJECTED = "REJECTED",
+  PENDING = "Pending",
+  APPROVED = "Approved",
+  DECLINED = "Declined",
 }
 
 export interface ISubject {
