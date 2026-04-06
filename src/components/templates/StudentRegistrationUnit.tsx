@@ -224,10 +224,10 @@ export const StudentRegistrationUnit = () => {
 						<span className="inline-block rounded-full border border-[#002E66] bg-frost px-4 py-2 text-xs font-medium sm:px-[18px] sm:py-[9px] sm:text-sm md:px-5 md:text-sm lg:px-[22px] lg:py-[10px] xl:text-sm">
 							Application
 						</span>
-						<h1 className="my-3 text-xl font-semibold leading-tight text-[#212121] sm:my-4 sm:text-2xl md:text-3xl md:leading-snug lg:text-4xl lg:leading-tight xl:text-[40px] xl:font-normal">
+						<h1 className="my-3 text-xl font-semibold leading-tight text-ink sm:my-4 sm:text-2xl md:text-3xl md:leading-snug lg:text-4xl lg:leading-tight xl:text-[40px] xl:font-normal">
 							Student Registration
 						</h1>
-						<p className="mx-auto max-w-2xl text-sm leading-relaxed text-[#757575] sm:text-base md:text-lg lg:text-xl xl:text-xl">
+						<p className="mx-auto max-w-2xl text-sm leading-relaxed text-muted-ink sm:text-base md:text-lg lg:text-xl xl:text-xl">
 							Complete both steps to submit your registration for the 2026 Awards.
 						</p>
 					</div>

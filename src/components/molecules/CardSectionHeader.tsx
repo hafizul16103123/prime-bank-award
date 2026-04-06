@@ -32,7 +32,7 @@ export function CardSectionHeader({
 			{hasDescription ? (
 				<p
 					className={cn(
-						"mt-2 mb-3 text-sm leading-relaxed text-[#757575] sm:mt-[10px] sm:mb-4 sm:text-[15px] md:text-base lg:text-base xl:text-base",
+						"mt-2 mb-3 text-sm leading-relaxed text-muted-ink sm:mt-[10px] sm:mb-4 sm:text-[15px] md:text-base lg:text-base xl:text-base",
 						descriptionClassName,
 					)}
 				>
