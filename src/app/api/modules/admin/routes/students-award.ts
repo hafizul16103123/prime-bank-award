@@ -1,42 +1,42 @@
 import { NextResponse } from "next/server";
 import { Student, StudentStatus } from "../../student/models/Student";
 import dbConnect from "@/lib/db";
-import { requireSchoolAdmin, AuthenticatedRequest } from "../../auth/utils/auth-guard";
+import {
+  requireAdmin,
+  AuthenticatedRequest,
+} from "../../auth/utils/auth-guard";
 import { successResponse, errorResponse } from "@/lib/api-response";
 
 export async function GET(request: AuthenticatedRequest) {
   try {
-    const authError = requireSchoolAdmin()(request as any);
+    const authError = requireAdmin()(request as any);
     if (authError) return authError;
-
-    const user = (request as any).user;
-    const userSchool = user?.school;
-
-    if (!userSchool) {
-      return errorResponse("School not assigned to this user", 403);
-    }
 
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "10");
     const status = searchParams.get("status");
     const level = searchParams.get("level");
+    const school = searchParams.get("school");
     const search = searchParams.get("search");
     const sortBy = searchParams.get("sort_by") || "createdAt";
     const sortOrder = searchParams.get("sort_order") === "asc" ? 1 : -1;
 
     await dbConnect();
 
-    let query: any = {school: userSchool};
+    let query: any = {status: {$in: [StudentStatus.APPROVED, StudentStatus.AWARDED]}};
 
-    if (status) {
+    if (status) { 
+      query={};
       query.status = status;
     }
 
     if (level) {
       query.applyingForLevel = level;
     }
-    query.school = userSchool;
+    if (school) {
+      query.school = school;
+    }
 
     if (search) {
       query.$or = [
@@ -75,3 +75,4 @@ export async function GET(request: AuthenticatedRequest) {
     return errorResponse(error.message || "Internal server error", 500);
   }
 }
+

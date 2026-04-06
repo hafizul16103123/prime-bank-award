@@ -27,9 +27,13 @@ export async function GET(request: AuthenticatedRequest) {
 
     await dbConnect();
 
-    let query: any = {school: userSchool};
+    let query: any = {
+      school: userSchool,
+      status: { $in: [StudentStatus.APPROVED, StudentStatus.AWARDED] },
+    };
 
     if (status) {
+      query = { school: userSchool };
       query.status = status;
     }
 
