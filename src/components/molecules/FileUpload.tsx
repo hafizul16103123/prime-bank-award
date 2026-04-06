@@ -29,7 +29,6 @@ export const FileUpload: FC<PropsType> = ({ label, property, imageURL, showImage
 			try {
 				const { data }: any = await upload("API_URL", "upload/image", formData);
 				const url = data?.data?.url;
-				console.log(url);
 				setValue(property, url, { shouldValidate: true, shouldDirty: true, shouldTouch: true });
 			} catch (error) {
 				console.error("Upload failed", error);

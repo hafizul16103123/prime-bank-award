@@ -1,6 +1,7 @@
 "use client";
 
 import { Form } from "@/components/ui/form";
+import { defaultDashboardPath } from "@/lib/dashboardAccess";
 import { useApiClient } from "@/libes/hooks";
 import { toastError, toastSuccess } from "@/utils/helpers/toast.helpers";
 import { signinValidation } from "@/utils/validation/signin.validation";
@@ -22,7 +23,6 @@ interface FormValues {
 export const SignInUnit = () => {
 	const searchParams = useSearchParams();
 	const token = searchParams.get("token");
-	console.log({ token });
 
 	const { post } = useApiClient();
 
@@ -36,21 +36,24 @@ export const SignInUnit = () => {
 	const handleLogin = async (_data: FormValues) => {
 		try {
 			const { data, status } = await post("API_URL", "login", _data);
-			if (status === 201) {
+			if (status === 200) {
+				console.log(data?.data);
 				toastSuccess({ message: "Login successfully" });
+				const role = data?.data?.role as string | undefined;
 				const tokenData = {
 					accessToken: data?.data?.accessToken,
 					name: data?.data?.name,
-					role: data?.data?.role,
+					role,
+					email: _data.email,
 				};
 
-				const res = await signIn("credentials", {
+				await signIn("credentials", {
 					...tokenData,
-					// callbackUrl,
+					callbackUrl: defaultDashboardPath(role),
 				});
 			}
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			toastError({
 				message: err instanceof AxiosError ? err.response?.data?.message[0] : err,
 			});
@@ -82,18 +85,20 @@ export const SignInUnit = () => {
 					alt=""
 					width={1000}
 					height={1000}
-					className="absolute inset-0 w-[1440px] h-[600px] 2xl:h-auto object-cover rounded-[20px]"
+					className="absolute inset-0 w-[1440px] h-[600px] 2xl:h-auto object-cover rounded-[20px] "
 				/>
 
 				<div className="relative z-10 flex flex-col items-center py-12 px-4">
 					<div className="flex items-center gap-2 mb-8">
-						<Image
-							src="/prime_logo.png"
-							alt="Prime Bank Logo"
-							width={200}
-							height={200}
-							className="w-[172px] h-auto"
-						/>
+						<Link href="/">
+							<Image
+								src="/prime_logo.png"
+								alt="Prime Bank Logo"
+								width={200}
+								height={200}
+								className="w-[172px] h-auto cursor-pointer"
+							/>
+						</Link>
 					</div>
 
 					<div className="bg-card rounded-xl  w-full max-w-[362px] p-6">

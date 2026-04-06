@@ -51,7 +51,6 @@ export const sidebarItems: NavSection[] = [
 		title: "Content",
 		items: [
 			{ label: "Banners", icon: Image, path: "/dashboard/banners" },
-			{ label: "Notice Board", icon: ClipboardList, path: "/dashboard/notice-board" },
 			{ label: "Notifications", icon: Bell, path: "/dashboard/notifications" },
 			{ label: "Blogs", icon: PenSquare, path: "/dashboard/blogs" },
 		],

@@ -12,8 +12,15 @@ const handler = NextAuth({
 			type: "credentials",
 			name: "credentials",
 			async authorize(credentials) {
-				const user = { ...credentials };
-				return user;
+				if (!credentials?.accessToken) {
+					return null;
+				}
+				return {
+					id: String(credentials.email ?? credentials.name ?? "user"),
+					accessToken: credentials.accessToken,
+					name: credentials.name ?? null,
+					role: credentials.role ?? null,
+				};
 			},
 		}),
 	],
@@ -21,16 +28,35 @@ const handler = NextAuth({
 		async jwt({ token, user }) {
 			if (user) {
 				token.accessToken = user.accessToken || null;
+				token.role = user.role ?? null;
+				if (user.name) {
+					token.name = user.name;
+				}
 			}
 			return token;
 		},
 		async session({ session, token }) {
-			session.user.accessToken = token.accessToken;
-
+			session.user.accessToken = token.accessToken ?? null;
+			session.user.role = token.role ?? null;
+			if (token.name) {
+				session.user.name = token.name;
+			}
 			return session;
 		},
 		async redirect({ url, baseUrl }) {
-			return new URL(process.env.NEXTAUTH_URL);
+			const origin = process.env.NEXTAUTH_URL ?? baseUrl;
+			if (url.startsWith("/")) {
+				return `${origin}${url}`;
+			}
+			try {
+				const next = new URL(url);
+				if (next.origin === new URL(origin).origin) {
+					return url;
+				}
+			} catch {
+				/* ignore */
+			}
+			return origin;
 		},
 	},
 	session: {

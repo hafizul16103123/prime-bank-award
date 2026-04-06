@@ -98,11 +98,11 @@ export const AcademicInfoStep = () => {
 			const { data, status } = await get("API_URL", "schools");
 			if (status === 200) {
 				const options = (data?.data ?? []).map((s: { name: string }) => ({ value: s.name, label: s.name }));
-				console.log({ options });
+
 				setSchoolsOption(options);
 			}
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 		}
 	};
 
