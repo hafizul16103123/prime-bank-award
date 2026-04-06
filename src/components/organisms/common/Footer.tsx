@@ -5,7 +5,7 @@ import Image from "next/image";
 export const Footer = () => {
 	return (
 		<Container>
-			<footer className="bg-background text-foreground">
+			<footer className="bg-background text-foreground mt-[185px]">
 				<div className="px-3 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-4 md:px-6 lg:px-8 xl:px-10">
 					<Image
 						src="/images/footer_logo.png"
@@ -16,12 +16,7 @@ export const Footer = () => {
 						className="h-auto w-full max-w-full object-cover object-center sm:object-contain"
 					/>
 
-					<div
-						className={cn(
-							"border-t border-border",
-							"mt-8 sm:mt-10 md:mt-12 lg:mt-14 xl:mt-[56px]",
-						)}
-					/>
+					<div className={cn("border-t border-border", "mt-8 sm:mt-10 md:mt-12 lg:mt-14 xl:mt-[56px]")} />
 
 					<div
 						className={cn(

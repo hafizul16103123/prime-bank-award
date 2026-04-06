@@ -1,3 +1,4 @@
+import { SignInUnit } from "@/components/templates";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,7 +8,7 @@ export const metadata: Metadata = {
 	},
 };
 const SignIn = () => {
-	return <></>;
+	return <SignInUnit />;
 };
 
 export default SignIn;
