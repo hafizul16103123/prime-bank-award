@@ -40,6 +40,7 @@ export const sidebarItems: NavSection[] = [
 			{ label: "Winners", icon: Trophy, path: "/dashboard/winners" },
 			{ label: "My Application", icon: LogOut, path: "/dashboard/my-application" },
 			{ label: "Notice Board", icon: LogOut, path: "/dashboard/notice-board" },
+			{ label: "Higher Education", icon: GraduationCap, path: "/dashboard/higher-education" },
 			{ label: "Alumni", icon: GraduationCap, path: "/dashboard/alumni" },
 			{ label: "Higher Study", icon: BookOpen, path: "/dashboard/higher-study" },
 			{ label: "Schools", icon: School, path: "/dashboard/schools" },

@@ -60,6 +60,9 @@ export const SignInUnit = () => {
 	const handleVerifyEmail = async () => {
 		try {
 			const { data, status } = await post("API_URL", "verify-email", { token });
+			if (status === 201) {
+				toastSuccess({ message: "Email Verify Successfully" });
+			}
 		} catch (err) {
 			toastError({
 				message: err instanceof AxiosError ? err.response?.data?.message[0] : err,
