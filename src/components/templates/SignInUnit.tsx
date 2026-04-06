@@ -37,11 +37,10 @@ export const SignInUnit = () => {
 		try {
 			const { data, status } = await post("API_URL", "login", _data);
 			if (status === 200) {
-				console.log(data?.data);
 				toastSuccess({ message: "Login successfully" });
 				const role = data?.data?.role as string | undefined;
 				const tokenData = {
-					accessToken: data?.data?.accessToken,
+					accessToken: data?.data?.token,
 					name: data?.data?.name,
 					role,
 					email: _data.email,
