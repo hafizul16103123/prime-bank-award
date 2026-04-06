@@ -1,4 +1,3 @@
-import { isFileList } from "@/lib/isFileList";
 import * as yup from "yup";
 
 /** One row in oLevelSubjects / aLevelSubjects (matches API `SubjectDto`). */
@@ -25,19 +24,14 @@ export const studentRegistrationSchema = yup
 			.required("Phone number is required")
 			.matches(/^01\d{9}$/, "Enter a valid 11-digit mobile number (01XXXXXXXXX)"),
 		gender: yup.string().oneOf(["MALE", "FEMALE"], "Select a gender").required("Gender is required"),
-		photo: yup
-			.mixed()
-			.required("Photo is required")
-			.test("has-file", "Please upload a photo", (value) => isFileList(value) && value.length > 0)
-			.test("file-size", "Image must be 5MB or smaller", (value) => {
-				if (!isFileList(value) || value.length === 0) return true;
-				return value[0].size <= 5 * 1024 * 1024;
-			})
-			.test("file-type", "Use PNG or JPG", (value) => {
-				if (!isFileList(value) || value.length === 0) return true;
-				const type = value[0].type;
-				return type === "image/png" || type === "image/jpeg" || type === "image/jpg" || type === "image/webp";
-			}),
+		/** Set by `FileUpload` after successful upload (URL string), not a FileList. */
+		photoUrl: yup
+			.string()
+			.trim()
+			.required("Please upload a photo")
+			.test("photo-url-shape", "Invalid photo link", (v) =>
+				Boolean(v && (v.startsWith("https://") || v.startsWith("http://") || v.startsWith("/"))),
+			),
 
 		applyingForLevel: yup.string().oneOf(["O Level", "A Level"], "Select a level").required("Level is required"),
 		yearOfExamination: yup.number().required("Year is required"),
@@ -105,7 +99,7 @@ export const defaultValuesStudentForm: StudentRegistrationFormValues = {
 	dateOfBirth: "",
 	phoneNumber: "",
 	gender: "" as StudentRegistrationFormValues["gender"],
-	photo: null as unknown as StudentRegistrationFormValues["photo"],
+	photoUrl: "",
 	applyingForLevel: "" as StudentRegistrationFormValues["applyingForLevel"],
 	yearOfExamination: 0,
 	studyGroup: "" as StudentRegistrationFormValues["studyGroup"],

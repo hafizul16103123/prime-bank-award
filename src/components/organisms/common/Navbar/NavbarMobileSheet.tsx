@@ -12,15 +12,16 @@ import { cn } from "@/lib/utils";
 import { ArrowUpRight, LogIn, Menu, X } from "lucide-react";
 import Link from "next/link";
 
-import type { NavItem } from "./nav-items";
+import { isNavPathActive, type NavItem } from "./nav-items";
 
 type NavbarMobileSheetProps = {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
 	items: NavItem[];
+	pathname: string;
 };
 
-export const NavbarMobileSheet = ({ open, onOpenChange, items }: NavbarMobileSheetProps) => {
+export const NavbarMobileSheet = ({ open, onOpenChange, items, pathname }: NavbarMobileSheetProps) => {
 	return (
 		<div className="flex shrink-0 items-center lg:hidden">
 			<Sheet open={open} onOpenChange={onOpenChange}>
@@ -60,16 +61,25 @@ export const NavbarMobileSheet = ({ open, onOpenChange, items }: NavbarMobileShe
 
 					<nav className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-6 py-6">
 						<div className="flex flex-col gap-0.5">
-							{items.map((item) => (
+							{items.map((item) => {
+								const active = isNavPathActive(pathname, item.path);
+								return (
 								<Link
 									key={item.path}
 									href={item.path}
 									onClick={() => onOpenChange(false)}
-									className="rounded-lg px-3 py-3 text-base font-medium text-foreground transition-colors hover:bg-muted"
+									aria-current={active ? "page" : undefined}
+									className={cn(
+										"rounded-lg px-3 py-3 text-base font-medium transition-colors",
+										active
+											? "bg-frost text-brand-blue"
+											: "text-foreground hover:bg-muted",
+									)}
 								>
 									{item.title}
 								</Link>
-							))}
+								);
+							})}
 						</div>
 					</nav>
 

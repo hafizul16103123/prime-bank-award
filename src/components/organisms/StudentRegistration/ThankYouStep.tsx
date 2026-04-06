@@ -11,30 +11,30 @@ export const ThankYouStep = () => {
 					to your inbox.
 				</p>
 
-				<div className="mx-auto mt-6 max-w-md rounded-2xl bg-accent/10 px-4 py-4 text-center sm:mt-8 sm:px-6 sm:py-5 md:px-6 lg:px-6 xl:px-6">
+				<div className="mx-auto mt-6 max-w-md rounded-2xl bg-accent/10 px-4 py-4 text-center sm:mt-8 sm:px-6 sm:py-5 md:px-6 lg:px-6 xl:px-6 bg-[#D4EBFF]">
 					<p className="text-xs text-ink sm:text-sm md:text-base lg:text-base xl:text-xl">
-						Please check your email and click <span className="font-bold text-primary">"Verify Now"</span>{" "}
-						to activate your account.
+						Please check your email and click <span className=" text-[#034EA2]">"Verify Now"</span> to
+						activate your account.
 					</p>
 				</div>
 
 				<div className="mt-6 sm:mt-8 md:mt-8 lg:mt-8 xl:mt-8">
 					<Button
 						size="lg"
-						className="w-full gap-2 rounded-full bg-primary px-8 text-sm text-primary-foreground hover:bg-primary/90 sm:w-auto sm:px-10 sm:text-base md:text-base lg:text-base xl:text-base"
+						className="!w-full gap-2 rounded-full bg-[#002E66] px-8 text-sm text-primary-foreground hover:bg-primary/90 sm:w-auto sm:px-10 sm:text-base md:text-base lg:text-base xl:text-base !py-6 !max-w-[378px]"
 						onClick={() => window.open("https://mail.google.com", "_blank")}
 					>
 						Open My Inbox <ArrowRight className="h-4 w-4" />
 					</Button>
 				</div>
 
-				<div className="mt-6 space-y-1">
-					<p className="text-sm text-muted-foreground">
+				{/* <div className="mt-6 space-y-1">
+					<p className="text-sm text-ink">
 						Didn't receive the email?{" "}
-						<button className="font-semibold text-primary hover:underline">"Resend Verification"</button>
+						<button className="text-[#034EA2] hover:underline">"Resend Verification"</button>
 					</p>
 					<p className="text-xs text-muted-foreground">Don't forget to check your spam folder!</p>
-				</div>
+				</div> */}
 			</div>
 		</div>
 	);

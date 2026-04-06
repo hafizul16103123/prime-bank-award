@@ -2,6 +2,7 @@
 
 import { Container } from "@/components/ui";
 import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 import { NavbarDesktop } from "./NavbarDesktop";
@@ -11,6 +12,7 @@ import { PUBLIC_NAV_ITEMS } from "./nav-items";
 
 export const Navbar = () => {
 	const [menuOpen, setMenuOpen] = useState(false);
+	const pathname = usePathname() ?? "/";
 
 	return (
 		<Container>
@@ -21,8 +23,13 @@ export const Navbar = () => {
 				)}
 			>
 				<NavbarLogo />
-				<NavbarDesktop items={PUBLIC_NAV_ITEMS} />
-				<NavbarMobileSheet open={menuOpen} onOpenChange={setMenuOpen} items={PUBLIC_NAV_ITEMS} />
+				<NavbarDesktop items={PUBLIC_NAV_ITEMS} pathname={pathname} />
+				<NavbarMobileSheet
+					open={menuOpen}
+					onOpenChange={setMenuOpen}
+					items={PUBLIC_NAV_ITEMS}
+					pathname={pathname}
+				/>
 			</header>
 		</Container>
 	);

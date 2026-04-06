@@ -1,22 +1,26 @@
+"use client";
+
+import { FileUpload } from "@/components/molecules";
 import { CardSectionHeader } from "@/components/molecules/CardSectionHeader";
 import { ControlDatePicker } from "@/components/molecules/ContorlDatePicker";
 import { FormInputField } from "@/components/molecules/FormInputField";
 import { type FormSelectOption, FormSelectField } from "@/components/molecules/FormSelectField";
-import { isFileList } from "@/lib/isFileList";
 import type { StudentRegistrationFormValues } from "@/lib/validation/studentRegistrationSchema";
-import { Upload } from "lucide-react";
-import { Controller, useFormContext } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
 const genderOptions: FormSelectOption[] = [
 	{ value: "MALE", label: "Male" },
 	{ value: "FEMALE", label: "Female" },
 ];
 
-export const PersonalInfoStep = () => {
+export const PersonalInfoStep = ({ setValue }: { setValue: any }) => {
 	const {
 		control,
 		formState: { errors },
+		watch,
 	} = useFormContext<StudentRegistrationFormValues>();
+
+	const { photoUrl } = watch();
 
 	return (
 		<div className="">
@@ -44,44 +48,10 @@ export const PersonalInfoStep = () => {
 				/>
 			</div>
 
-			<div className="mt-5 space-y-2 sm:mt-6 md:mt-6 lg:mt-6 xl:mt-6">
-				<span className="text-sm font-medium leading-none">Upload Photo</span>
-				<div className="flex flex-col items-center rounded-lg border-2 border-dashed border-border bg-muted/50 p-5 sm:p-6 md:p-7 lg:p-8 xl:p-8">
-					<Controller
-						name="photo"
-						control={control}
-						render={({ field: { value, onChange, onBlur, name, ref } }) => (
-							<>
-								<Upload className="mb-2 h-8 w-8 text-muted-foreground" />
-								<p className="text-sm font-medium text-foreground">Upload Images</p>
-								<p className="text-xs text-muted-foreground">PNG, JPG up to 5MB</p>
-								<input
-									ref={ref}
-									name={name}
-									onBlur={onBlur}
-									type="file"
-									className="hidden"
-									id="photo-upload"
-									accept="image/png,image/jpeg,image/jpg,image/webp"
-									onChange={(e) => {
-										const files = e.target.files;
-										onChange(files && files.length > 0 ? files : null);
-									}}
-								/>
-								<label htmlFor="photo-upload" className="mt-3 cursor-pointer">
-									<span className="rounded-md bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground hover:bg-primary/90">
-										Select Image
-									</span>
-								</label>
-								{isFileList(value) && value.length > 0 ? (
-									<p className="mt-2 text-xs text-accent">{value[0].name}</p>
-								) : null}
-							</>
-						)}
-					/>
-				</div>
-				{errors.photo && <p className="text-xs text-destructive">{errors.photo.message}</p>}
+			<div className="mt-5">
+				<FileUpload setValue={setValue} imageURL={photoUrl as string} property={"photoUrl"} showImage />
 			</div>
+			{errors.photoUrl && <p className="text-xs text-destructive">{errors.photoUrl.message}</p>}
 		</div>
 	);
 };

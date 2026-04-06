@@ -19,7 +19,7 @@ export const registrationStep1Fields: (keyof StudentRegistrationFormValues)[] = 
 	"dateOfBirth",
 	"phoneNumber",
 	"gender",
-	"photo",
+	"photoUrl",
 ];
 
 export const registrationStep2Fields: (keyof StudentRegistrationFormValues)[] = [

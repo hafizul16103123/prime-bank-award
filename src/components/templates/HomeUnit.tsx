@@ -17,7 +17,7 @@ export const HomeUnit = () => {
 		<Container>
 			<HeroSection />
 
-			<div className="px-3 xs:px-4 sm:px-5 md:px-6 lg:px-8 xl:px-10 2xl:px-12">
+			<div className="">
 				<Image
 					src="/images/award.png"
 					alt="Award"

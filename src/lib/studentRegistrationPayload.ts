@@ -66,15 +66,16 @@ export function formatBdPhoneForApi(phone: string): string {
 
 /**
  * Builds the registration JSON payload from validated form values.
- * Pass `photoUrl` after upload; otherwise `photoUrl` is omitted.
+ * Optional `photoUrlOverride` if the URL is kept outside the form.
  */
 export function buildStudentRegistrationSubmitPayload(
 	values: StudentRegistrationFormValues,
-	photoUrl?: string,
+	photoUrlOverride?: string,
 ): StudentRegistrationSubmitPayload {
 	const oRows = mapLevelSubjectRows(values.oLevelSubjects);
 	const aRows = mapLevelSubjectRows(values.aLevelSubjects);
 	const isOLevel = values.applyingForLevel === "O Level";
+	const photo = (photoUrlOverride ?? values.photoUrl)?.trim();
 
 	const payload: StudentRegistrationSubmitPayload = {
 		name: values.name.trim(),
@@ -93,8 +94,11 @@ export function buildStudentRegistrationSubmitPayload(
 		email: values.email.trim(),
 		password: values.password,
 		confirmPassword: values.confirmPassword,
-		photoUrl: "https://example.com/photo.jpg",
 	};
+
+	if (photo) {
+		payload.photoUrl = photo;
+	}
 
 	return payload;
 }

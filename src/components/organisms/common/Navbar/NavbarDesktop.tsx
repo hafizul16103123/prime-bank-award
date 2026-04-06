@@ -1,26 +1,35 @@
 import { Button } from "@/components/ui";
+import { cn } from "@/lib/utils";
 import { ArrowUpRight, LogIn } from "lucide-react";
 import Link from "next/link";
 
-import type { NavItem } from "./nav-items";
+import { isNavPathActive, type NavItem } from "./nav-items";
 
 type NavbarDesktopProps = {
 	items: NavItem[];
+	pathname: string;
 };
 
-export const NavbarDesktop = ({ items }: NavbarDesktopProps) => {
+export const NavbarDesktop = ({ items, pathname }: NavbarDesktopProps) => {
 	return (
 		<div className="hidden items-center gap-4 lg:flex lg:gap-5 xl:gap-6 ">
-			<nav className="flex items-center gap-0.5 rounded-full border border-tartiary px-2 py-1.5 sm:gap-1 xl:px-4 xl:py-[7px]">
-				{items.map((item) => (
-					<Link
-						key={item.path}
-						href={item.path}
-						className="rounded-full px-2.5 py-1.5 text-sm font-medium text-foreground transition-colors hover:text-primary xl:px-4 xl:text-base"
-					>
-						{item.title}
-					</Link>
-				))}
+			<nav className="flex items-center gap-0.5 rounded-full border border-tartiary px-2 py-1.5 sm:gap-1 xl:px-2 xl:py-[7px]">
+				{items.map((item) => {
+					const active = isNavPathActive(pathname, item.path);
+					return (
+						<Link
+							key={item.path}
+							href={item.path}
+							aria-current={active ? "page" : undefined}
+							className={cn(
+								"rounded-full px-2.5 py-1.5 text-sm font-medium transition-colors xl:px-4 xl:text-base",
+								active ? "bg-frost text-brand-blue" : "text-foreground hover:text-primary",
+							)}
+						>
+							{item.title}
+						</Link>
+					);
+				})}
 			</nav>
 			<div className="flex items-center gap-2 xl:gap-3">
 				<Link href="/sign-in">

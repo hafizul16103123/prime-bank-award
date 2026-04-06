@@ -17,10 +17,10 @@ import {
 	AcademicInfoStep,
 	ConfirmSubmitStep,
 	getRegistrationFooterActions,
-	type RegistrationStepFooterAction,
 	PersonalInfoStep,
 	RegistrationStepper,
 	ThankYouStep,
+	type RegistrationStepFooterAction,
 } from "../organisms/StudentRegistration";
 import { Container } from "../ui";
 
@@ -65,7 +65,7 @@ export const StudentRegistrationUnit = () => {
 		shouldFocusError: true,
 	});
 
-	const { handleSubmit, trigger } = methods;
+	const { handleSubmit, trigger, setValue } = methods;
 
 	useEffect(() => {
 		if (currentStep !== 3) return;
@@ -90,6 +90,7 @@ export const StudentRegistrationUnit = () => {
 
 	const onRegistrationSubmit = async (data: StudentRegistrationFormValues) => {
 		const payload = buildStudentRegistrationSubmitPayload(data);
+
 		try {
 			const { data, status } = await post("API_URL", "student-register", payload);
 			if (status === 201) {
@@ -113,7 +114,7 @@ export const StudentRegistrationUnit = () => {
 	if (submitted) {
 		return (
 			<div className="min-h-screen bg-background px-3 py-8 sm:px-4 sm:py-9 md:px-6 md:py-10 lg:px-8 xl:px-10">
-				<div className="mx-auto max-w-3xl">
+				<div className="mx-auto max-w-5xl">
 					<ThankYouStep />
 				</div>
 			</div>
@@ -162,7 +163,7 @@ export const StudentRegistrationUnit = () => {
 								"lg:rounded-[34px] lg:px-9 lg:py-10 xl:rounded-[36px] xl:px-[50px] xl:py-[45px]",
 							].join(" ")}
 						>
-							{currentStep === 1 && <PersonalInfoStep />}
+							{currentStep === 1 && <PersonalInfoStep setValue={setValue} />}
 							{currentStep === 2 && <AcademicInfoStep />}
 							{currentStep === 3 && <ConfirmSubmitStep />}
 

@@ -1,3 +1,5 @@
+"use client";
+
 import { CardSectionHeader } from "@/components/molecules/CardSectionHeader";
 import { FormCheckboxField } from "@/components/molecules/FormCheckboxField";
 import { FormInputField } from "@/components/molecules/FormInputField";

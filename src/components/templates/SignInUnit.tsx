@@ -2,7 +2,7 @@
 
 import { Form } from "@/components/ui/form";
 import { useApiClient } from "@/libes/hooks";
-import { toastError } from "@/utils/helpers/toast.helpers";
+import { toastError, toastSuccess } from "@/utils/helpers/toast.helpers";
 import { signinValidation } from "@/utils/validation/signin.validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AxiosError } from "axios";
@@ -31,14 +31,23 @@ export const SignInUnit = () => {
 
 	const { control, handleSubmit } = methods;
 
-	const handleLogin = (_data: FormValues) => {};
+	const handleLogin = async (_data: FormValues) => {
+		try {
+			const { data, status } = await post("API_URL", "login", _data);
+			if (status === 201) {
+				toastSuccess({ message: "Login successfully" });
+			}
+		} catch (err) {
+			console.log(err);
+			toastError({
+				message: err instanceof AxiosError ? err.response?.data?.message[0] : err,
+			});
+		}
+	};
 
 	const handleVerifyEmail = async () => {
 		try {
 			const { data, status } = await post("API_URL", "verify-email", { token });
-			if (status === 201) {
-				console.log(data);
-			}
 		} catch (err) {
 			toastError({
 				message: err instanceof AxiosError ? err.response?.data?.message[0] : err,
