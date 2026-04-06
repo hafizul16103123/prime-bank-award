@@ -3,10 +3,21 @@ import { User } from "../models/User";
 import { Verification } from "../models/Verification";
 import { sendVerificationEmail } from "@/lib/email";
 import dbConnect from "@/lib/db";
-import { generateToken, generateVerificationToken, verifyVerificationToken } from "../utils/jwt";
+import {
+  generateToken,
+  generateVerificationToken,
+  verifyVerificationToken,
+} from "../utils/jwt";
 
 export class AuthService {
-  async register(name: string, email: string, password: string, role: string = "STUDENT", baseUrl?: string, school?: string) {
+  async register(
+    name: string,
+    email: string,
+    password: string,
+    role: string = "STUDENT",
+    baseUrl?: string,
+    school?: string,
+  ) {
     await dbConnect();
 
     const existingUser = await User.findOne({ email });
@@ -38,7 +49,7 @@ export class AuthService {
     });
 
     if (baseUrl) {
-      const verificationLink = `${baseUrl}/login?token=${verificationToken}`;
+      const verificationLink = `${baseUrl}/sign-in?token=${verificationToken}`;
       await sendVerificationEmail(email, verificationLink, name);
     }
 
@@ -114,7 +125,7 @@ export class AuthService {
       id: user._id.toString(),
       email: user.email,
       role: user.role,
-      school: user.school
+      school: user.school,
     });
 
     return {

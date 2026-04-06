@@ -78,7 +78,7 @@ export class StudentService {
     });
 
     if (baseUrl) {
-      const verificationLink = `${baseUrl}/verify-email?token=${verificationToken}`;
+      const verificationLink = `${baseUrl}/sign-in?token=${verificationToken}`;
       await sendVerificationEmail(email, verificationLink, name);
     }
 
