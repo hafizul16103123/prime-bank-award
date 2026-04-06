@@ -17,7 +17,7 @@ export const Navbar = () => {
 			<header
 				className={cn(
 					"flex items-center justify-between gap-3 bg-white/90 backdrop-blur-lg",
-					"px-3 py-3 sm:gap-4 sm:px-4 sm:py-4 md:px-6 md:py-5 lg:px-8 2xl:px-0 lg:py-7 xl:py-9",
+					" py-3 sm:gap-4 sm:py-4  md:py-5  lg:py-7 xl:py-9",
 				)}
 			>
 				<NavbarLogo />

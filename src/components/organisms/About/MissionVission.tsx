@@ -20,9 +20,9 @@ export const visionMissionData = [
 
 export const MissionVission = () => {
 	return (
-		<div>
+		<div className="mt-4 sm:mt-6">
 			<SectionHeader
-				className="mb-11"
+				className="mb-8 sm:mb-10 md:mb-11"
 				title={
 					<>
 						Our Mission & <span className="text-[#757575]">Vision</span>
@@ -32,7 +32,7 @@ export const MissionVission = () => {
 					bank with a proven track record of innovation and customer service excellence."
 			/>
 
-			<div className="max-w-[820px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-5 mb-16">
+			<div className="mx-auto mb-12 grid max-w-[820px] grid-cols-1 gap-4 sm:mb-14 sm:gap-5 md:grid-cols-2 md:mb-16">
 				{visionMissionData.map((item, index) => (
 					<VisionMissionCard
 						key={index}
@@ -56,14 +56,16 @@ type VisionMissionCardProps = {
 
 const VisionMissionCard = ({ bgColor, icon, title, description }: VisionMissionCardProps) => {
 	return (
-		<div className={`${bgColor} rounded-2xl p-10 text-center`}>
-			<div className="flex justify-center mb-[14px]">
-				<Image src={icon} alt={title} width={48} height={48} className="w-12" />
+		<div className={`${bgColor} rounded-2xl p-6 text-center sm:p-8 md:p-10`}>
+			<div className="mb-3 flex justify-center sm:mb-[14px]">
+				<Image src={icon} alt={title} width={48} height={48} className="h-10 w-10 sm:h-12 sm:w-12" />
 			</div>
 
-			<h3 className="text-[32px] font-medium text-[#212121] mb-2">{title}</h3>
+			<h3 className="mb-2 text-2xl font-medium leading-tight text-[#212121] sm:text-[28px] md:text-[32px]">
+				{title}
+			</h3>
 
-			<p className="text-[#212121] leading-[24px]">{description}</p>
+			<p className="text-sm leading-relaxed text-[#212121] sm:text-base sm:leading-relaxed">{description}</p>
 		</div>
 	);
 };

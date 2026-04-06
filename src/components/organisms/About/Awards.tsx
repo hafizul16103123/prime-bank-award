@@ -25,15 +25,15 @@ export const achievementsData = [
 ];
 export const Awards = () => {
 	return (
-		<div className="mt-[200px]">
-			<div className="flex items-center justify-center">
-				<span className=" border border-[#212121] rounded-full px-5 py-1.5 font-medium text-[#212121] mb-5 ">
+		<div className="mt-16 sm:mt-20 md:mt-28 lg:mt-36 xl:mt-40">
+			<div className="mb-4 flex items-center justify-center sm:mb-5">
+				<span className="rounded-full border border-[#212121] px-4 py-1 text-xs font-medium text-[#212121] sm:px-5 sm:py-1.5 sm:text-sm">
 					Recognition
 				</span>
 			</div>
 
 			<SectionHeader
-				className="mb-11"
+				className="mb-8 sm:mb-10 md:mb-11"
 				title={
 					<>
 						Awards & <span className="text-[#757575]">Recognition</span>
@@ -43,7 +43,7 @@ export const Awards = () => {
 						commercial bank with a proven track record of innovation and customer service excellence."
 			/>
 
-			<div className="grid grid-cols-1 md:grid-cols-3 gap-7 mb-24">
+			<div className="mb-12 grid grid-cols-1 gap-5 sm:mb-16 sm:gap-6 md:mb-20 md:grid-cols-3 md:gap-7 lg:mb-24">
 				{achievementsData.map((item, index) => (
 					<AchievementCard
 						key={index}
@@ -67,16 +67,16 @@ type AchievementCardProps = {
 
 const AchievementCard = ({ icon, year, title, description }: AchievementCardProps) => {
 	return (
-		<div className="border border-border rounded-2xl p-8 text-center">
-			<div className="flex justify-center mb-2">
-				<Image src={icon} alt={title} width={48} height={48} className="w-12" />
+		<div className="rounded-2xl border border-border p-5 text-center sm:p-6 md:p-8">
+			<div className="mb-2 flex justify-center">
+				<Image src={icon} alt={title} width={48} height={48} className="h-10 w-10 sm:h-12 sm:w-12" />
 			</div>
 
-			<p className="text-[#212121] mb-3">{year}</p>
+			<p className="mb-2 text-sm text-[#212121] sm:mb-3 sm:text-base">{year}</p>
 
-			<h3 className="text-2xl font-medium text-[#212121] mb-2">{title}</h3>
+			<h3 className="mb-2 text-lg font-medium leading-snug text-[#212121] sm:text-xl md:text-2xl">{title}</h3>
 
-			<p className="text-[#212121] leading-[24px]">{description}</p>
+			<p className="text-sm leading-relaxed text-[#212121] sm:text-base sm:leading-relaxed">{description}</p>
 		</div>
 	);
 };
