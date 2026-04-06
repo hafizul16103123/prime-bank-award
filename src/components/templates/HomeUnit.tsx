@@ -17,23 +17,33 @@ export const HomeUnit = () => {
 		<Container>
 			<HeroSection />
 
-			<Image src="/images/award.png" alt="Award Image" width={1500} height={1500} className="w-full -mt-1" />
+			<div className="px-3 xs:px-4 sm:px-5 md:px-6 lg:px-8 xl:px-10 2xl:px-12">
+				<Image
+					src="/images/award.png"
+					alt="Award"
+					width={1500}
+					height={1500}
+					className="-mt-1 h-auto w-full max-w-full object-contain object-center"
+					sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 1440px"
+					priority
+				/>
 
-			<Glance />
+				<Glance />
 
-			<WaitingSection />
+				<WaitingSection />
 
-			<RoadToStage />
+				<RoadToStage />
 
-			<SponsorBanner />
+				<SponsorBanner />
 
-			<RewardSection />
+				<RewardSection />
 
-			<GlobalJourney />
+				<GlobalJourney />
 
-			<AbroadSection />
+				<AbroadSection />
 
-			<LatestNews />
+				<LatestNews />
+			</div>
 		</Container>
 	);
 };
