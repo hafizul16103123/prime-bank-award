@@ -25,7 +25,7 @@ export const MissionVission = () => {
 				className="mb-8 sm:mb-10 md:mb-11"
 				title={
 					<>
-						Our Mission & <span className="text-[#757575]">Vision</span>
+						Our Mission & <span className="text-muted-ink">Vision</span>
 					</>
 				}
 				description="Established in 1995, Prime Bank has grown to become a top-tier second generation local commercial
@@ -61,11 +61,9 @@ const VisionMissionCard = ({ bgColor, icon, title, description }: VisionMissionC
 				<Image src={icon} alt={title} width={48} height={48} className="h-10 w-10 sm:h-12 sm:w-12" />
 			</div>
 
-			<h3 className="mb-2 text-2xl font-medium leading-tight text-[#212121] sm:text-[28px] md:text-[32px]">
-				{title}
-			</h3>
+			<h3 className="mb-2 text-2xl font-medium leading-tight text-ink sm:text-[28px] md:text-[32px]">{title}</h3>
 
-			<p className="text-sm leading-relaxed text-[#212121] sm:text-base sm:leading-relaxed">{description}</p>
+			<p className="text-sm leading-relaxed text-ink sm:text-base sm:leading-relaxed">{description}</p>
 		</div>
 	);
 };

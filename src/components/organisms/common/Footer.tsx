@@ -26,7 +26,7 @@ export const Footer = () => {
 							"lg:py-8 xl:py-10",
 						)}
 					>
-						<p className="order-2 max-w-prose text-xs leading-relaxed text-[#757575] sm:text-sm md:order-1 md:max-w-xs lg:max-w-none">
+						<p className="order-2 max-w-prose text-xs leading-relaxed text-muted-ink sm:text-sm md:order-1 md:max-w-xs lg:max-w-none">
 							© 2026 Prime Bank PLC – All rights reserved.
 						</p>
 
@@ -87,7 +87,7 @@ export const Footer = () => {
 
 						<nav
 							className={cn(
-								"order-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-xs text-[#757575]",
+								"order-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-xs text-muted-ink",
 								"sm:text-sm",
 								"md:justify-end",
 							)}

@@ -10,9 +10,9 @@ export const DigitalLeader = () => {
 				className="mb-6 sm:mb-8 md:mb-10"
 				title={
 					<>
-						Bangladesh&apos;s <span className="text-[#757575]">Digital</span>
+						Bangladesh&apos;s <span className="text-muted-ink">Digital</span>
 						<br className="hidden sm:block" />
-						<span className="text-[#757575]">Banking Leader</span>
+						<span className="text-muted-ink">Banking Leader</span>
 					</>
 				}
 				description="Established in 1995, Prime Bank has grown to become a top-tier second generation local commercial bank with a proven track record of innovation and customer service excellence."
@@ -30,10 +30,10 @@ export const DigitalLeader = () => {
 								className="w-12 sm:w-14 md:w-16"
 							/>
 						</div>
-						<h3 className="mb-3 text-xl font-medium text-[#212121] sm:mb-4 sm:text-2xl md:text-[26px] lg:text-[28px]">
+						<h3 className="mb-3 text-xl font-medium text-ink sm:mb-4 sm:text-2xl md:text-[26px] lg:text-[28px]">
 							Our Heritage
 						</h3>
-						<p className="text-sm leading-relaxed text-[#212121] sm:text-base md:leading-[26px]">
+						<p className="text-sm leading-relaxed text-ink sm:text-base md:leading-[26px]">
 							Founded in 1995 and incorporated under the Companies Act of 1994, Prime Bank has established
 							itself as a cornerstone of Bangladesh&apos;s financial system. Headquartered in Gulshan
 							Avenue, Dhaka&apos;s bustling financial hub, we serve clients across the entire nation with
@@ -51,10 +51,10 @@ export const DigitalLeader = () => {
 								className="w-12 sm:w-14 md:w-16"
 							/>
 						</div>
-						<h3 className="mb-3 text-xl font-medium text-[#212121] sm:mb-4 sm:text-2xl md:text-[26px] lg:text-[28px]">
+						<h3 className="mb-3 text-xl font-medium text-ink sm:mb-4 sm:text-2xl md:text-[26px] lg:text-[28px]">
 							Our Expertise
 						</h3>
-						<p className="text-sm leading-relaxed text-[#212121] sm:text-base md:leading-[26px]">
+						<p className="text-sm leading-relaxed text-ink sm:text-base md:leading-[26px]">
 							Prime Bank is renowned for its exceptional expertise in Corporate and Institutional Banking.
 							We combine deep market knowledge with innovative solutions to serve Bangladesh&apos;s most
 							demanding corporate clients. Our success is built on understanding your business needs.
@@ -75,10 +75,10 @@ export const DigitalLeader = () => {
 								className="w-12 sm:w-14 md:w-16"
 							/>
 						</div>
-						<h3 className="mb-3 text-xl font-medium text-[#212121] sm:mb-4 sm:text-2xl md:text-[26px] lg:text-[28px]">
+						<h3 className="mb-3 text-xl font-medium text-ink sm:mb-4 sm:text-2xl md:text-[26px] lg:text-[28px]">
 							Digital Leadership
 						</h3>
-						<p className="text-sm leading-relaxed text-[#212121] sm:text-base md:leading-[26px]">
+						<p className="text-sm leading-relaxed text-ink sm:text-base md:leading-[26px]">
 							Prime Bank has pioneered digital banking services in Bangladesh. We were awarded &quot;Best
 							Digital Bank in Bangladesh 2020&quot; by Asiamoney, recognizing our commitment to
 							technology-driven innovation that makes banking accessible and convenient for everyone.
@@ -95,10 +95,10 @@ export const DigitalLeader = () => {
 								className="w-12 sm:w-14 md:w-16"
 							/>
 						</div>
-						<h3 className="mb-3 text-xl font-medium text-[#212121] sm:mb-4 sm:text-2xl md:text-[26px] lg:text-[28px]">
+						<h3 className="mb-3 text-xl font-medium text-ink sm:mb-4 sm:text-2xl md:text-[26px] lg:text-[28px]">
 							Global Recognition
 						</h3>
-						<p className="text-sm leading-relaxed text-[#212121] sm:text-base md:leading-[26px]">
+						<p className="text-sm leading-relaxed text-ink sm:text-base md:leading-[26px]">
 							Global Finance, a leading North American financial publication, recognized Prime Bank as the
 							&quot;Best Bank in Bangladesh 2020.&quot; This honor reflects our commitment to excellence,
 							innovation, and customer satisfaction across all banking services.
@@ -107,7 +107,7 @@ export const DigitalLeader = () => {
 				</div>
 			</div>
 
-			<p className="mx-auto mt-8 max-w-[880px] px-1 text-center text-sm leading-relaxed text-[#212121] sm:mt-10 sm:text-base md:mt-12 md:text-lg md:leading-relaxed">
+			<p className="mx-auto mt-8 max-w-[880px] px-1 text-center text-sm leading-relaxed text-ink sm:mt-10 sm:text-base md:mt-12 md:text-lg md:leading-relaxed">
 				In 2014, Prime Bank initiated a comprehensive &apos;Business Model Restructuring and
 				Centralization&apos; project to enhance operational efficiency, streamline processes, and better serve
 				our evolving customer base with modern banking solutions.

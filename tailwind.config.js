@@ -79,6 +79,10 @@ module.exports = {
 				default: "#fafafa",
 				tartiary: "#E0E0E0",
 				white: "#ffffff",
+				/** Primary dark text / headings on light surfaces */
+				ink: "var(--ink)",
+				/** Secondary / supporting text on light surfaces */
+				"muted-ink": "var(--muted-ink)",
 				gray: "#5F6368",
 				green: "#002C00",
 			},

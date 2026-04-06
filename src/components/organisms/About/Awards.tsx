@@ -27,7 +27,7 @@ export const Awards = () => {
 	return (
 		<div className="mt-16 sm:mt-20 md:mt-28 lg:mt-36 xl:mt-40">
 			<div className="mb-4 flex items-center justify-center sm:mb-5">
-				<span className="rounded-full border border-[#212121] px-4 py-1 text-xs font-medium text-[#212121] sm:px-5 sm:py-1.5 sm:text-sm">
+				<span className="rounded-full border border-ink px-4 py-1 text-xs font-medium text-ink sm:px-5 sm:py-1.5 sm:text-sm">
 					Recognition
 				</span>
 			</div>
@@ -36,7 +36,7 @@ export const Awards = () => {
 				className="mb-8 sm:mb-10 md:mb-11"
 				title={
 					<>
-						Awards & <span className="text-[#757575]">Recognition</span>
+						Awards & <span className="text-muted-ink">Recognition</span>
 					</>
 				}
 				description="Established in 1995, Prime Bank has grown to become a top-tier second generation local
@@ -72,11 +72,11 @@ const AchievementCard = ({ icon, year, title, description }: AchievementCardProp
 				<Image src={icon} alt={title} width={48} height={48} className="h-10 w-10 sm:h-12 sm:w-12" />
 			</div>
 
-			<p className="mb-2 text-sm text-[#212121] sm:mb-3 sm:text-base">{year}</p>
+			<p className="mb-2 text-sm text-ink sm:mb-3 sm:text-base">{year}</p>
 
-			<h3 className="mb-2 text-lg font-medium leading-snug text-[#212121] sm:text-xl md:text-2xl">{title}</h3>
+			<h3 className="mb-2 text-lg font-medium leading-snug text-ink sm:text-xl md:text-2xl">{title}</h3>
 
-			<p className="text-sm leading-relaxed text-[#212121] sm:text-base sm:leading-relaxed">{description}</p>
+			<p className="text-sm leading-relaxed text-ink sm:text-base sm:leading-relaxed">{description}</p>
 		</div>
 	);
 };
