@@ -14,6 +14,8 @@ import Link from "next/link";
 
 import { isNavPathActive, type NavItem } from "./nav-items";
 
+const NAV_MOBILE_MENU_TRIGGER_ID = "public-nav-mobile-menu-trigger";
+
 type NavbarMobileSheetProps = {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
@@ -24,8 +26,9 @@ type NavbarMobileSheetProps = {
 export const NavbarMobileSheet = ({ open, onOpenChange, items, pathname }: NavbarMobileSheetProps) => {
 	return (
 		<div className="flex shrink-0 items-center lg:hidden">
-			<Sheet open={open} onOpenChange={onOpenChange}>
+			<Sheet open={open} onOpenChange={onOpenChange} triggerId={NAV_MOBILE_MENU_TRIGGER_ID}>
 				<SheetTrigger
+					id={NAV_MOBILE_MENU_TRIGGER_ID}
 					type="button"
 					className={cn(
 						buttonVariants({ variant: "outline", size: "icon" }),

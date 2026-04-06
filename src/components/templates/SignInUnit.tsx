@@ -6,6 +6,7 @@ import { toastError, toastSuccess } from "@/utils/helpers/toast.helpers";
 import { signinValidation } from "@/utils/validation/signin.validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AxiosError } from "axios";
+import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -37,6 +38,16 @@ export const SignInUnit = () => {
 			const { data, status } = await post("API_URL", "login", _data);
 			if (status === 201) {
 				toastSuccess({ message: "Login successfully" });
+				const tokenData = {
+					accessToken: data?.data?.accessToken,
+					name: data?.data?.name,
+					role: data?.data?.role,
+				};
+
+				const res = await signIn("credentials", {
+					...tokenData,
+					// callbackUrl,
+				});
 			}
 		} catch (err) {
 			console.log(err);
