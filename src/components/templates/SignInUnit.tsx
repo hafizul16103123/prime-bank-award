@@ -1,38 +1,39 @@
 "use client";
 
+import { Form } from "@/components/ui/form";
 import { signinValidation } from "@/utils/validation/signin.validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Image from "next/image";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { FormInputField } from "../molecules";
+import { Button } from "../ui";
 
 interface FormValues {
 	email: string;
 	password: string;
 }
 export const SignInUnit = () => {
-	const {
-		register,
-		handleSubmit,
-		control,
-		formState: { errors },
-	} = useForm<FormValues>({
+	const methods = useForm<FormValues>({
 		resolver: yupResolver(signinValidation),
+		defaultValues: { email: "", password: "" },
 	});
 
-	const handleLogin = () => {};
+	const { control, handleSubmit } = methods;
+
+	const handleLogin = (_data: FormValues) => {};
 	return (
-		<div className="min-h-screen flex  justify-center bg-background mt-[52px]">
-			<div className="relative w-full max-w-[1100px] rounded-[20px] overflow-hidden ">
+		<div className="min-h-screen flex  justify-center bg-background pt-[52px]">
+			<div className="relative w-full max-w-[1440px]  overflow-hidden ">
 				<Image
 					src="/images/login_img.jpg"
 					alt=""
 					width={1000}
 					height={1000}
-					className="absolute inset-0 w-full h-auto object-cover"
+					className="absolute inset-0 w-[1440px] h-[600px] 2xl:h-auto object-cover rounded-[20px]"
 				/>
 
-				<div className="relative z-10 flex flex-col items-center py-12 px-4 min-h-[560px]">
+				<div className="relative z-10 flex flex-col items-center py-12 px-4">
 					<div className="flex items-center gap-2 mb-8">
 						<Image
 							src="/prime_logo.png"
@@ -47,42 +48,50 @@ export const SignInUnit = () => {
 						<h1 className="text-lg font-medium text-[#09090B] text-center">Welcome back</h1>
 						<p className="text-[#09090B] text-center mt-1 mb-6 text-sm">Sign in to access your account</p>
 
-						<form onSubmit={handleLogin} className="space-y-4">
-							<FormInputField control={control} name="email" label="Email" placeholder="m@example.com" />
-							<FormInputField
-								control={control}
-								name="password"
-								label="Password"
-								placeholder="••••••••"
-								type="password"
-							/>
+						<Form {...methods}>
+							<form onSubmit={handleSubmit(handleLogin)} className="space-y-4">
+								<FormInputField
+									control={control}
+									name="email"
+									label="Email"
+									placeholder="m@example.com"
+								/>
+								<FormInputField
+									control={control}
+									name="password"
+									label="Password"
+									placeholder="••••••••"
+									type="password"
+								/>
 
-							<button
-								type="submit"
-								className="w-full rounded-lg bg-primary py-2.5 text-sm font-medium text-primary-foreground hover:opacity-90 transition-opacity"
-							>
-								Login
-							</button>
-						</form>
+								<Button
+									type="submit"
+									size={"lg"}
+									className="w-full rounded-lg bg-primary !py-3 text-sm font-medium text-primary-foreground hover:opacity-90 transition-opacity"
+								>
+									Login
+								</Button>
+							</form>
+						</Form>
 
-						<p className="text-center text-sm text-muted-foreground mt-5">
+						<p className="text-center text-sm text-[#09090B] mt-4">
 							Don't have an account?{" "}
-							<a href="#" className="text-foreground font-medium hover:underline">
+							<Link href="/registration" className="text-foreground underline">
 								Sign up
-							</a>
+							</Link>
 						</p>
 					</div>
 
 					{/* Footer */}
-					<p className="text-primary-foreground/80 text-xs mt-6 text-center">
+					<p className="text-white text-sm mt-6 text-center w-[260px]">
 						By clicking continue, you agree to our{" "}
-						<a href="#" className="underline hover:text-primary-foreground">
+						<Link href="#" className="underline hover:text-primary-foreground">
 							Terms of Service
-						</a>{" "}
+						</Link>{" "}
 						and{" "}
-						<a href="#" className="underline hover:text-primary-foreground">
+						<Link href="#" className="underline hover:text-primary-foreground">
 							Privacy Policy
-						</a>
+						</Link>
 						.
 					</p>
 				</div>

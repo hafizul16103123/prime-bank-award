@@ -3,6 +3,7 @@ export * from "./container";
 export * from "./form";
 export * from "./input";
 export * from "./label";
+export * from "./SectionHeader";
 export * from "./select";
 export * from "./separator";
 export * from "./sheet";
