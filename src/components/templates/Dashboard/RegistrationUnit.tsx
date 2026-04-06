@@ -46,6 +46,7 @@ export const RegistrationUnit = () => {
 	useEffect(() => {
 		getStudentsList();
 	}, [status]);
+
 	useEffect(() => {
 		getStudentStats();
 	}, []);

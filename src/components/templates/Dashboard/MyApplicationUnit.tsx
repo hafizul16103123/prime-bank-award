@@ -1,10 +1,32 @@
+"use client";
+
 import { FormField } from "@/components/molecules";
 import { StudentInfo, StudentMarksheet } from "@/components/organisms";
+import { useApiClient } from "@/libes/hooks";
+import { AdminStudentListItem } from "@/libes/interface/registration";
+import { useEffect, useState } from "react";
 
 export const MyApplicationUnit = () => {
+	const [data, setData] = useState<AdminStudentListItem | null>(null);
+	const { get } = useApiClient();
+
+	const getStudentData = async () => {
+		try {
+			const { data, status } = await get("API_URL", `student/profile`);
+			if (status === 200) {
+				setData(data?.data);
+			}
+		} catch (err) {
+			console.error(err);
+		}
+	};
+
+	useEffect(() => {
+		getStudentData();
+	}, []);
 	return (
 		<div className="space-y-4">
-			<StudentInfo />
+			<StudentInfo data={data} />
 
 			<div className="grid grid-cols-12 gap-4">
 				<div className="col-span-8 ">

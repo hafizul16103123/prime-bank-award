@@ -1,23 +1,24 @@
 import { Button } from "@/components/ui";
-import { CircleCheck, Edit } from "lucide-react";
+import { AdminStudentListItem } from "@/libes/interface/registration";
+import { CircleCheck, Edit, User } from "lucide-react";
 
-export const StudentInfo = () => {
+export const StudentInfo = ({ data }: { data: AdminStudentListItem | null }) => {
 	return (
 		<div className="bg-white rounded-lg border border-tartiary p-4 flex items-center justify-between">
 			<div className="flex items-center gap-4">
 				<div className="size-[136px] overflow-hidden rounded-lg bg-muted">
-					<img
-						src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face"
-						alt="Student"
-						className="size-full object-cover"
-					/>
+					{data?.photoUrl ? (
+						<img src={data?.photoUrl} alt="Student" className="size-full object-cover" />
+					) : (
+						<User className="size-[136px]" />
+					)}
 				</div>
 
 				<div>
-					<p className="text-xl font-medium mt-2">Shahriar Rahman</p>
-					<p className="text-black/60 text-sm">01929459195</p>
-					<p className="text-black/60 text-sm">A-Level</p>
-					<p className="text-black/60 text-sm">Scholastica</p>
+					<p className="text-xl font-medium mt-2">{data?.name}</p>
+					<p className="text-black/60 text-sm">{data?.phoneNumber}</p>
+					<p className="text-black/60 text-sm">{data?.applyingForLevel}</p>
+					<p className="text-black/60 text-sm">{data?.school}</p>
 
 					<div className="bg-[#DFFABC] text-[#0A6700] rounded-full flex gap-2 py-2 px-4 items-center w-max mt-2">
 						<CircleCheck size={18} />
