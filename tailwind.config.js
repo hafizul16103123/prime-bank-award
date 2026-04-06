@@ -6,7 +6,7 @@ module.exports = {
 		"./src/app/**/*.{js,ts,jsx,tsx,mdx}",
 		"./src/**/*.{js,ts,jsx,tsx,mdx}",
 		"./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-		"./node_modules/react-tailwindcss-datepicker/dist/index.esm.{js,ts}",
+		"./node_modules/react-tailwindcss-datepicker/dist/**/*.js",
 	],
 	theme: {
 		extend: {
@@ -93,6 +93,10 @@ module.exports = {
 			},
 			fontFamily: {
 				sans: ["var(--font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
+			},
+			/** Used by react-tailwindcss-datepicker (not in default scale) */
+			opacity: {
+				1: "1",
 			},
 		},
 	},

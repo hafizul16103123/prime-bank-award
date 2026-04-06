@@ -53,10 +53,9 @@ export function ControlDatePicker<TFieldValues extends FieldValues>({
 	control,
 	required,
 	highlight,
-	...rest
 }: ControlDatePickerProps<TFieldValues>) {
 	return (
-		<div>
+		<div className="relative z-0 overflow-visible">
 			{label && (
 				<p
 					className={`font-normal mb-1 text-sm text-muted-foreground ${highlight ? "text-yellow-700" : ""} ${
@@ -72,20 +71,24 @@ export function ControlDatePicker<TFieldValues extends FieldValues>({
 				control={control}
 				render={({ field }) => (
 					<Datepicker
-						{...field}
-						{...rest}
+						inputId={String(name)}
+						inputName={String(name)}
 						placeholder={placeholder}
 						useRange={false}
 						asSingle={true}
+						readOnly={false}
 						displayFormat="MM/DD/YYYY"
 						onChange={(date) => {
 							field.onChange(rangeToYmdString(date));
 						}}
 						value={parseToPickerValue(field.value)}
 						inputClassName={`${
-							highlight ? "border border-yellow-700" : "border border-lightGray"
+							highlight ? "border border-yellow-700" : "border border-input"
 						} rounded-[8px] h-12 text-gray-900 ring-4 ring-transparent placeholder:text-gray-400 placeholder:text-sm text-sm focus:!border-primary focus:ring-primary/10 w-full outline-none font-light px-4`}
-						containerClassName="relative w-full !border-0 !outline-none !outline-0"
+						containerClassName={(defaultCls: string) =>
+							`${defaultCls} relative w-full !border-0 !outline-none !outline-0 overflow-visible`
+						}
+						popupClassName={(defaultCls: string) => `${defaultCls} !z-[200]`}
 						popoverDirection="down"
 					/>
 				)}

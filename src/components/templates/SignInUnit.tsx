@@ -21,6 +21,7 @@ interface FormValues {
 export const SignInUnit = () => {
 	const searchParams = useSearchParams();
 	const token = searchParams.get("token");
+	console.log({ token });
 
 	const { post } = useApiClient();
 
