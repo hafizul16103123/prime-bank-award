@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Glance, HeroSection, RoadToStage, SponsorBanner, WaitingSection } from "../organisms";
+import { Glance, HeroSection, RewardSection, RoadToStage, SponsorBanner, WaitingSection } from "../organisms";
 import { Container } from "../ui";
 
 export const HomeUnit = () => {
@@ -16,6 +16,8 @@ export const HomeUnit = () => {
 			<RoadToStage />
 
 			<SponsorBanner />
+
+			<RewardSection />
 		</Container>
 	);
 };
