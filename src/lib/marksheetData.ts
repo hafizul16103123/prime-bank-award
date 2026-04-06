@@ -1,60 +1,63 @@
+/** Template / catalog rows — same shape as API subject lines: `name`, `grade`, `paperCode`. */
 export const oLevelSubjectRows = [
-	{ subject: "Mathematics D (Calculator)", grade: "A*", code: "4024" },
-	{ subject: "Physics", grade: "B", code: "5054" },
-	{ subject: "Chemistry", grade: "C", code: "5070" },
-	{ subject: "Biology", grade: "D", code: "5090" },
-	{ subject: "Computer Science", grade: "E", code: "2210" },
-	{ subject: "Combined Science", grade: "U", code: "5129" },
-	{ subject: "Accounting", grade: "A", code: "7707" },
-	{ subject: "Business Studies", grade: "A", code: "7115" },
-	{ subject: "Economics", grade: "A", code: "2281" },
-	{ subject: "Commerce", grade: "A", code: "7100" },
-	{ subject: "Bangladesh Studies", grade: "A", code: "7094" },
-	{ subject: "Sociology", grade: "A", code: "2251" },
-	{ subject: "Geography", grade: "A", code: "2217" },
-	{ subject: "ICT", grade: "B", code: "7042" },
-	{ subject: "Islamiyat", grade: "A", code: "2058" },
-	{ subject: "Global Perspectives", grade: "A", code: "2069" },
-	{ subject: "Additional Mathematics", grade: "A", code: "4037" },
-	{ subject: "English Language", grade: "A", code: "1123" },
-	{ subject: "Bengali", grade: "A", code: "3204" },
+	{ name: "Mathematics D (Calculator)", grade: "A*", paperCode: "4024" },
+	{ name: "Physics", grade: "B", paperCode: "5054" },
+	{ name: "Chemistry", grade: "C", paperCode: "5070" },
+	{ name: "Biology", grade: "D", paperCode: "5090" },
+	{ name: "Computer Science", grade: "E", paperCode: "2210" },
+	{ name: "Combined Science", grade: "U", paperCode: "5129" },
+	{ name: "Accounting", grade: "A", paperCode: "7707" },
+	{ name: "Business Studies", grade: "A", paperCode: "7115" },
+	{ name: "Economics", grade: "A", paperCode: "2281" },
+	{ name: "Commerce", grade: "A", paperCode: "7100" },
+	{ name: "Bangladesh Studies", grade: "A", paperCode: "7094" },
+	{ name: "Sociology", grade: "A", paperCode: "2251" },
+	{ name: "Geography", grade: "A", paperCode: "2217" },
+	{ name: "ICT", grade: "B", paperCode: "7042" },
+	{ name: "Islamiyat", grade: "A", paperCode: "2058" },
+	{ name: "Global Perspectives", grade: "A", paperCode: "2069" },
+	{ name: "Additional Mathematics", grade: "A", paperCode: "4037" },
+	{ name: "English Language", grade: "A", paperCode: "1123" },
+	{ name: "Bengali", grade: "A", paperCode: "3204" },
 ];
 
 export const aLevelSubjectRows = [
-	{ subject: "Mathematics", grade: "A", code: "9709" },
-	{ subject: "Further Mathematics", grade: "A", code: "9231" },
-	{ subject: "Physics", grade: "A", code: "9702" },
-	{ subject: "Chemistry", grade: "A", code: "9701" },
-	{ subject: "Biology", grade: "A", code: "9700" },
-	{ subject: "Computer Science", grade: "A", code: "9618" },
-	{ subject: "Marine Science", grade: "A", code: "9693" },
-	{ subject: "Accounting", grade: "A", code: "9706" },
-	{ subject: "Business", grade: "A", code: "9609" },
-	{ subject: "Economics", grade: "A", code: "9708" },
-	{ subject: "Law", grade: "A", code: "9084" },
-	{ subject: "Psychology", grade: "A", code: "9990" },
-	{ subject: "Sociology", grade: "A", code: "9699" },
-	{ subject: "English Language", grade: "A", code: "9093" },
+	{ name: "Mathematics", grade: "A", paperCode: "9709" },
+	{ name: "Further Mathematics", grade: "A", paperCode: "9231" },
+	{ name: "Physics", grade: "A", paperCode: "9702" },
+	{ name: "Chemistry", grade: "A", paperCode: "9701" },
+	{ name: "Biology", grade: "A", paperCode: "9700" },
+	{ name: "Computer Science", grade: "A", paperCode: "9618" },
+	{ name: "Marine Science", grade: "A", paperCode: "9693" },
+	{ name: "Accounting", grade: "A", paperCode: "9706" },
+	{ name: "Business", grade: "A", paperCode: "9609" },
+	{ name: "Economics", grade: "A", paperCode: "9708" },
+	{ name: "Law", grade: "A", paperCode: "9084" },
+	{ name: "Psychology", grade: "A", paperCode: "9990" },
+	{ name: "Sociology", grade: "A", paperCode: "9699" },
+	{ name: "English Language", grade: "A", paperCode: "9093" },
 ];
 
 export const GRADE_OPTIONS = ["A*", "A", "B", "C", "D", "E", "U"];
 
-export type MarkLine = { id: string; subject: string; grade: string; code: string };
+export type MarksheetSubjectRow = { name: string; grade: string; paperCode: string };
 
-export function seedLines(rows: { subject: string; grade: string; code: string }[], prefix: string): MarkLine[] {
+export type MarkLine = { id: string; name: string; grade: string; paperCode: string };
+
+export function seedLines(rows: MarksheetSubjectRow[], prefix: string): MarkLine[] {
 	return rows.map((r, i) => ({
-		id: `${prefix}-${i}-${r.code}`,
-		subject: r.subject,
+		id: `${prefix}-${i}-${r.paperCode}`,
+		name: r.name,
 		grade: r.grade,
-		code: r.code,
+		paperCode: r.paperCode,
 	}));
 }
 
-export function newLine(prefix: string, subjectOptions: string[]): MarkLine {
+export function newLine(prefix: string, nameOptions: string[]): MarkLine {
 	return {
 		id: `${prefix}-${crypto.randomUUID()}`,
-		subject: subjectOptions[0] ?? "",
+		name: nameOptions[0] ?? "",
 		grade: "A",
-		code: "",
+		paperCode: "",
 	};
 }

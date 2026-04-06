@@ -4,14 +4,10 @@ import { FileUpload } from "@/components/molecules";
 import { CardSectionHeader } from "@/components/molecules/CardSectionHeader";
 import { ControlDatePicker } from "@/components/molecules/ContorlDatePicker";
 import { FormInputField } from "@/components/molecules/FormInputField";
-import { type FormSelectOption, FormSelectField } from "@/components/molecules/FormSelectField";
+import { FormSelectField } from "@/components/molecules/FormSelectField";
 import type { StudentRegistrationFormValues } from "@/lib/validation/studentRegistrationSchema";
+import { genderOptions } from "@/utils/constant";
 import { useFormContext } from "react-hook-form";
-
-const genderOptions: FormSelectOption[] = [
-	{ value: "MALE", label: "Male" },
-	{ value: "FEMALE", label: "Female" },
-];
 
 export const PersonalInfoStep = ({ setValue }: { setValue: any }) => {
 	const {

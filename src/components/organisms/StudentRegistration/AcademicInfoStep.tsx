@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { StudentRegistrationFormValues } from "@/lib/validation/studentRegistrationSchema";
 import { useApiClient } from "@/libes/hooks";
+import { boardOptions, levelOptions, sessionOptions, studyGroupOptions } from "@/utils/constant";
 import { Plus, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
@@ -28,33 +29,11 @@ const gradeOptions: FormSelectOption[] = ["A*", "A", "B", "C", "D", "E", "F", "U
 	label: g,
 }));
 
-const levelOptions: FormSelectOption[] = [
-	{ value: "O Level", label: "O Level" },
-	{ value: "A Level", label: "A Level" },
-];
-
 function marksheetSectionTitle(level: string | undefined): string {
 	if (level === "A Level") return "A-Level Subjects – Marksheet";
 	if (level === "O Level") return "O-Level Subjects – Marksheet";
 	return "Subjects – Marksheet";
 }
-
-const studyGroupOptions: FormSelectOption[] = [
-	{ value: "Science", label: "Science" },
-	{ value: "Commerce", label: "Commerce" },
-	{ value: "Arts", label: "Arts" },
-];
-
-const sessionOptions: FormSelectOption[] = [
-	{ value: "May/June", label: "May/June" },
-	{ value: "Oct/Nov", label: "Oct/Nov" },
-];
-
-const boardOptions: FormSelectOption[] = [
-	{ value: "Cambridge(CIE)", label: "Cambridge (CIE)" },
-	{ value: "Edexcel", label: "Edexcel" },
-	{ value: "Pearson", label: "Pearson" },
-];
 
 const emptySubjectRow = () => ({ name: "", grade: "", paperCode: "" });
 

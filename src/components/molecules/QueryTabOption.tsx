@@ -14,7 +14,7 @@ interface PropsType {
 }
 
 export const QueryTabOption: FC<PropsType> = ({ tabsOption, filterKey }) => {
-	const [activeTab, setActiveTab] = useState("all");
+	const [activeTab, setActiveTab] = useState(tabsOption[0]?.id);
 
 	const router = useRouter();
 	const searchParams = useSearchParams();
@@ -39,15 +39,16 @@ export const QueryTabOption: FC<PropsType> = ({ tabsOption, filterKey }) => {
 	}, [activeTab]);
 
 	return (
-		<div className="flex flex-row">
+		<div className="inline-flex w-fit max-w-full flex-wrap items-center gap-1 rounded-md bg-tartiary/50 p-2 mb-4">
 			{tabsOption.map((tab, i) => (
 				<button
 					key={i}
 					onClick={() => setActiveTab(tab?.id)}
-					className={`
-						px-5 py-3 text-sm bg-default rounded-full  text-nowrap
-						${activeTab === tab.id ? "bg-gray-50 text-gray-800 font-medium" : "bg-white text-gray-600 hover:bg-gray-50"}
-					`}
+					className={`px-4 py-2 text-sm rounded-md transition-colors ${
+						activeTab === tab?.id
+							? "bg-card border border-border font-medium text-foreground shadow-sm"
+							: "text-muted-foreground hover:bg-muted"
+					}`}
 				>
 					{tab.label}
 				</button>

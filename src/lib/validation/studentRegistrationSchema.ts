@@ -87,12 +87,7 @@ export const studentRegistrationSchema = yup
 
 export type StudentRegistrationFormValues = yup.InferType<typeof studentRegistrationSchema>;
 
-const defaultLevelSubjectRows = () =>
-	Array.from({ length: 6 }, () => ({
-		name: "",
-		grade: "",
-		paperCode: "",
-	}));
+const defaultLevelSubjectRows = () => [{ name: "", grade: "", paperCode: "" }];
 
 export const defaultValuesStudentForm: StudentRegistrationFormValues = {
 	name: "",

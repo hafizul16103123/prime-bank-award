@@ -23,11 +23,6 @@ export const RegistrationFilter = ({
 						}`}
 					>
 						{label}
-						{count !== null && (
-							<span className="ml-1.5 bg-muted text-muted-foreground text-xs px-1.5 py-0.5 rounded-full">
-								{count}
-							</span>
-						)}
 					</button>
 				);
 			})}

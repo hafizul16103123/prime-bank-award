@@ -36,26 +36,26 @@ export const useApiClient = () => {
 				setLoading(false);
 			}
 		},
-		[]
+		[],
 	);
 
 	const get = useCallback((base: keyof typeof BASE_URLS, url: string) => request(base, "get", url), [request]);
 	const post = useCallback(
 		(base: keyof typeof BASE_URLS, url: string, data: any) => request(base, "post", url, data),
-		[request]
+		[request],
 	);
 	const patch = useCallback(
 		(base: keyof typeof BASE_URLS, url: string, data: any) => request(base, "patch", url, data),
-		[request]
+		[request],
 	);
 	const put = useCallback(
 		(base: keyof typeof BASE_URLS, url: string, data: any) => request(base, "put", url, data),
-		[request]
+		[request],
 	);
 	const del = useCallback((base: keyof typeof BASE_URLS, url: string) => request(base, "delete", url), [request]);
 	const upload = useCallback(
 		(base: keyof typeof BASE_URLS, url: string, formData: FormData) => request(base, "post", url, formData, true),
-		[request]
+		[request],
 	);
 
 	return { get, post, patch, put, del, upload, loading, error };

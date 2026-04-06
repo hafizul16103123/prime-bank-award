@@ -17,12 +17,12 @@ export const StudentMarksheet = () => {
 					emptyMessage="No subjects."
 				>
 					{oLevelSubjectRows.map((row, i) => (
-						<TableRow key={`o-${row.code}-${i}`}>
+						<TableRow key={`o-${row.paperCode}-${i}`}>
 							<TableCell className="max-w-[280px] py-3 text-sm text-foreground whitespace-normal">
-								{row.subject}
+								{row.name}
 							</TableCell>
 							<TableCell className="py-3 text-sm text-foreground">{row.grade}</TableCell>
-							<TableCell className="py-3 text-sm text-foreground">{row.code}</TableCell>
+							<TableCell className="py-3 text-sm text-foreground">{row.paperCode}</TableCell>
 						</TableRow>
 					))}
 				</ReusableTable>
@@ -38,12 +38,12 @@ export const StudentMarksheet = () => {
 					emptyMessage="No subjects."
 				>
 					{aLevelSubjectRows.map((row, i) => (
-						<TableRow key={`a-${row.code}-${i}`}>
+						<TableRow key={`a-${row.paperCode}-${i}`}>
 							<TableCell className="max-w-[280px] py-3 text-sm text-foreground whitespace-normal">
-								{row.subject}
+								{row.name}
 							</TableCell>
 							<TableCell className="py-3 text-sm text-foreground">{row.grade}</TableCell>
-							<TableCell className="py-3 text-sm text-foreground">{row.code}</TableCell>
+							<TableCell className="py-3 text-sm text-foreground">{row.paperCode}</TableCell>
 						</TableRow>
 					))}
 				</ReusableTable>

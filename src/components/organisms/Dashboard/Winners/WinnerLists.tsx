@@ -12,7 +12,7 @@ const registrationTableHeader = ["Student", "Phone", "School", "ID", "Level", "S
 
 const mockData: Registration[] = [
 	{
-		id: 1,
+		id: "1",
 		student: "Shahriar Rahman",
 		phone: "01929459195",
 		school: "Green Hill High",
@@ -22,7 +22,7 @@ const mockData: Registration[] = [
 		status: "YET_TO_AWARD",
 	},
 	{
-		id: 2,
+		id: "2",
 		student: "Zayan Hossain",
 		phone: "01929459195",
 		school: "Green Hill High",
@@ -32,7 +32,7 @@ const mockData: Registration[] = [
 		status: "YET_TO_AWARD",
 	},
 	{
-		id: 3,
+		id: "3",
 		student: "Misha Akter",
 		phone: "01929459195",
 		school: "Green Hill High",
@@ -42,7 +42,7 @@ const mockData: Registration[] = [
 		status: "YET_TO_AWARD",
 	},
 	{
-		id: 4,
+		id: "4",
 		student: "Priya Sen",
 		phone: "01929459195",
 		school: "Green Hill High",
@@ -52,7 +52,7 @@ const mockData: Registration[] = [
 		status: "YET_TO_AWARD",
 	},
 	{
-		id: 5,
+		id: "5",
 		student: "Tanvir Ahmed",
 		phone: "01929459195",
 		school: "Green Hill High",
@@ -62,7 +62,7 @@ const mockData: Registration[] = [
 		status: "YET_TO_AWARD",
 	},
 	{
-		id: 6,
+		id: "6",
 		student: "Sadia Islam",
 		phone: "01929459195",
 		school: "Green Hill High",
@@ -72,7 +72,7 @@ const mockData: Registration[] = [
 		status: "AWARDED",
 	},
 	{
-		id: 7,
+		id: "7",
 		student: "Shahriar Rahman",
 		phone: "01929459195",
 		school: "Green Hill High",
@@ -82,7 +82,7 @@ const mockData: Registration[] = [
 		status: "AWARDED",
 	},
 	{
-		id: 8,
+		id: "8",
 		student: "Shahriar Rahman",
 		phone: "01929459195",
 		school: "Green Hill High",
@@ -92,7 +92,7 @@ const mockData: Registration[] = [
 		status: "AWARDED",
 	},
 	{
-		id: 9,
+		id: "9",
 		student: "Shahriar Rahman",
 		phone: "01929459195",
 		school: "Green Hill High",
@@ -102,7 +102,7 @@ const mockData: Registration[] = [
 		status: "AWARDED",
 	},
 	{
-		id: 10,
+		id: "10",
 		student: "Shahriar Rahman",
 		phone: "01929459195",
 		school: "Green Hill High",
