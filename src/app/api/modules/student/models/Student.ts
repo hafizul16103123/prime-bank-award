@@ -4,6 +4,7 @@ import { Gender, ExaminationLevel, ExaminationSession, ExaminationBoard, StudyGr
 export enum StudentStatus {
   PENDING = "Pending",
   APPROVED = "Approved",
+  AWARDED = "Awarded",
   DECLINED = "Declined",
 }
 
