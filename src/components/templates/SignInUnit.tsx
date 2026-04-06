@@ -1,10 +1,15 @@
 "use client";
 
 import { Form } from "@/components/ui/form";
+import { useApiClient } from "@/libes/hooks";
+import { toastError } from "@/utils/helpers/toast.helpers";
 import { signinValidation } from "@/utils/validation/signin.validation";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { AxiosError } from "axios";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { FormInputField } from "../molecules";
 import { Button } from "../ui";
@@ -14,6 +19,11 @@ interface FormValues {
 	password: string;
 }
 export const SignInUnit = () => {
+	const searchParams = useSearchParams();
+	const token = searchParams.get("token");
+
+	const { post } = useApiClient();
+
 	const methods = useForm<FormValues>({
 		resolver: yupResolver(signinValidation),
 		defaultValues: { email: "", password: "" },
@@ -22,6 +32,24 @@ export const SignInUnit = () => {
 	const { control, handleSubmit } = methods;
 
 	const handleLogin = (_data: FormValues) => {};
+
+	const handleVerifyEmail = async () => {
+		try {
+			const { data, status } = await post("API_URL", "verify-email", { token });
+			if (status === 201) {
+				console.log(data);
+			}
+		} catch (err) {
+			toastError({
+				message: err instanceof AxiosError ? err.response?.data?.message[0] : err,
+			});
+		}
+	};
+
+	useEffect(() => {
+		if (token) handleVerifyEmail();
+	}, [token]);
+
 	return (
 		<div className="min-h-screen flex  justify-center bg-background pt-[52px]">
 			<div className="relative w-full max-w-[1440px]  overflow-hidden ">

@@ -5,7 +5,7 @@ import "../globals.css";
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<div className="flex min-h-screen flex-col bg-white">
-			<div className="sticky top-0 z-[999] shrink-0">
+			<div className="sticky top-0 z-[500] shrink-0">
 				<Navbar />
 			</div>
 			{/* Not <main> — root layout already wraps the app in <main>; avoid nested mains. */}

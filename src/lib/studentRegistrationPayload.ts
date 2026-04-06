@@ -93,11 +93,8 @@ export function buildStudentRegistrationSubmitPayload(
 		email: values.email.trim(),
 		password: values.password,
 		confirmPassword: values.confirmPassword,
+		photoUrl: "https://example.com/photo.jpg",
 	};
-
-	if (photoUrl) {
-		payload.photoUrl = photoUrl;
-	}
 
 	return payload;
 }

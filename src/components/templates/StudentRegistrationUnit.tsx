@@ -11,13 +11,13 @@ import { useApiClient } from "@/libes/hooks";
 import { toastError } from "@/utils/helpers/toast.helpers";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AxiosError } from "axios";
-import type { LucideIcon } from "lucide-react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm, type Resolver } from "react-hook-form";
 import {
 	AcademicInfoStep,
 	ConfirmSubmitStep,
+	getRegistrationFooterActions,
+	type RegistrationStepFooterAction,
 	PersonalInfoStep,
 	RegistrationStepper,
 	ThankYouStep,
@@ -26,33 +26,7 @@ import { Container } from "../ui";
 
 const steps = [{ label: "Personal Information" }, { label: "Academic Info" }, { label: "Confirm & Submit" }];
 
-const step1Fields: (keyof StudentRegistrationFormValues)[] = ["name", "dateOfBirth", "phoneNumber", "gender", "photo"];
-
-const step2Fields: (keyof StudentRegistrationFormValues)[] = [
-	"applyingForLevel",
-	"yearOfExamination",
-	"studyGroup",
-	"examinationSession",
-	"rollNumber",
-	"examinationBoard",
-	"school",
-	"oLevelSubjects",
-	"aLevelSubjects",
-];
-
-type StepFooterAction = {
-	type?: "button" | "submit";
-	variant?: "default" | "outline" | "secondary" | "ghost" | "link" | "destructive";
-	size?: "default" | "sm" | "lg" | "xs" | "icon" | "icon-sm" | "icon-lg";
-	className?: string;
-	disabled?: boolean;
-	onClick?: () => void;
-	label: string;
-	icon: LucideIcon;
-	iconPosition: "start" | "end";
-};
-
-function StepFooterButton({ action }: { action: StepFooterAction }) {
+function StepFooterButton({ action }: { action: RegistrationStepFooterAction }) {
 	const Icon = action.icon;
 	return (
 		<Button
@@ -128,74 +102,13 @@ export const StudentRegistrationUnit = () => {
 		}
 	};
 
-	const getFooterActions = (): [StepFooterAction | null, StepFooterAction | null] => {
-		switch (currentStep) {
-			case 1:
-				return [
-					null,
-					{
-						type: "button",
-						size: "lg",
-						className:
-							"w-full bg-brand-blue text-sm font-medium text-white transition-opacity hover:opacity-90 sm:ml-auto sm:w-auto sm:text-base md:text-base rounded-full px-6 py-4 sm:px-10 sm:py-5 md:px-14 md:py-5 lg:px-16 lg:py-6 xl:px-20 xl:py-6",
-						onClick: () => goToStep(2, step1Fields),
-						label: "Next: Academic Info",
-						icon: ArrowRight,
-						iconPosition: "end",
-					},
-				];
-			case 2:
-				return [
-					{
-						type: "button",
-						variant: "outline",
-						className:
-							"w-full gap-2 rounded-full border border-tartiary bg-subtle py-4 text-sm sm:w-auto sm:px-8 sm:py-5 md:px-9 md:py-5 lg:px-10 lg:py-6",
-						onClick: () => setCurrentStep(1),
-						label: "Back",
-						icon: ArrowLeft,
-						iconPosition: "start",
-					},
-					{
-						type: "button",
-						size: "lg",
-						className:
-							"w-full bg-brand-blue text-sm font-medium text-white transition-opacity hover:opacity-90 sm:ml-auto sm:w-auto sm:text-base md:text-base rounded-full px-6 py-4 sm:px-10 sm:py-5 md:px-14 md:py-5 lg:px-16 lg:py-6 xl:px-20 xl:py-6",
-						onClick: () => goToStep(3, step2Fields),
-						label: "Next: Confirm & Submit",
-						icon: ArrowRight,
-						iconPosition: "end",
-					},
-				];
-			case 3:
-				return [
-					{
-						type: "button",
-						variant: "outline",
-						className:
-							"w-full gap-2 rounded-full border border-tartiary bg-subtle py-4 text-sm sm:w-auto sm:px-8 sm:py-5 md:px-9",
-						onClick: () => setCurrentStep(2),
-						label: "Back",
-						icon: ArrowLeft,
-						iconPosition: "start",
-					},
-					{
-						type: "submit",
-						size: "lg",
-						disabled: isSubmitting || suppressStep3Submit,
-						className:
-							"w-full gap-2 rounded-full bg-[#1E6E45] py-4 text-sm sm:w-auto sm:px-8 sm:py-5 md:px-9",
-						label: isSubmitting ? "Submitting…" : "Submit Registration",
-						icon: ArrowRight,
-						iconPosition: "end",
-					},
-				];
-			default:
-				return [null, null];
-		}
-	};
-
-	const [footerLeft, footerRight] = getFooterActions();
+	const [footerLeft, footerRight] = getRegistrationFooterActions({
+		currentStep,
+		isSubmitting,
+		suppressStep3Submit,
+		goToStep,
+		setCurrentStep,
+	});
 
 	if (submitted) {
 		return (
