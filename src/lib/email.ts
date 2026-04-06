@@ -29,14 +29,14 @@ export async function sendOTPEmail(email: string, otp: string): Promise<void> {
   await transporter.sendMail(mailOptions);
 }
 
-export async function sendVerificationEmail(email: string, verificationLink: string, name: string): Promise<void> {
+export async function sendVerificationEmail(email: string, verificationLink: string, name: string = ''): Promise<void> {
   const mailOptions = {
     from: process.env.EMAIL_SENDER_SMTP_FROM || '"Prime Bank" <noreply@primebank.com>',
     to: email,
     subject: 'Verify Your Email - Prime Bank',
     html: `
       <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #4F46E5;">Welcome to Prime Bank, ${name}!</h2>
+        <h2 style="color: #4F46E5;">Welcome to Prime Bank ${name ? `, ${name}` : ''}!</h2>
         <p>Thank you for registering. Please verify your email address to activate your account.</p>
         <div style="margin: 30px 0; text-align: center;">
           <a href="${verificationLink}" style="background-color: #4F46E5; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; display: inline-block;">
