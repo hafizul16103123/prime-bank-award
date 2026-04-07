@@ -10,7 +10,13 @@ function pathIsActive(pathname: string, itemPath: string) {
 	return pathname === itemPath || pathname.startsWith(`${itemPath}/`);
 }
 
-export const AdminSidebar = () => {
+type AdminSidebarProps = {
+	/** Desktop renders as fixed sidebar; mobile renders as sheet content. */
+	variant?: "desktop" | "mobile";
+	onNavigate?: () => void;
+};
+
+export const AdminSidebar = ({ variant = "desktop", onNavigate }: AdminSidebarProps) => {
 	const pathname = usePathname() ?? "";
 	const { data: session } = useSession();
 	const role = session?.user?.role ?? null;
@@ -23,9 +29,15 @@ export const AdminSidebar = () => {
 		.filter((section) => section.items.length > 0);
 
 	return (
-		<aside className="flex h-full min-h-0 w-[220px] min-w-[220px] shrink-0 flex-col border-r border-tartiary bg-white">
+		<aside
+			className={
+				variant === "desktop"
+					? "hidden h-full min-h-0 w-[220px] min-w-[220px] shrink-0 flex-col border-r border-tartiary bg-white lg:flex"
+					: "flex h-full min-h-0 w-full flex-col bg-white"
+			}
+		>
 			{/* Logo */}
-			<div className="flex items-center gap-2.5 px-4 py-4 border-b border-tartiary">
+			<div className="flex items-center gap-2.5 border-b border-tartiary px-4 py-4">
 				<span className="font-semibold text-sm text-foreground">Prime Bank PLC</span>
 			</div>
 
@@ -34,7 +46,11 @@ export const AdminSidebar = () => {
 					<div key={section.title} className="mb-1 mt-2">
 						<p className="px-4 py-1.5 text-xs    text-muted-foreground">{section?.title}</p>
 						{section.items.map((item) => (
-							<Link key={`${section.title}-${item.label}-${item.path}`} href={item?.path}>
+							<Link
+								key={`${section.title}-${item.label}-${item.path}`}
+								href={item?.path}
+								onClick={onNavigate}
+							>
 								<button
 									type="button"
 									className={`flex w-full items-center gap-2.5 px-4 py-2 text-sm transition-colors ${

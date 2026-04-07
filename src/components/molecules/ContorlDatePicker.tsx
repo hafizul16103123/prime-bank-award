@@ -63,7 +63,7 @@ export function ControlDatePicker<TFieldValues extends FieldValues>({
 	highlight,
 }: ControlDatePickerProps<TFieldValues>) {
 	return (
-		<div className="relative z-0 overflow-visible">
+		<div className="relative z-[9998] overflow-visible">
 			{label && (
 				<p
 					className={`font-normal mb-1 text-sm text-muted-foreground ${highlight ? "text-yellow-700" : ""} ${
@@ -94,9 +94,9 @@ export function ControlDatePicker<TFieldValues extends FieldValues>({
 							highlight ? "border border-yellow-700" : "border border-input"
 						} rounded-[8px] h-12 text-gray-900 ring-4 ring-transparent placeholder:text-gray-400 placeholder:text-sm text-sm focus:!border-primary focus:ring-primary/10 w-full outline-none font-light px-4`}
 						containerClassName={(defaultCls: string) =>
-							`${defaultCls} relative w-full !border-0 !outline-none !outline-0 overflow-visible`
+							`${defaultCls} relative z-[9998] w-full !border-0 !outline-none !outline-0 overflow-visible`
 						}
-						popupClassName={(defaultCls: string) => `${defaultCls} !z-[200]`}
+						popupClassName={(defaultCls: string) => `${defaultCls} !z-[9999]`}
 						popoverDirection="down"
 					/>
 				)}

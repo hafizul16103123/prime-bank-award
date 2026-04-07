@@ -77,7 +77,7 @@ export const SignInUnit = () => {
 	}, [token]);
 
 	return (
-		<div className="min-h-screen flex  justify-center bg-background pt-[52px]">
+		<div className="min-h-screen flex  justify-center bg-background lg:pt-[52px]">
 			<div className="relative w-full max-w-[1440px]  overflow-hidden ">
 				<Image
 					src="/images/login_img.jpg"

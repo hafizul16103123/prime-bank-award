@@ -45,7 +45,7 @@ export const FileUpload: FC<PropsType> = ({ label, property, imageURL, showImage
 			{label && <p className={`font-normal mb-1 mt-5 text-sm `}>{label}</p>}
 
 			{imageURL ? (
-				<div className="relative h-full">
+				<div className="relative h-full z-0">
 					{imageURL && (
 						<div className="flex items-center justify-center">
 							<Image

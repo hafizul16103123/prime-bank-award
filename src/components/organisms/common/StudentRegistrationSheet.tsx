@@ -7,8 +7,10 @@ import { aLevelSubjectRows, GRADE_OPTIONS, oLevelSubjectRows } from "@/lib/marks
 import { cn } from "@/lib/utils";
 import {
 	defaultValuesStudentForm,
+	defaultValuesStudentFormUpdate,
 	StudentRegistrationFormValues,
-	studentRegistrationSchema,
+	StudentUpdateFormValues,
+	studentUpdateSchema,
 } from "@/lib/validation/studentRegistrationSchema";
 import { useApiClient } from "@/libes/hooks";
 import type { AdminStudentListItem } from "@/libes/interface/registration";
@@ -39,9 +41,9 @@ export const StudentRegistrationSheet = ({ student, onOpenChange, updateData }: 
 
 	const { post, get, patch, put, loading } = useApiClient();
 
-	const methods = useForm<StudentRegistrationFormValues>({
-		resolver: yupResolver(studentRegistrationSchema) as Resolver<StudentRegistrationFormValues>,
-		defaultValues: defaultValuesStudentForm,
+	const methods = useForm<StudentUpdateFormValues>({
+		resolver: yupResolver(studentUpdateSchema) as Resolver<StudentUpdateFormValues>,
+		defaultValues: defaultValuesStudentFormUpdate,
 		mode: "onTouched",
 		shouldFocusError: true,
 	});
@@ -93,7 +95,7 @@ export const StudentRegistrationSheet = ({ student, onOpenChange, updateData }: 
 		const setOpts = { shouldValidate: false, shouldDirty: false } as const;
 		Object.entries(student).forEach(([key, value]) => {
 			if (skipStudentKeysForForm.has(key)) return;
-			setValue(key as keyof StudentRegistrationFormValues, value as any, setOpts);
+			setValue(key as keyof StudentUpdateFormValues, value as any, setOpts);
 		});
 
 		const oList = student.oLevelSubjects ?? [];
@@ -187,7 +189,7 @@ export const StudentRegistrationSheet = ({ student, onOpenChange, updateData }: 
 
 						<FormProvider {...methods}>
 							<form
-								onSubmit={handleSubmit(onUpdateStudents)}
+								onSubmit={handleSubmit(onUpdateStudents as any)}
 								className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-6 py-6"
 							>
 								<div className="space-y-8">
@@ -250,24 +252,6 @@ export const StudentRegistrationSheet = ({ student, onOpenChange, updateData }: 
 												placeholder="Select date"
 												// error={errors.dateOfBirth?.message}
 											/>
-											{role === "STUDENT" && (
-												<>
-													<FormInputField
-														control={control}
-														name="password"
-														label="Password"
-														type="text"
-														placeholder="*******"
-													/>
-													<FormInputField
-														control={control}
-														name="confirmPassword"
-														label="Confirm Password"
-														type="text"
-														placeholder="*******"
-													/>
-												</>
-											)}
 										</div>
 									</div>
 

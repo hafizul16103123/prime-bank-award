@@ -30,14 +30,14 @@ export const MyApplicationUnit = () => {
 		<div className="space-y-4">
 			<StudentInfo data={data} updateData={getStudentData} />
 
-			<div className="grid grid-cols-12 gap-4">
-				<div className="col-span-8 ">
-					<div className="grid grid-cols-2 gap-4">
+			<div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
+				<div className="lg:col-span-8">
+					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 						<div className="rounded-lg border border-tartiary bg-white p-4">
 							<h3 className="mb-4 text-sm font-semibold text-foreground">Personal Information</h3>
 							<div className="space-y-3">
 								<FormField label="Full Name" value={data?.name as string} />
-								<div className="grid grid-cols-2 gap-3">
+								<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
 									<FormField label="Phone Number" value={data?.phoneNumber as string} />
 									<FormField label="Gender" value={data?.gender as string} />
 								</div>
@@ -56,15 +56,15 @@ export const MyApplicationUnit = () => {
 							<h3 className="mb-4 text-sm font-semibold text-foreground">Academic Information</h3>
 							<div className="space-y-3">
 								<FormField label="School Name" value={data?.school as string} />
-								<div className="grid grid-cols-2 gap-3">
+								<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
 									<FormField label="Roll Number" value={data?.rollNumber as string} />
 									<FormField label="Applying for Level" value={data?.applyingForLevel as string} />
 								</div>
-								<div className="grid grid-cols-2 gap-3">
+								<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
 									<FormField label="Year of Examination" value={data?.yearOfExamination as any} />
 									<FormField label="Study Group" value={data?.studyGroup as string} />
 								</div>
-								<div className="grid grid-cols-2 gap-3">
+								<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
 									<FormField label="Session" value={data?.examinationSession as string} />
 									<FormField label="Examination Board" value={data?.examinationBoard as string} />
 								</div>
@@ -77,10 +77,10 @@ export const MyApplicationUnit = () => {
 						alt=""
 						width={500}
 						height={500}
-						className="w-full h-auto mt-4"
+						className="mt-4 h-auto w-full rounded-lg"
 					/>
 				</div>
-				<div className="col-span-4">
+				<div className="lg:col-span-4">
 					<StudentMarksheet data={data} />
 				</div>
 			</div>

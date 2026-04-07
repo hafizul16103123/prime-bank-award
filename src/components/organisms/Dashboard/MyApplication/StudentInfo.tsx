@@ -15,23 +15,23 @@ export const StudentInfo = ({
 }) => {
 	const [selectedStudent, setSelectedStudent] = useState<AdminStudentListItem | null>(data);
 	return (
-		<div className="bg-white rounded-lg border border-tartiary p-4 flex items-center justify-between">
-			<div className="flex items-center gap-4">
-				<div className="size-[136px] overflow-hidden rounded-lg bg-muted">
+		<div className="flex flex-col gap-4 rounded-lg border border-tartiary bg-white p-4 sm:flex-row sm:items-center sm:justify-between">
+			<div className="flex min-w-0 flex-1 items-center gap-4">
+				<div className="size-24 shrink-0 overflow-hidden rounded-lg bg-muted sm:size-[136px]">
 					{data?.photoUrl ? (
 						<img src={data?.photoUrl} alt="Student" className="size-full object-cover" />
 					) : (
-						<User className="size-[136px]" />
+						<User className="size-full" />
 					)}
 				</div>
 
-				<div>
-					<p className="text-xl font-medium mt-2">{data?.name}</p>
-					<p className="text-black/60 text-sm">{data?.phoneNumber}</p>
-					<p className="text-black/60 text-sm">{data?.applyingForLevel}</p>
-					<p className="text-black/60 text-sm">{data?.school}</p>
+				<div className="min-w-0">
+					<p className="mt-1 truncate text-lg font-medium sm:text-xl">{data?.name}</p>
+					<p className="truncate text-sm text-black/60">{data?.phoneNumber}</p>
+					<p className="truncate text-sm text-black/60">{data?.applyingForLevel}</p>
+					<p className="truncate text-sm text-black/60">{data?.school}</p>
 
-					<div className="bg-[#DFFABC] text-[#0A6700] rounded-full flex gap-2 py-2 px-4 items-center w-max mt-2">
+					<div className="mt-2 inline-flex w-max max-w-full items-center gap-2 rounded-full bg-[#DFFABC] px-4 py-2 text-[#0A6700]">
 						<CircleCheck size={18} />
 						<span className="text-sm">Eligible for Award</span>
 					</div>
@@ -43,7 +43,7 @@ export const StudentInfo = ({
 				type="button"
 				variant="outline"
 				size="lg"
-				className="gap-1.5 bg-frost"
+				className="w-full gap-1.5 bg-frost sm:w-auto"
 			>
 				<Edit className="size-3.5" />
 				Edit Information
