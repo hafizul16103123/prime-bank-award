@@ -2,32 +2,22 @@
 
 import { CardSectionHeader } from "@/components/molecules/CardSectionHeader";
 import { FormInputField } from "@/components/molecules/FormInputField";
-import { type FormSelectOption, FormSelectField } from "@/components/molecules/FormSelectField";
+import { FormSelectField } from "@/components/molecules/FormSelectField";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { StudentRegistrationFormValues } from "@/lib/validation/studentRegistrationSchema";
 import { useApiClient } from "@/libes/hooks";
-import { boardOptions, levelOptions, sessionOptions, studyGroupOptions } from "@/utils/constant";
+import {
+	boardOptions,
+	gradeOptions,
+	levelOptions,
+	sessionOptions,
+	studyGroupOptions,
+	subjectOptions,
+} from "@/utils/constant";
 import { Plus, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
-
-const subjectOptions: FormSelectOption[] = [
-	"Mathematics (D2/Compulsory)",
-	"Physics",
-	"Chemistry",
-	"Biology",
-	"Computer Science",
-	"Economics",
-	"Business Studies",
-	"English Language",
-	"Bangla",
-].map((s) => ({ value: s, label: s }));
-
-const gradeOptions: FormSelectOption[] = ["A*", "A", "B", "C", "D", "E", "F", "U"].map((g) => ({
-	value: g,
-	label: g,
-}));
 
 function marksheetSectionTitle(level: string | undefined): string {
 	if (level === "A Level") return "A-Level Subjects – Marksheet";

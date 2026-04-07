@@ -5,6 +5,9 @@ const nextConfig: NextConfig = {
 
 	env: {
 		API_URL: process.env.API_URL,
+		NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+		NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+
 		EMAIL_SENDER_SMTP_USER: process.env.EMAIL_SENDER_SMTP_USER,
 		EMAIL_SENDER_SMTP_PASS: process.env.EMAIL_SENDER_SMTP_PASS,
 		EMAIL_SENDER_SMTP_HOST: process.env.EMAIL_SENDER_SMTP_HOST,
