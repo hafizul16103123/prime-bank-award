@@ -46,7 +46,14 @@ export const StudentRegistrationSheet = ({ student, onOpenChange, updateData }: 
 		shouldFocusError: true,
 	});
 
-	const { handleSubmit, setValue, control, reset, formState } = methods;
+	const {
+		handleSubmit,
+		setValue,
+		control,
+		reset,
+		formState: { errors },
+	} = methods;
+	console.log({ errors });
 
 	const applyingForLevel = useWatch({ control, name: "applyingForLevel" });
 	const showOMarksheet = applyingForLevel === "O Level";
@@ -66,7 +73,6 @@ export const StudentRegistrationSheet = ({ student, onOpenChange, updateData }: 
 	);
 	const gradeOptions: FormSelectOption[] = useMemo(() => GRADE_OPTIONS.map((g) => ({ value: g, label: g })), []);
 
-	const { errors } = formState;
 	const oSubjectsError =
 		showOMarksheet && errors.oLevelSubjects && !Array.isArray(errors.oLevelSubjects)
 			? errors.oLevelSubjects.message
@@ -244,6 +250,24 @@ export const StudentRegistrationSheet = ({ student, onOpenChange, updateData }: 
 												placeholder="Select date"
 												// error={errors.dateOfBirth?.message}
 											/>
+											{role === "STUDENT" && (
+												<>
+													<FormInputField
+														control={control}
+														name="password"
+														label="Password"
+														type="text"
+														placeholder="*******"
+													/>
+													<FormInputField
+														control={control}
+														name="confirmPassword"
+														label="Confirm Password"
+														type="text"
+														placeholder="*******"
+													/>
+												</>
+											)}
 										</div>
 									</div>
 

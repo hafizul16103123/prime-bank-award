@@ -3,6 +3,7 @@ export interface AdminStudentStatsData {
 	Pending: number;
 	Approved: number;
 	Declined: number;
+	Awarded?: number;
 }
 
 export interface AdminStudentSubject {

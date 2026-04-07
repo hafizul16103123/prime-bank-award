@@ -17,15 +17,23 @@ function parseToPickerValue(value: unknown): DateValueType {
 	if (value instanceof Date && !Number.isNaN(value.getTime())) {
 		return { startDate: value, endDate: value };
 	}
+	if (typeof value === "number" && Number.isFinite(value)) {
+		const date = new Date(value);
+		if (!Number.isNaN(date.getTime())) return { startDate: date, endDate: date };
+	}
 	if (typeof value === "string") {
-		const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
-		if (m) {
-			const y = Number(m[1]);
-			const mo = Number(m[2]);
-			const d = Number(m[3]);
+		const s = value.trim();
+		// Calendar date: strict YYYY-MM-DD or ISO / Mongo-style "2005-05-15T00:00:00.000Z" (use date part in local TZ)
+		const cal = /^(\d{4})-(\d{2})-(\d{2})/.exec(s);
+		if (cal) {
+			const y = Number(cal[1]);
+			const mo = Number(cal[2]);
+			const d = Number(cal[3]);
 			const date = new Date(y, mo - 1, d);
 			if (!Number.isNaN(date.getTime())) return { startDate: date, endDate: date };
 		}
+		const parsed = new Date(s);
+		if (!Number.isNaN(parsed.getTime())) return { startDate: parsed, endDate: parsed };
 	}
 	return null;
 }
