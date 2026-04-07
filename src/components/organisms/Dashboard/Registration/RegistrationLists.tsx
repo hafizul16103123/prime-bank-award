@@ -1,7 +1,7 @@
 "use client";
 import { ReusableTable } from "@/components/molecules";
 import { TableRow } from "@/components/ui/table";
-import { AdminStudentListItem } from "@/libes/interface/registration";
+import { AdminStudentListItem, IRegistrationLists } from "@/libes/interface/registration";
 import { useState } from "react";
 import { StudentRegistrationSheet } from "../../common";
 import { RegistrationTableRow } from "./RegistrationTableRow";
@@ -9,7 +9,7 @@ import { RegistrationTableRow } from "./RegistrationTableRow";
 const registrationTableHeader = ["Student", "Phone", "School", "ID", "Level", "Submitted", "Status", "Actions"];
 
 type Props = {
-	data: AdminStudentListItem[];
+	data: IRegistrationLists;
 	emptyMessage?: string;
 	isLoading?: boolean;
 	updateData: () => Promise<void>;
@@ -30,11 +30,11 @@ export const RegistrationLists = ({ data, emptyMessage, isLoading = false, updat
 			<ReusableTable
 				variant="default"
 				tableHeader={registrationTableHeader}
-				data={data}
+				data={data?.items}
 				isLoading={isLoading}
 				emptyMessage={emptyMessage ?? "No registrations yet."}
 			>
-				{data.map((row) => (
+				{data?.items.map((row) => (
 					<TableRow key={row.id}>
 						<RegistrationTableRow row={row} setSelectedStudent={setSelectedStudent} />
 					</TableRow>

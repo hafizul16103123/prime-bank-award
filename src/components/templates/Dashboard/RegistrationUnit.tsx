@@ -3,7 +3,7 @@
 import { QueryTabOption, StatCard } from "@/components/molecules";
 import { RegistrationLists } from "@/components/organisms";
 import { useApiClient } from "@/libes/hooks";
-import type { AdminStudentListItem, AdminStudentStatsData } from "@/libes/interface/registration";
+import type { AdminStudentStatsData, IRegistrationLists } from "@/libes/interface/registration";
 import { updateURLSearchParams } from "@/utils/helpers/url.helpers";
 import { CheckCircle2, PenLine, RefreshCw, XCircle } from "lucide-react";
 import { useSearchParams } from "next/navigation";
@@ -11,7 +11,8 @@ import { useEffect, useState } from "react";
 
 export const RegistrationUnit = () => {
 	const [stats, setStats] = useState<AdminStudentStatsData | null>(null);
-	const [registrations, setRegistrations] = useState<AdminStudentListItem[]>([]);
+	const [registrations, setRegistrations] = useState<IRegistrationLists | null>(null);
+
 	const { get } = useApiClient();
 	const searchParams = useSearchParams();
 	const query = Object.fromEntries(searchParams.entries());
@@ -36,7 +37,7 @@ export const RegistrationUnit = () => {
 		try {
 			const { data, status } = await get("API_URL", `admin/students?${params}`);
 			if (status === 200) {
-				setRegistrations(data?.data?.items);
+				setRegistrations(data?.data);
 			}
 		} catch (err) {
 			console.error(err);
@@ -71,7 +72,7 @@ export const RegistrationUnit = () => {
 			/>
 
 			<div className="rounded-lg border border-border bg-card  shadow-sm">
-				<RegistrationLists data={registrations} updateData={getStudentsList} />
+				<RegistrationLists data={registrations as IRegistrationLists} updateData={getStudentsList} />
 			</div>
 		</section>
 	);

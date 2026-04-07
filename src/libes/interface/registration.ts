@@ -10,6 +10,17 @@ export interface AdminStudentSubject {
 	grade: string;
 	paperCode: string;
 }
+export interface Pagination {
+	page: number;
+	limit: number;
+	total: number;
+	totalPages: number;
+}
+
+export interface IRegistrationLists {
+	items: AdminStudentListItem[];
+	pagination: Pagination;
+}
 
 export interface AdminStudentListItem {
 	id: string;

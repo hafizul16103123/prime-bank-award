@@ -3,7 +3,7 @@
 import { QueryTabOption, StatCard } from "@/components/molecules";
 import { WinnerLists } from "@/components/organisms/Dashboard/Winners";
 import { useApiClient } from "@/libes/hooks";
-import { AdminStudentListItem, AdminStudentStatsData } from "@/libes/interface/registration";
+import { AdminStudentStatsData, IRegistrationLists } from "@/libes/interface/registration";
 import { updateURLSearchParams } from "@/utils/helpers/url.helpers";
 import { CheckCircle2, PenLine, RefreshCw } from "lucide-react";
 import { useSearchParams } from "next/navigation";
@@ -11,7 +11,8 @@ import { useEffect, useState } from "react";
 
 export const WinnersUnit = () => {
 	const [stats, setStats] = useState<AdminStudentStatsData | null>(null);
-	const [registrations, setRegistrations] = useState<AdminStudentListItem[]>([]);
+	const [registrations, setRegistrations] = useState<IRegistrationLists | null>(null);
+
 	const { get } = useApiClient();
 	const searchParams = useSearchParams();
 	const query = Object.fromEntries(searchParams.entries());
@@ -36,7 +37,7 @@ export const WinnersUnit = () => {
 		try {
 			const { data, status } = await get("API_URL", `admin/students?${params}`);
 			if (status === 200) {
-				setRegistrations(data?.data?.items);
+				setRegistrations(data?.data);
 			}
 		} catch (err) {
 			console.error(err);
@@ -67,7 +68,7 @@ export const WinnersUnit = () => {
 			/>
 
 			<div className="rounded-lg border border-border bg-card  shadow-sm">
-				<WinnerLists data={registrations} updateData={getStudentsList} />
+				<WinnerLists data={registrations as IRegistrationLists} updateData={getStudentsList} />
 			</div>
 		</section>
 	);
