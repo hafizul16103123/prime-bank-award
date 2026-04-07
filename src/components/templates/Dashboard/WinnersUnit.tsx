@@ -35,7 +35,7 @@ export const WinnersUnit = () => {
 		let optionalParams: any = {};
 		const params = updateURLSearchParams(query, optionalParams);
 		try {
-			const { data, status } = await get("API_URL", `admin/students?${params}`);
+			const { data, status } = await get("API_URL", `admin/students-award?${params}`);
 			if (status === 200) {
 				setRegistrations(data?.data);
 			}

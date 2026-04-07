@@ -17,6 +17,7 @@ import { toastError, toastSuccess } from "@/utils/helpers/toast.helpers";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AxiosError } from "axios";
 import { Trash2, Upload, User, X } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { useEffect, useMemo, useState } from "react";
 import { FormProvider, useFieldArray, useForm, useWatch, type Resolver } from "react-hook-form";
 
@@ -31,9 +32,12 @@ type Props = {
 };
 
 export const StudentRegistrationSheet = ({ student, onOpenChange, updateData }: Props) => {
+	const { data: session } = useSession();
+	const role = session?.user?.role ?? null;
+
 	const [schoolsOption, setSchoolsOption] = useState([]);
 
-	const { post, get, patch, loading } = useApiClient();
+	const { post, get, patch, put, loading } = useApiClient();
 
 	const methods = useForm<StudentRegistrationFormValues>({
 		resolver: yupResolver(studentRegistrationSchema) as Resolver<StudentRegistrationFormValues>,
@@ -92,7 +96,21 @@ export const StudentRegistrationSheet = ({ student, onOpenChange, updateData }: 
 		setValue("aLevelSubjects", aList?.length > 0 ? aList : [emptySubjectRow()], setOpts);
 	}, [student, setValue, reset]);
 
-	const onUpdateStudents = async () => {};
+	const onUpdateStudents = async (_data: StudentRegistrationFormValues) => {
+		try {
+			const { data, status } = await put("API_URL", "student/profile", _data);
+			console.log({ status });
+			if (status === 200) {
+				onOpenChange(false);
+				updateData();
+				toastSuccess({ message: `Update successfully` });
+			}
+		} catch (err) {
+			toastError({
+				message: err instanceof AxiosError ? err.response?.data?.message[0] : err,
+			});
+		}
+	};
 
 	const handleApprovedReject = async (value: string) => {
 		const payload = {
@@ -423,36 +441,40 @@ export const StudentRegistrationSheet = ({ student, onOpenChange, updateData }: 
 										</div>
 									) : null}
 
-									{student?.status === "Pending" && (
-										<div className="space-y-2 pb-4">
-											{/* <Button
-											type="button"
-											variant="outline"
-											className="h-10 w-full rounded-md border border-[#002E66] bg-frost text-sm font-medium"
-										>
-											Update Information
-										</Button> */}
+									<div className="space-y-2 pb-4">
+										{role === "STUDENT" && (
 											<Button
-												onClick={() => handleApprovedReject("approve")}
-												type="button"
-												className="h-10 w-full rounded-md bg-[#002E66] text-sm font-medium"
+												type="submit"
+												variant="outline"
+												className="h-10 w-full rounded-md border border-[#002E66] bg-frost text-sm font-medium"
 											>
-												Approve Now
+												Update Information
 											</Button>
-											<div className="flex items-center gap-2">
-												{/* <select className="h-10 min-w-0 flex-1 rounded-md border border-input bg-background px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50">
+										)}
+										{student?.status === "Pending" && role !== "STUDENT" && (
+											<>
+												<Button
+													onClick={() => handleApprovedReject("approve")}
+													type="button"
+													className="h-10 w-full rounded-md bg-[#002E66] text-sm font-medium"
+												>
+													Approve Now
+												</Button>
+												<div className="flex items-center gap-2">
+													{/* <select className="h-10 min-w-0 flex-1 rounded-md border border-input bg-background px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50">
 												<option>Select a reason to decline</option>
 											</select> */}
-												<Button
-													onClick={() => handleApprovedReject("reject")}
-													type="button"
-													className="h-10 w-full shrink-0 rounded-md bg-[#FFB0B0] px-6 text-sm font-medium text-[#B00000] hover:bg-[#FFB0B0]/90"
-												>
-													Decline
-												</Button>
-											</div>
-										</div>
-									)}
+													<Button
+														onClick={() => handleApprovedReject("reject")}
+														type="button"
+														className="h-10 w-full shrink-0 rounded-md bg-[#FFB0B0] px-6 text-sm font-medium text-[#B00000] hover:bg-[#FFB0B0]/90"
+													>
+														Decline
+													</Button>
+												</div>
+											</>
+										)}
+									</div>
 								</div>
 							</form>
 						</FormProvider>

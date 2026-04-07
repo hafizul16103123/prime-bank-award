@@ -5,9 +5,11 @@ export type FormSelectOption = {
 	label: ReactNode;
 };
 
+/** Values must match API / Mongo `Gender` enum strings (`"Male"`, `"Female"`, …). */
 export const genderOptions: FormSelectOption[] = [
-	{ value: "MALE", label: "Male" },
-	{ value: "FEMALE", label: "Female" },
+	{ value: "Male", label: "Male" },
+	{ value: "Female", label: "Female" },
+	{ value: "Other", label: "Other" },
 ];
 
 export const levelOptions: FormSelectOption[] = [

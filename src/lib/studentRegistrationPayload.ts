@@ -27,8 +27,8 @@ export type StudentRegistrationSubmitPayload = {
 	confirmPassword: string;
 };
 
-/** Form select values → `Gender` enum strings stored in MongoDB. */
-const GENDER_TO_DTO: Record<string, string> = {
+/** Legacy uppercase select values → `Gender` enum strings (if any old client still sends them). */
+const GENDER_LEGACY: Record<string, string> = {
 	MALE: "Male",
 	FEMALE: "Female",
 };
@@ -81,7 +81,7 @@ export function buildStudentRegistrationSubmitPayload(
 		name: values.name.trim(),
 		dateOfBirth: values.dateOfBirth ? new Date(values.dateOfBirth).toISOString() : "",
 		phoneNumber: formatBdPhoneForApi(values.phoneNumber),
-		gender: GENDER_TO_DTO[values.gender] ?? values.gender,
+		gender: GENDER_LEGACY[values.gender] ?? values.gender,
 		applyingForLevel: values.applyingForLevel,
 		yearOfExamination: values.yearOfExamination,
 		studyGroup: values.studyGroup,

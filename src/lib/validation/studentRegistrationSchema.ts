@@ -23,7 +23,10 @@ export const studentRegistrationSchema = yup
 			.trim()
 			.required("Phone number is required")
 			.matches(/^01\d{9}$/, "Enter a valid 11-digit mobile number (01XXXXXXXXX)"),
-		gender: yup.string().oneOf(["MALE", "FEMALE"], "Select a gender").required("Gender is required"),
+		gender: yup
+			.string()
+			.oneOf(["Male", "Female", "Other", "Prefer not to say"], "Select a gender")
+			.required("Gender is required"),
 		/** Set by `FileUpload` after successful upload (URL string), not a FileList. */
 		photoUrl: yup
 			.string()
