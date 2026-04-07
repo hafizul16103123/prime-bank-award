@@ -3,10 +3,14 @@ import { School } from "../models/School";
 import dbConnect from "@/lib/db";
 import { successResponse, errorResponse } from "@/lib/api-response";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     await dbConnect();
-    const schools = await School.find({}).select("name address").sort({ name: 1 });
+    const { searchParams } = new URL(request.url);
+    const search = searchParams.get("search");
+
+    const query = search ? { name: { $regex: search, $options: "i" } } : {};
+    const schools = await School.find(query).select("name address").sort({ name: 1 });
     return successResponse(schools, "Schools fetched", 200);
   } catch (error: any) {
     return errorResponse(error.message || "Internal server error", 500);
