@@ -21,7 +21,7 @@ export const WinnersUnit = () => {
 
 	const getStudentStats = async () => {
 		try {
-			const { data, status } = await get("API_URL", "admin/student-stats");
+			const { data, status } = await get("API_URL", "admin/student-award-stats");
 			if (status === 200) {
 				setStats(data?.data);
 			}
@@ -53,9 +53,9 @@ export const WinnersUnit = () => {
 	return (
 		<section>
 			<div className="mb-6 flex gap-4">
-				<StatCard title="Total Approved" value="2,412" change="↑ 18% vs 2024" icon={PenLine} />
-				<StatCard title="Yet to Award" value="602" change="+180.1% from last month" icon={RefreshCw} />
-				<StatCard title="Awarded" value="1,517" change="+19% from last month" icon={CheckCircle2} />
+				<StatCard title="Total Approved" value={stats?.Approved as any} icon={PenLine} />
+				<StatCard title="Yet to Award" value={stats?.Approved as any} icon={RefreshCw} />
+				<StatCard title="Awarded" value={stats?.Awarded as any} icon={CheckCircle2} />
 			</div>
 
 			<QueryTabOption
