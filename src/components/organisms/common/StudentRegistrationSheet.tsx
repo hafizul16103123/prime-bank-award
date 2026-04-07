@@ -27,6 +27,18 @@ const skipStudentKeysForForm = new Set(["id", "userId", "status", "createdAt", "
 
 const emptySubjectRow = () => ({ name: "", grade: "", paperCode: "" });
 
+const hasValidSubjectRows = (rows?: { name?: string; grade?: string; paperCode?: string }[]) =>
+	(rows ?? []).some((r) => Boolean(r?.name?.trim() && r?.grade?.trim()));
+
+const normalizeSubjectRows = (rows?: { name?: string; grade?: string; paperCode?: string }[]) =>
+	(rows ?? [])
+		.filter((r) => Boolean(r?.name?.trim() && r?.grade?.trim()))
+		.map((r) => ({
+			name: r.name!.trim(),
+			grade: r.grade!.trim(),
+			...(r.paperCode?.trim() ? { paperCode: r.paperCode.trim() } : {}),
+		}));
+
 type Props = {
 	student: AdminStudentListItem | null;
 	onOpenChange: (open: boolean) => void;
@@ -55,7 +67,6 @@ export const StudentRegistrationSheet = ({ student, onOpenChange, updateData }: 
 		reset,
 		formState: { errors },
 	} = methods;
-	console.log({ errors });
 
 	const applyingForLevel = useWatch({ control, name: "applyingForLevel" });
 	const showOMarksheet = applyingForLevel === "O Level";
@@ -105,8 +116,29 @@ export const StudentRegistrationSheet = ({ student, onOpenChange, updateData }: 
 	}, [student, setValue, reset]);
 
 	const onUpdateStudents = async (_data: StudentRegistrationFormValues) => {
+		const payload: Partial<StudentRegistrationFormValues> = { ..._data };
+
+		if (hasValidSubjectRows(_data.oLevelSubjects)) {
+			payload.oLevelSubjects = normalizeSubjectRows(
+				_data.oLevelSubjects,
+			) as StudentRegistrationFormValues["oLevelSubjects"];
+		} else {
+			delete payload.oLevelSubjects;
+		}
+
+		if (hasValidSubjectRows(_data.aLevelSubjects)) {
+			payload.aLevelSubjects = normalizeSubjectRows(
+				_data.aLevelSubjects,
+			) as StudentRegistrationFormValues["aLevelSubjects"];
+		} else {
+			delete payload.aLevelSubjects;
+		}
+
 		try {
-			const { data, status } = await put("API_URL", "student/profile", _data);
+			const { data, status } =
+				role === "STUDENT"
+					? await put("API_URL", `student/profile`, payload)
+					: await patch("API_URL", `admin/students/${student?.id}`, payload);
 			console.log({ status });
 			if (status === 200) {
 				onOpenChange(false);
@@ -450,15 +482,14 @@ export const StudentRegistrationSheet = ({ student, onOpenChange, updateData }: 
 									) : null}
 
 									<div className="space-y-2 pb-4">
-										{role === "STUDENT" && (
-											<Button
-												type="submit"
-												variant="outline"
-												className="h-10 w-full rounded-md border border-[#002E66] bg-frost text-sm font-medium"
-											>
-												Update Information
-											</Button>
-										)}
+										<Button
+											type="submit"
+											variant="outline"
+											className="h-10 w-full rounded-md border border-[#002E66] bg-frost text-sm font-medium"
+										>
+											Update Information
+										</Button>
+
 										{student?.status === "Pending" && role !== "STUDENT" && (
 											<>
 												<Button
