@@ -1,11 +1,11 @@
 import { Student } from "@/app/api/modules/student/models/Student";
 import dbConnect from "@/lib/db";
-import { requireAdmin, AuthenticatedRequest } from "@/app/api/modules/auth/utils/auth-guard";
+import { requireAdmin, AuthenticatedRequest, requireAdminOrSchoolAdmin } from "@/app/api/modules/auth/utils/auth-guard";
 import { successResponse, errorResponse } from "@/lib/api-response";
 
 export async function GET(request: AuthenticatedRequest) {
   try {
-    const authError = requireAdmin()(request as any);
+    const authError = requireAdminOrSchoolAdmin()(request as any);
     if (authError) return authError;
 
     const { searchParams } = new URL(request.url);

@@ -1,11 +1,11 @@
 import { Student } from "../../../modules/student/models/Student";
 import dbConnect from "@/lib/db";
-import { requireAdmin, AuthenticatedRequest } from "../../../modules/auth/utils/auth-guard";
+import { requireAdmin, AuthenticatedRequest, requireAdminOrSchoolAdmin } from "../../../modules/auth/utils/auth-guard";
 import { successResponse, errorResponse } from "@/lib/api-response";
 
 export async function GET(request: AuthenticatedRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const authError = requireAdmin()(request as any);
+    const authError = requireAdminOrSchoolAdmin()(request as any);
     if (authError) return authError;
 
     const { id } = await params;

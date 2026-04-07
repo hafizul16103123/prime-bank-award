@@ -4,13 +4,16 @@ import dbConnect from "@/lib/db";
 import {
   requireAdmin,
   AuthenticatedRequest,
+  requireAdminOrSchoolAdmin,
 } from "../../auth/utils/auth-guard";
 import { successResponse, errorResponse } from "@/lib/api-response";
 
 export async function GET(request: AuthenticatedRequest) {
   try {
-    const authError = requireAdmin()(request as any);
+    const authError = requireAdminOrSchoolAdmin()(request as any);
     if (authError) return authError;
+
+    const user = (request as any).user;
 
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get("page") || "1");
@@ -25,6 +28,15 @@ export async function GET(request: AuthenticatedRequest) {
     await dbConnect();
 
     const query: any = {};
+
+    if (user.role == "SCHOOL_ADMIN") {
+      const userSchool = user?.school ?? null;
+
+      if (!userSchool) {
+        return errorResponse("School not assigned to this user", 403);
+      }
+      query.school = userSchool;
+    }
 
     if (status) {
       query.status = status;
@@ -68,7 +80,7 @@ export async function GET(request: AuthenticatedRequest) {
         },
       },
       "Students fetched",
-      200
+      200,
     );
   } catch (error: any) {
     return errorResponse(error.message || "Internal server error", 500);
@@ -77,7 +89,7 @@ export async function GET(request: AuthenticatedRequest) {
 
 export async function PATCH(request: AuthenticatedRequest) {
   try {
-    const authError = requireAdmin()(request as any);
+    const authError = requireAdminOrSchoolAdmin()(request as any);
     if (authError) return authError;
 
     const body = await request.json();
@@ -93,17 +105,20 @@ export async function PATCH(request: AuthenticatedRequest) {
 
     await dbConnect();
 
-    const status = action === "approve" ? StudentStatus.APPROVED : StudentStatus.DECLINED;
+    const status =
+      action === "approve" ? StudentStatus.APPROVED : StudentStatus.DECLINED;
 
     const result = await Student.updateMany(
       { _id: { $in: studentIds } },
-      { $set: { status } }
+      { $set: { status } },
     );
 
     return successResponse(
       { updatedCount: result.modifiedCount },
-      action === "approve" ? "Students approved successfully" : "Students rejected successfully",
-      200
+      action === "approve"
+        ? "Students approved successfully"
+        : "Students rejected successfully",
+      200,
     );
   } catch (error: any) {
     return errorResponse(error.message || "Internal server error", 500);

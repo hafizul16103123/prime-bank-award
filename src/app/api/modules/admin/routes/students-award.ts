@@ -4,12 +4,13 @@ import dbConnect from "@/lib/db";
 import {
   requireAdmin,
   AuthenticatedRequest,
+  requireAdminOrSchoolAdmin,
 } from "../../auth/utils/auth-guard";
 import { successResponse, errorResponse } from "@/lib/api-response";
 
 export async function GET(request: AuthenticatedRequest) {
   try {
-    const authError = requireAdmin()(request as any);
+    const authError = requireAdminOrSchoolAdmin()(request as any);
     if (authError) return authError;
 
     const { searchParams } = new URL(request.url);
@@ -24,10 +25,23 @@ export async function GET(request: AuthenticatedRequest) {
 
     await dbConnect();
 
-    let query: any = {status: {$in: [StudentStatus.APPROVED, StudentStatus.AWARDED]}};
+    const user = (request as any).user;
+    let query: any = {
+      status: { $in: [StudentStatus.APPROVED, StudentStatus.AWARDED] },
+    };
+    const userSchool = user?.school ?? null;
+    if (user.role == "SCHOOL_ADMIN") {
+      if (!userSchool) {
+        return errorResponse("School not assigned to this user", 403);
+      }
+      query.school = userSchool;
+    }
 
-    if (status) { 
-      query={};
+    if (status) {
+      query = {};
+      if (user.role == "SCHOOL_ADMIN") {
+        query.school = userSchool;
+      }
       query.status = status;
     }
 
@@ -69,10 +83,9 @@ export async function GET(request: AuthenticatedRequest) {
         },
       },
       "Students fetched",
-      200
+      200,
     );
   } catch (error: any) {
     return errorResponse(error.message || "Internal server error", 500);
   }
 }
-

@@ -1,26 +1,41 @@
 import { NextResponse } from "next/server";
-import { Student } from "../../student/models/Student";
+import { Student, StudentStatus } from "../../student/models/Student";
 import dbConnect from "@/lib/db";
-import { requireAdminOrSchoolAdmin, AuthenticatedRequest } from "../../auth/utils/auth-guard";
+import {
+  requireAdminOrSchoolAdmin,
+  AuthenticatedRequest,
+} from "../../auth/utils/auth-guard";
 import { successResponse, errorResponse } from "@/lib/api-response";
 
 export async function GET(request: AuthenticatedRequest) {
   try {
     const adminError = requireAdminOrSchoolAdmin()(request as any);
-    
+
     if (adminError) {
       return errorResponse("Access denied. Admin or School Admin only.", 403);
     }
-
     await dbConnect();
+    const user = (request as any).user;
+    let query: any = {};
+    if (user.role == "SCHOOL_ADMIN") {
+      const userSchool = user?.school ?? null;
+
+      if (!userSchool) {
+        return errorResponse("School not assigned to this user", 403);
+      }
+      query.school = userSchool;
+    }
 
     const statusCounts = await Student.aggregate([
       {
+        $match: query,
+      },
+      {
         $group: {
           _id: "$status",
-          count: { $sum: 1 }
-        }
-      }
+          count: { $sum: 1 },
+        },
+      },
     ]);
 
     const totalStudents = await Student.countDocuments();
@@ -29,7 +44,7 @@ export async function GET(request: AuthenticatedRequest) {
       total: totalStudents,
       Pending: 0,
       Approved: 0,
-      Declined: 0
+      Declined: 0,
     };
 
     statusCounts.forEach((item: any) => {
