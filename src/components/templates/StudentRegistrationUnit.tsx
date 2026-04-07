@@ -53,7 +53,6 @@ function StepFooterButton({ action }: { action: RegistrationStepFooterAction }) 
 export const StudentRegistrationUnit = () => {
 	const [currentStep, setCurrentStep] = useState(1);
 	const [submitted, setSubmitted] = useState(false);
-	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [suppressStep3Submit, setSuppressStep3Submit] = useState(false);
 
 	const { post, loading } = useApiClient();
@@ -105,7 +104,7 @@ export const StudentRegistrationUnit = () => {
 
 	const [footerLeft, footerRight] = getRegistrationFooterActions({
 		currentStep,
-		isSubmitting,
+		loading,
 		suppressStep3Submit,
 		goToStep,
 		setCurrentStep,

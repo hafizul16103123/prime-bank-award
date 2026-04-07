@@ -36,7 +36,7 @@ export const registrationStep2Fields: (keyof StudentRegistrationFormValues)[] = 
 
 export type GetRegistrationFooterActionsParams = {
 	currentStep: number;
-	isSubmitting: boolean;
+	loading: boolean;
 	suppressStep3Submit: boolean;
 	goToStep: (next: number, fields: (keyof StudentRegistrationFormValues)[]) => void | Promise<void>;
 	setCurrentStep: (step: number) => void;
@@ -48,7 +48,7 @@ export type GetRegistrationFooterActionsParams = {
  */
 export function getRegistrationFooterActions({
 	currentStep,
-	isSubmitting,
+	loading,
 	suppressStep3Submit,
 	goToStep,
 	setCurrentStep,
@@ -106,10 +106,9 @@ export function getRegistrationFooterActions({
 				{
 					type: "submit",
 					size: "lg",
-					disabled: isSubmitting || suppressStep3Submit,
-					className:
-						"w-full gap-2 rounded-full bg-[#1E6E45] py-4 text-sm sm:w-auto sm:px-8 sm:py-5 md:px-9",
-					label: isSubmitting ? "Submitting…" : "Submit Registration",
+					disabled: loading || suppressStep3Submit,
+					className: "w-full gap-2 rounded-full bg-[#1E6E45] py-4 text-sm sm:w-auto sm:px-8 sm:py-5 md:px-9",
+					label: loading ? "Submitting…" : "Submit Registration",
 					icon: ArrowRight,
 					iconPosition: "end",
 				},

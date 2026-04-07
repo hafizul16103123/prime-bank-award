@@ -1,8 +1,19 @@
+"use client";
+
 import { Button } from "@/components/ui";
 import { AdminStudentListItem } from "@/libes/interface/registration";
 import { CircleCheck, Edit, User } from "lucide-react";
+import { useState } from "react";
+import { StudentRegistrationSheet } from "../../common";
 
-export const StudentInfo = ({ data }: { data: AdminStudentListItem | null }) => {
+export const StudentInfo = ({
+	data,
+	updateData,
+}: {
+	data: AdminStudentListItem | null;
+	updateData: () => Promise<void>;
+}) => {
+	const [selectedStudent, setSelectedStudent] = useState<AdminStudentListItem | null>(data);
 	return (
 		<div className="bg-white rounded-lg border border-tartiary p-4 flex items-center justify-between">
 			<div className="flex items-center gap-4">
@@ -27,10 +38,26 @@ export const StudentInfo = ({ data }: { data: AdminStudentListItem | null }) => 
 				</div>
 			</div>
 
-			<Button type="button" variant="outline" size="lg" className="gap-1.5 bg-frost">
+			<Button
+				onClick={() => setSelectedStudent(data)}
+				type="button"
+				variant="outline"
+				size="lg"
+				className="gap-1.5 bg-frost"
+			>
 				<Edit className="size-3.5" />
 				Edit Information
 			</Button>
+
+			{selectedStudent && (
+				<StudentRegistrationSheet
+					student={selectedStudent}
+					updateData={updateData}
+					onOpenChange={(next) => {
+						if (!next) setSelectedStudent(null);
+					}}
+				/>
+			)}
 		</div>
 	);
 };
